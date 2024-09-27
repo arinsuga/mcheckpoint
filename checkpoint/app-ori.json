@@ -4,11 +4,11 @@
     "slug": "checkpoint",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/checkpoint/images/icon.png",
+    "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/checkpoint/images/splash.png",
+      "image": "./assets/images/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,7 +17,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/checkpoint/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.arinsuga.checkpoint"
@@ -25,18 +25,13 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/checkpoint/images/favicon.png"
+      "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
       "expo-router"
     ],
     "experiments": {
       "typedRoutes": true
-    },
-    "extra": {
-      "eas": {
-        "projectId": "257f6bf0-a102-49c0-809a-0c37eb5fce0a"
-      }
     }
   }
 }
