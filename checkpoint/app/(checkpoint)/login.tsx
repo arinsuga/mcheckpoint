@@ -13,8 +13,8 @@ import {
   View
 } from "react-native";
 
-import { Colors } from "../constants/Colors";
-import Logo from "../components/Logo";
+import { Colors } from "../../constants/checkpoint/Colors";
+import Logo from "../../components/checkpoint/Logo";
 
 export default function Login() {
 
@@ -41,7 +41,7 @@ export default function Login() {
 
       <View style={ styles.textInputGroup } >
 
-          <Image style={ styles.inputIcon } source={require('../assets/images/user.png')}  />
+          <Image style={ styles.inputIcon } source={require('../../assets/checkpoint/images/user.png')}  />
           <TextInput
             placeholderTextColor={ Colors.grey }
             placeholder="Username"
@@ -52,7 +52,7 @@ export default function Login() {
 
         <View style={ [ styles.textInputGroup, { marginBottom: 30 } ] }>
 
-          <Image style={ styles.inputIcon } source={require('../assets/images/key.png')} />
+          <Image style={ styles.inputIcon } source={require('../../assets/checkpoint/images/key.png')} />
           <TextInput
             placeholderTextColor={ Colors.grey }
             secureTextEntry={ true }

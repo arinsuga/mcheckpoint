@@ -18,7 +18,7 @@ const Logo = ({ size }: propType) => {
 
         <Image
         style={ styles[size] }
-        source={require('../assets/images/logo.png')}
+        source={require('../../assets/checkpoint/images/logo.png')}
         />
 
     )
