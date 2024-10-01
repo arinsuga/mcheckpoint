@@ -32,7 +32,7 @@ export default function RootLayout() {
         <Stack.Screen name="(checkpoint)" options={{
           headerShown: false,
           title: "",
-          statusBarStyle: 'dark'
+          statusBarColor: Colors.orange
         }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />

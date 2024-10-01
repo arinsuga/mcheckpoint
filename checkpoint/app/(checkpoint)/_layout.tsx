@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/checkpoint/Colors";
 import { Stack } from "expo-router";
 
 export default function RootLayout() {
@@ -5,7 +6,9 @@ export default function RootLayout() {
     <Stack>
       <Stack.Screen name="login" options={{
         headerShown: false,
-        title: ""
+        title: "",
+        statusBarStyle: 'light',
+        statusBarColor: Colors.whiteLight
       }} />
       <Stack.Screen name="index" />
       <Stack.Screen name="dashboard" />

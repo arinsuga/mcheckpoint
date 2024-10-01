@@ -29,7 +29,7 @@ export default function Login() {
         flex: 1,
         alignItems: "center",
         position: 'absolute',
-        top: 50,
+        top: 100,
         alignSelf: "center",
         width: '100%'
       }}>
