@@ -15,10 +15,23 @@ import {
 
 import { Colors } from "../../constants/checkpoint/Colors";
 import Logo from "../../components/checkpoint/Logo";
+import { useState } from "react";
 
 export default function Login() {
 
-  console.log(StatusBar);
+  const [ username, setUsername ] = useState('');
+  const [ password, setPassword ] = useState('');
+
+  const oStatusBar = 'Ini Parameter ya....';
+
+
+  const handleLogin = (usr: string, pwd: string) => {
+
+    console.log('Username : ' + usr);
+    console.log('Password : ' + pwd);
+
+  }
+
 
   return (
     <SafeAreaView
@@ -46,6 +59,7 @@ export default function Login() {
             placeholderTextColor={ Colors.grey }
             placeholder="Username"
             style={ styles.textInput }
+            onChangeText={ (nextText) => setUsername(nextText) }
           ></TextInput>
 
         </View>
@@ -58,14 +72,21 @@ export default function Login() {
             secureTextEntry={ true }
             placeholder="Password"
             style={ styles.textInput }
+            onChangeText={ (nextText) => setPassword(nextText) }
           ></TextInput>
 
         </View>
 
         <View>
 
-          <TouchableOpacity style={ [styles.btn, styles.btnLogin] }>
+          <TouchableOpacity style={ [styles.btn, styles.btnLogin] }  onPress={ (para) => {
+
+            handleLogin(username, password);
+
+          }}>
+
             <Text style={ styles.btnText }>Login</Text>
+
           </TouchableOpacity>
 
         </View>

@@ -8,7 +8,7 @@ export default function RootLayout() {
         headerShown: false,
         title: "",
         statusBarStyle: 'light',
-        statusBarColor: Colors.whiteLight
+        statusBarColor: Colors.whiteLight,
       }} />
       <Stack.Screen name="index" />
       <Stack.Screen name="dashboard" />
