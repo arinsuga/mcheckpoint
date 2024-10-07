@@ -12,26 +12,56 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
+import { useState, useEffect } from "react";
 
 import { Colors } from "../../constants/checkpoint/Colors";
 import Logo from "../../components/checkpoint/Logo";
-import { useState } from "react";
+import { useAuth } from "@/contexts/Authcontext";
+
+import { useFocusEffect, useRouter } from "expo-router";
 
 export default function Login() {
-
+  const { authState, Login } = useAuth();
+  const router = useRouter();
   const [ username, setUsername ] = useState('');
   const [ password, setPassword ] = useState('');
+  
 
-  const oStatusBar = 'Ini Parameter ya....';
+  useEffect(() => {
 
+    console.log('=======================');
+    console.log('handleLogin:');
+    console.log('=======================');
+    console.log(authState);
 
-  const handleLogin = (usr: string, pwd: string) => {
+    if (authState?.authenticated) {
+      router.replace('/');
+    }
 
-    console.log('Username : ' + usr);
-    console.log('Password : ' + pwd);
+  }, [authState]);
 
+  
+  const onLogin = async (username: string, password: string) => {
+    
+    const result = await (Login && Login(username, password));
+    
+    // if (result) {
+      
+      
+    //   router.replace('/');
+
+      
+      
+    // } else {
+      
+    //   console.log('gagal...');
+      
+    // }
+    
+    
+      
   }
-
+    
 
   return (
     <SafeAreaView
@@ -79,11 +109,10 @@ export default function Login() {
 
         <View>
 
-          <TouchableOpacity style={ [styles.btn, styles.btnLogin] }  onPress={ (para) => {
-
-            handleLogin(username, password);
-
-          }}>
+          <TouchableOpacity
+              style={ [styles.btn, styles.btnLogin] }
+              onPress={ () => onLogin(username, password) }
+          >
 
             <Text style={ styles.btnText }>Login</Text>
 
