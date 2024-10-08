@@ -14,8 +14,8 @@ import {
 } from "react-native";
 import { useState, useEffect } from "react";
 
-import { Colors } from "../../constants/checkpoint/Colors";
-import Logo from "../../components/checkpoint/Logo";
+import { Colors } from "../constants/checkpoint/Colors";
+import Logo from "../components/checkpoint/Logo";
 import { useAuth } from "@/contexts/Authcontext";
 
 import { useFocusEffect, useRouter } from "expo-router";
@@ -27,36 +27,36 @@ export default function Login() {
   const [ password, setPassword ] = useState('');
   
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    console.log('=======================');
-    console.log('handleLogin:');
-    console.log('=======================');
-    console.log(authState);
+  //   console.log('=======================');
+  //   console.log('handleLogin:');
+  //   console.log('=======================');
+  //   console.log(authState);
 
-    if (authState?.authenticated) {
-      router.replace('/');
-    }
+  //   if (authState?.authenticated) {
+  //     router.replace('/')
+  //   }
 
-  }, [authState]);
+  // }, [authState]);
 
   
   const onLogin = async (username: string, password: string) => {
     
     const result = await (Login && Login(username, password));
     
-    // if (result) {
+    if (result) {
       
       
-    //   router.replace('/');
+      router.replace('/');
 
       
       
-    // } else {
+    } else {
       
-    //   console.log('gagal...');
+      console.log('gagal...');
       
-    // }
+    }
     
     
       
@@ -84,7 +84,7 @@ export default function Login() {
 
       <View style={ styles.textInputGroup } >
 
-          <Image style={ styles.inputIcon } source={require('../../assets/checkpoint/images/user.png')}  />
+          <Image style={ styles.inputIcon } source={require('../assets/checkpoint/images/user.png')}  />
           <TextInput
             placeholderTextColor={ Colors.grey }
             placeholder="Username"
@@ -96,7 +96,7 @@ export default function Login() {
 
         <View style={ [ styles.textInputGroup, { marginBottom: 30 } ] }>
 
-          <Image style={ styles.inputIcon } source={require('../../assets/checkpoint/images/key.png')} />
+          <Image style={ styles.inputIcon } source={require('../assets/checkpoint/images/key.png')} />
           <TextInput
             placeholderTextColor={ Colors.grey }
             secureTextEntry={ true }
