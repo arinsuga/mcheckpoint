@@ -13,7 +13,7 @@ interface IUser {
 }
 
 interface IState {
-    username?: string | null,
+    user?: IUser | null,
     token?: string | null;
     authenticated?: boolean | null;
 }
@@ -36,21 +36,47 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
     const [authdata, setAuthdata] = useState<IState>({});
 
     const handleLogin = async (username?: string, password?: string) => {
+        let result = false;
 
-        setAuthdata({
-            username: username,
-            token: 'token authenticated',
-            authenticated: true,
-        });
+        //User
+        if ((username?.toLocaleLowerCase() === 'user') && (password?.toLocaleLowerCase() === 'user')) {
 
-        return true;
+            result = true;
+            setAuthdata({
+                user: {
+                    username,
+                    roles: ['user_roles'],
+                    email: 'user@gmail.com',
+                },
+                token: 'User token authenticated',
+                authenticated: result,
+            });
+    
+        }
 
+        //Admin
+        if ((username?.toLocaleLowerCase() === 'admin') && (password?.toLocaleLowerCase() === 'admin')) {
+
+            result = true;
+            setAuthdata({
+                user: {
+                    username,
+                    roles: ['admin_roles'],
+                    email: 'admin@gmail.com',
+                },
+                token: 'Admin token authenticated',
+                authenticated: result,
+            });
+    
+        }
+
+        return result;
     }
 
     const handleLogout = async () => {
 
         setAuthdata({
-            username: null,
+            user: null,
             token: null,
             authenticated: null,
         });

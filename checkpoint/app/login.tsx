@@ -54,6 +54,7 @@ export default function Login() {
       
     } else {
       
+      alert('Invalid username or password');
       console.log('gagal...');
       
     }
