@@ -8,12 +8,16 @@ import 'react-native-reanimated';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Colors } from '@/constants/checkpoint/Colors';
 import Authprovider from "@/contexts/Authcontext";
+import { View } from 'react-native-reanimated/lib/typescript/Animated';
+import { Ionicons } from '@expo/vector-icons';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+
+
   const [loaded] = useFonts({
     SpaceMono: require('../assets/checkpoint/fonts/SpaceMono-Regular.ttf'),
   });
@@ -31,7 +35,9 @@ export default function RootLayout() {
   return (
 
       <Authprovider>
+
         <Slot />
+        
       </Authprovider>
   );
 }

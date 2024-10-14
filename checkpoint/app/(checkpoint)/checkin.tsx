@@ -1,6 +1,10 @@
-import { Text, View } from "react-native";
+import { Text, View, TouchableOpacity } from "react-native";
+import { useRouter } from "expo-router";
+
 
 export default function Checkin() {
+  const router = useRouter();
+
   return (
     <View
       style={{
@@ -9,7 +13,17 @@ export default function Checkin() {
         alignItems: "center",
       }}
     >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
+
+      <Text>CHECKIN</Text> 
+      <TouchableOpacity
+          onPress={() => {
+              router.push("/checkout");
+          }}
+      >
+        <Text>Goto Checkout</Text>
+      </TouchableOpacity>
+
+
     </View>
   );
 }

@@ -1,8 +1,8 @@
-import { useRouter, Link } from "expo-router";
-import { Button, Text, View } from "react-native";
+import { useFocusEffect, useRouter } from "expo-router";
+import { Text, View } from "react-native";
 import { useAuth } from "@/contexts/Authcontext";
 
-export default function Home() {
+export default function index() {
 
   const { authState } = useAuth();
   const router = useRouter()
@@ -34,10 +34,7 @@ export default function Home() {
         alignItems: "center",
       }}
     >
-
-        <Text>INDEX</Text>
-        <Link href="/dashboard"><Text>Goto Dashboard</Text></Link>
-
+      <Text>Edit app/index.tsx to edit this screen.XXXX</Text>
     </View>
   );
 }
