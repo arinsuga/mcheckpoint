@@ -16,14 +16,6 @@ export default function Checkout() {
       <Text>CHECKOUT</Text> 
       <TouchableOpacity
           onPress={() => {
-              router.back();
-          }}
-      >
-        <Text>Backto Checkin</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-          onPress={() => {
               router.push("/dashboard");
           }}
       >
