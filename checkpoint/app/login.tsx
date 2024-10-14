@@ -23,44 +23,15 @@ import { useFocusEffect, useRouter } from "expo-router";
 export default function Login() {
   const { authState, Login } = useAuth();
   const router = useRouter();
-  const [ username, setUsername ] = useState('');
-  const [ password, setPassword ] = useState('');
-  
+  const [ username, setUsername ] = useState('admin'); //fortest
+  const [ password, setPassword ] = useState('admin'); //fortest
 
-  // useEffect(() => {
-
-  //   console.log('=======================');
-  //   console.log('handleLogin:');
-  //   console.log('=======================');
-  //   console.log(authState);
-
-  //   if (authState?.authenticated) {
-  //     router.replace('/')
-  //   }
-
-  // }, [authState]);
-
-  
   const onLogin = async (username: string, password: string) => {
     
     const result = await (Login && Login(username, password));
     
-    if (result) {
-      
-      
-      router.replace('/');
+    result ? router.replace('/') : alert('Invalid username or password');
 
-      
-      
-    } else {
-      
-      alert('Invalid username or password');
-      console.log('gagal...');
-      
-    }
-    
-    
-      
   }
     
 

@@ -1,0 +1,33 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+  margin: 0;
+  background-color: #f0f0f0;
+}
+
+.box {
+  width: 100px;
+  height: 100px;
+  background-color: #3498db;
+  transition: width 2s, height 2s;
+}
+
+.kotak {
+  width: 100px;
+  height: 100px;
+  background-color:red;
+  transition: width 5s;
+}
+
+.animate {
+  width: 700px;
+}
+
+button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+}

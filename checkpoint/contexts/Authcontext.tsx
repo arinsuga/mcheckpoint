@@ -1,16 +1,11 @@
 import {
     ReactNode,
-    Dispatch,
     useState,
     createContext,
     useContext,
 } from 'react'
+import IUser from '@/interfaces/IUser';
 
-interface IUser {
-    username?: string | null,
-    roles?: string[] | null,
-    email?: string | null
-}
 
 interface IState {
     user?: IUser | null,
