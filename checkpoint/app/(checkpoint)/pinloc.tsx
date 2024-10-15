@@ -2,7 +2,7 @@ import { Text, View, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 
 
-export default function Checkin() {
+export default function Pinloc() {
   const router = useRouter();
 
   return (
