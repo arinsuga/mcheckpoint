@@ -35,16 +35,22 @@ export default function AppLayout() {
             screenOptions={{
               headerShown: true,
               title: "",
-              headerLeft: () => (
-                <>
+              headerLeft: () => (router.canGoBack() ?
+                <Ionicons
+                name="arrow-back"
+                size={24}
+                color={ Colors.orange }
+                onPress={() => router.canGoBack() && router.back()}
+                /> :
+                <></>),
+                headerRight: () => (
                   <Ionicons
-                      name="arrow-back"
-                      size={24}
-                      color={ Colors.orange }
-                      onPress={() => router.back()}
+                    name="power"
+                    size={24}
+                    color={Colors.orange}
+                    onPress={() => (Logout && Logout())}
                   />
-                </>
-              )
+                ),
             }}
         />
 
