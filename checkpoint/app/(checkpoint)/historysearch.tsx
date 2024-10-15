@@ -1,4 +1,6 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Text, View } from "react-native";
+
+import { Link } from "expo-router";
 
 export default function Historysearch() {
   return (
@@ -9,13 +11,10 @@ export default function Historysearch() {
         alignItems: "center",
       }}
     >
-      <Text style={style.contain}>Edit app/index.tsx to edit this screen.</Text>
+        <Text>HISTORY SEARCH</Text>
+        <Link href="/historydetail"><Text>Goto History Details</Text></Link>
+
     </View>
   );
 }
 
-const style = StyleSheet.create({
-  contain: {
-    fontWeight: "bold"
-  }
-});

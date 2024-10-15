@@ -60,7 +60,9 @@ export default function AppLayout() {
               }} />
               <Tabs.Screen name="pinloc" options={{
                 headerShown: true,
-                tabBarIcon: () => <MaterialIcons name="my-location" size={32} color={ Colors.orange } />
+                tabBarIcon: () => <MaterialIcons name="my-location" size={56} color={ Colors.orange }
+                  style={[{ position: "absolute", top: -30, backgroundColor: Colors.white, borderRadius: 50 }]}
+                />
               }} />
               <Tabs.Screen name="history" options={{
                 headerShown: true,
