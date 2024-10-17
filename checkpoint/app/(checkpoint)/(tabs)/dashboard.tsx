@@ -14,21 +14,6 @@ export default function Dashboard() {
     >
 
       <Text>DASHBOARD</Text> 
-      <TouchableOpacity
-          onPress={() => {
-              router.push("/checkin");
-          }}
-      >
-        <Text>Goto Checkin</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-          onPress={() => {
-              router.push("/");
-          }}
-      >
-        <Text>Goto Home</Text>
-      </TouchableOpacity>
 
     </View>
   );

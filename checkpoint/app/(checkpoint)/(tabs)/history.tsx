@@ -2,7 +2,7 @@ import { Text, View } from "react-native";
 
 import { Link } from "expo-router";
 
-export default function Historydetail() {
+export default function History() {
   return (
     <View
       style={{
@@ -11,8 +11,8 @@ export default function Historydetail() {
         alignItems: "center",
       }}
     >
-      <Text>HISTORY DETAILS</Text>
-      <Link href="/historysearch"><Text>Goto History Search</Text></Link>
+
+        <Text>HISTORY</Text>
 
     </View>
   );

@@ -12,7 +12,6 @@ export default function Historysearch() {
       }}
     >
         <Text>HISTORY SEARCH</Text>
-        <Link href="/historydetail"><Text>Goto History Details</Text></Link>
 
     </View>
   );

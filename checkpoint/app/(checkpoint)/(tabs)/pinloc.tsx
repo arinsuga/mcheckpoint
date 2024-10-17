@@ -15,14 +15,6 @@ export default function Pinloc() {
     >
 
       <Text>CHECKIN</Text> 
-      <TouchableOpacity
-          onPress={() => {
-              router.push("/checkout");
-          }}
-      >
-        <Text>Goto Checkout</Text>
-      </TouchableOpacity>
-
 
     </View>
   );
