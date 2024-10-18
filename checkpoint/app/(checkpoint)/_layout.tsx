@@ -17,13 +17,11 @@ import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 
 const CustomDrawerContent = (props: any) => {
     const { Logout } = useAuth();
+    const router = useRouter();
 
   return (
 
-      <DrawerContentScrollView {...props}
-        style={{
-        }}
-      >
+      <DrawerContentScrollView {...props} >
 
         <DrawerItem
             icon={({color, size}) => (
@@ -31,10 +29,21 @@ const CustomDrawerContent = (props: any) => {
                 name="power"
                 size={24}
                 color={Colors.orange}
+                style={{
+                  marginRight: -20
+                }}
               />
             )}
             label={"Logout"}
+            labelStyle={{
+              fontSize: 16,
+            }}
             onPress={() => (Logout && Logout())}
+        />
+
+        <DrawerItem
+          label={"History"}
+          onPress={() => router.push('/(checkpoint)/(tabs)/history')}
         />
 
       </DrawerContentScrollView>
@@ -65,7 +74,6 @@ export default function AppLayout() {
                   headerTintColor: Colors.white,
                   headerShown: true,
                   headerStyle: {
-                    height: 100,
                     backgroundColor: Colors.orange
                   }
             }}>
