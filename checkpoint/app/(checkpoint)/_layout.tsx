@@ -61,7 +61,13 @@ export default function AppLayout() {
         <GestureHandlerRootView >
             <Drawer drawerContent={ (props) => <CustomDrawerContent {...props} /> }
                 screenOptions={{
-                  title: ""
+                  title: "",
+                  headerTintColor: Colors.white,
+                  headerShown: true,
+                  headerStyle: {
+                    height: 100,
+                    backgroundColor: Colors.orange
+                  }
             }}>
 
                 <Drawer.Screen name="(tabs)" />

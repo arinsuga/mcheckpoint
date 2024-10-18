@@ -17,8 +17,11 @@ export default function AppLayout() {
 
     <Tabs
         screenOptions={{
-          headerShown: true,
+          headerShown: false,
           title: "",
+          headerStyle: {
+            backgroundColor: Colors.orange,
+          },
           headerLeft: () => (router.canGoBack() ?
             <Ionicons
             name="arrow-back"
@@ -31,32 +34,26 @@ export default function AppLayout() {
     >
       
           <Tabs.Screen name="index" options={{
-            headerShown: true,
             tabBarIcon: () => <MaterialIcons name="home" size={32} color={ Colors.orange } />
           }} />
           <Tabs.Screen name="pinloc" options={{
-            headerShown: true,
             tabBarIcon: () => <MaterialIcons name="my-location" size={56} color={ Colors.orange }
               style={[{ position: "absolute", top: -30, backgroundColor: Colors.white, borderRadius: 50 }]}
             />
           }} />
           <Tabs.Screen name="history" options={{
-            headerShown: true,
             tabBarIcon: () => <MaterialIcons name="history" size={32} color={ Colors.orange } />
           }} />
 
           <Tabs.Screen name="dashboard" options={{
-            headerShown: true,
             href: null,
             tabBarIcon: () => <FontAwesome name="dashboard" size={32} color={ Colors.orange } />
           }} />
           <Tabs.Screen name="historydetail" options={{
-            headerShown: true,
             href: null,
             tabBarIcon: () => <MaterialIcons name="my-location" size={32} color={ Colors.orange } />
           }} />
           <Tabs.Screen name="historysearch" options={{
-            headerShown: true,
             href: null,
             tabBarIcon: () => <MaterialIcons name="my-location" size={32} color={ Colors.orange } />
           }} />
