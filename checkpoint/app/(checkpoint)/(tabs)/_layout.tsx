@@ -1,6 +1,7 @@
 
 import { Text } from "react-native";
 import { useRouter, Tabs } from "expo-router";
+import { useRef } from "react";
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -12,7 +13,10 @@ import { useAuth } from "@/contexts/Authcontext";
 export default function AppLayout() {
   const { Logout } = useAuth();
   const router = useRouter();
-    
+  const viewRef = useRef(null);
+
+  
+
   return (
 
     <Tabs

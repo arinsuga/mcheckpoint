@@ -1,9 +1,8 @@
 
-import { Text } from "react-native";
+import { View, Button, Text } from "react-native";
 import { useRouter } from "expo-router";
 import { Drawer } from "expo-router/drawer";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
