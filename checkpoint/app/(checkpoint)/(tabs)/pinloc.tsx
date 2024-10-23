@@ -1,11 +1,21 @@
 import { useState, useEffect, useRef } from 'react';
-import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
-import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { CameraView, CameraType, useCameraPermissions, CameraCapturedPicture } from 'expo-camera';
+import { Button, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
+import TakePhoto from '@/components/checkpoint/TakePhoto';
+
 
 export default function Pinloc() {
-  const [facing, setFacing] = useState<CameraType>('front');
   const [permission, requestPermission] = useCameraPermissions();
-  const ref = useRef();
+  const [photo, setPhoto] = useState<CameraCapturedPicture | undefined>(undefined);
+
+
+  useEffect(() => {
+
+    console.log('useEffect photo...');
+
+  }, [photo]);
+
 
   if (!permission) {
     // Camera permissions are still loading.
@@ -22,44 +32,13 @@ export default function Pinloc() {
     );
   }
 
-  let camera: CameraView | null;
-
-  const rekam = async () => {
-      
-        const result = await camera?.takePictureAsync({
-          base64: true
-        });
-        console.log(result?.base64);
-
-  }
-
-  function toggleCameraFacing() {
-    setFacing(current => (current === 'back' ? 'front' : 'back'));
-  }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
 
-      <CameraView
-          style={styles.camera}
-          facing={facing}
-          ref={r => {
-            camera = r;
-          }}
-      >
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
+        <TakePhoto photo={photo} />
 
-            <Text style={styles.text}>Flip Camera</Text>
-            
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.button} onPress={rekam}>
-            <Text style={ styles.text }>Rekam</Text>
-          </TouchableOpacity>
-        </View>
-      </CameraView>
-    </View>
+    </SafeAreaView>
   );
 }
 
