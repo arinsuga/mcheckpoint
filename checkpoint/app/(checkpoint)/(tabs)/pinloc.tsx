@@ -36,8 +36,6 @@ export default function Pinloc() {
   function toggleCameraFacing() {
     setFacing(current => (current === 'back' ? 'front' : 'back'));
   }
-  
-
 
   return (
     <View style={styles.container}>
@@ -56,8 +54,8 @@ export default function Pinloc() {
             
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={rekam}>
-            <Text>Rekam</Text>
+          <TouchableOpacity style={styles.button} onPress={rekam}>
+            <Text style={ styles.text }>Rekam</Text>
           </TouchableOpacity>
         </View>
       </CameraView>

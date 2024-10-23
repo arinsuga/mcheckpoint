@@ -1,6 +1,7 @@
 
-import { View, Button, Text } from "react-native";
-import { useRouter } from "expo-router";
+import React from "react";
+import { View, Button, Text, TouchableOpacity } from "react-native";
+import { useRouter, Stack } from "expo-router";
 import { Drawer } from "expo-router/drawer";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
@@ -53,7 +54,12 @@ const CustomDrawerContent = (props: any) => {
 
 export default function AppLayout() {
   const { authState, Logout } = useAuth();
-  const router = useRouter();
+
+  React.useEffect(() => {
+    console.log('useEffect authstate rendered ....')
+    
+  }, [authState]);
+
 
   if (!authState?.authenticated) {
 
@@ -66,22 +72,26 @@ export default function AppLayout() {
     
       return (
 
-        <GestureHandlerRootView >
-            <Drawer drawerContent={ (props) => <CustomDrawerContent {...props} /> }
-                screenOptions={{
-                  title: "",
-                  headerTintColor: Colors.white,
-                  headerShown: true,
-                  headerStyle: {
-                    backgroundColor: Colors.orange
-                  }
-            }}>
+        <Stack 
+            screenOptions={{
+              title: "",
+              headerShown: true,
+              headerStyle: {
+                backgroundColor: Colors.orange
+              },
+              headerRight: () => (
+                <TouchableOpacity onPress={() => Logout && Logout()}>
+                  <Ionicons name="power" size={24} color={Colors.white} />
+                </TouchableOpacity>
+              )
+        }}>
 
-                <Drawer.Screen name="(tabs)" />
+            <Stack.Screen name="(tabs)" />
 
-            </Drawer>
-        </GestureHandlerRootView>
+        </Stack>
 
       )
   }
+
+
 }
