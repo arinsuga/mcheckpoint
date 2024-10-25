@@ -6,7 +6,6 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
 import Authprovider from "@/contexts/Authcontext";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -33,7 +32,8 @@ export default function RootLayout() {
 
       <Authprovider>
 
-        <Slot />
+          <Slot />
+
         
       </Authprovider>
   );

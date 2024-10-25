@@ -3,22 +3,17 @@ import { useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { CameraView, CameraType, CameraCapturedPicture } from "expo-camera";
 
-interface compProps {
-    photo
-}
-
 const TakePhoto = () => {
     const [facing, setFacing] = useState<CameraType>('front');
     const [photo, setPhoto] = useState<CameraCapturedPicture | undefined>(undefined);
     const cameraRef = useRef<CameraView | null>(null);
 
-  const takePhoto = async () => {
+  const capture = async () => {
       
-        const options = {
-          base64: true
-        };
+        const options = {};
 
         setPhoto(await cameraRef.current?.takePictureAsync(options));
+        console.log(photo?.uri);
 
   }
 
@@ -40,7 +35,7 @@ const TakePhoto = () => {
             
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.button} onPress={takePhoto}>
+          <TouchableOpacity style={styles.button} onPress={capture}>
             <Text style={ styles.text }>Rekam</Text>
           </TouchableOpacity>
         </View>

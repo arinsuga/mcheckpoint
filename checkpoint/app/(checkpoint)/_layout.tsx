@@ -1,6 +1,6 @@
 
 import React from "react";
-import { View, Button, Text, TouchableOpacity } from "react-native";
+import { View, Button, Text, TouchableOpacity, SafeAreaView } from "react-native";
 import { useRouter, Stack } from "expo-router";
 import { Drawer } from "expo-router/drawer";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -89,6 +89,8 @@ export default function AppLayout() {
             <Stack.Screen name="(tabs)" />
 
         </Stack>
+
+
 
       )
   }
