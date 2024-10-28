@@ -1,5 +1,5 @@
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { CameraView, CameraType, CameraCapturedPicture } from "expo-camera";
 
@@ -8,12 +8,22 @@ const TakePhoto = () => {
     const [photo, setPhoto] = useState<CameraCapturedPicture | undefined>(undefined);
     const cameraRef = useRef<CameraView | null>(null);
 
+  useEffect(() => {
+
+    console.log('useEffect child 1...logging photo');
+    console.log(photo);
+    console.log('useEffect child 2...reseting photo');
+    console.log(photo);
+
+  }, [photo]);
+
   const capture = async () => {
       
         const options = {};
 
         setPhoto(await cameraRef.current?.takePictureAsync(options));
-        console.log(photo?.uri);
+        console.log('start Capture');
+        console.log(photo);
 
   }
 

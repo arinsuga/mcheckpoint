@@ -3,6 +3,7 @@ import { CameraView, CameraType, useCameraPermissions, CameraCapturedPicture } f
 import { Button, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import TakePhoto from '@/components/checkpoint/TakePhoto';
+import { Colors } from '@/constants/checkpoint/Colors';
 
 
 export default function Pinloc() {
@@ -12,7 +13,8 @@ export default function Pinloc() {
 
   useEffect(() => {
 
-    console.log('useEffect photo...');
+    console.log('useEffect parrent...');
+    console.log(photo);
 
   }, [photo]);
 
@@ -36,7 +38,8 @@ export default function Pinloc() {
   return (
     <SafeAreaView style={styles.container}>
 
-        <TakePhoto photo={photo} />
+        <Text style={{backgroundColor: Colors.green, color: Colors.white}}>TESTING</Text>
+        <TakePhoto />
 
     </SafeAreaView>
   );
