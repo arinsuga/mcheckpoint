@@ -1,8 +1,19 @@
-import { useState, useEffect, useCallback } from 'react';
-import { CameraView, CameraType, useCameraPermissions, CameraCapturedPicture } from 'expo-camera';
-import { Button, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  useState,
+  useEffect,
+  useCallback
+} from 'react';
+import {
+  BackHandler,
+  Button,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native';
 import { Camera } from 'react-native-vision-camera';
-
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 import TakePhoto from '@/components/checkpoint/TakePhoto';
 import { Colors } from '@/constants/checkpoint/Colors';
@@ -10,24 +21,17 @@ import { Colors } from '@/constants/checkpoint/Colors';
 
 export default function Pinloc() {
   const [showcamera, setShowcamera] = useState(Camera.getCameraPermissionStatus());
-  const [photo, setPhoto] = useState<CameraCapturedPicture | undefined>(undefined);
+  const [quitApp, setQuitApp] = useState(false);
 
 
-  // const handlePermission = useCallback(async () => {
-    
-  //   console.log('Parent requesting camera permission...');
-  //   const permission = await Camera.requestCameraPermission();
-  //   console.log(`Camere permission status : ${permission}`);
-  //   setShowcamera(permission);
-
-  // }, []);
-
+  //Request Camera Permission
   const handlePermission = async () => {
     
     console.log('Parent requesting camera permission...');
     const permission = await Camera.requestCameraPermission();
     console.log(`Camere permission status : ${permission}`);
     setShowcamera(permission);
+    setQuitApp(permission === 'denied');
 
   }
 
@@ -40,21 +44,40 @@ export default function Pinloc() {
 
 
   if (showcamera !== 'granted') {
-    // Camera permissions are not granted yet.
-    return (
-      <View style={styles.container}>
-        <Text style={styles.message}>We need your permission to show the cameraxxx</Text>
-        <Button onPress={handlePermission} title="grant permission" />
-      </View>
+
+    handlePermission();
+
+  }
+
+  if (quitApp) {
+
+    return(
+      
+        <View style={{
+          flex: 1,
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}>
+
+
+            <TouchableOpacity>
+                <Ionicons name="power" size={64} color={ Colors.orange }
+                onPress={() => BackHandler.exitApp()} />
+            </TouchableOpacity>
+
+        </View>
+
     );
+    
+
   }
 
 
   return (
     <SafeAreaView style={styles.container}>
 
-        <Text style={{backgroundColor: Colors.green, color: Colors.white}}>TESTING</Text>
-        <TakePhoto />
+      <TakePhoto />
 
     </SafeAreaView>
   );

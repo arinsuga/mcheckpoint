@@ -8,6 +8,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 import { Colors } from "@/constants/checkpoint/Colors";
+import Icon from "@/components/Icon";
 import { useAuth } from "@/contexts/Authcontext";
 
 export default function AppLayout() {
@@ -39,18 +40,18 @@ export default function AppLayout() {
       
           <Tabs.Screen name="index"
             options={{
-            tabBarIcon: () => <MaterialIcons name="home" size={32} />,
+            tabBarIcon: () => <Icon.Home />,
             tabBarIconStyle: {
               color: Colors.red
             }
           }} />
           <Tabs.Screen name="pinloc" options={{
-            tabBarIcon: () => <MaterialIcons name="my-location" size={56}
+            tabBarIcon: () => <Icon.Location size={56}
               style={[{ position: "absolute", top: -30, backgroundColor: Colors.white, borderRadius: 50 }]}
             />
           }} />
           <Tabs.Screen name="history" options={{
-            tabBarIcon: () => <MaterialIcons name="history" size={32} />
+            tabBarIcon: () => <Icon.History />
           }} />
 
           <Tabs.Screen name="dashboard" options={{

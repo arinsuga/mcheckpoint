@@ -1,15 +1,12 @@
 
 import React from "react";
-import { View, Button, Text, TouchableOpacity, SafeAreaView } from "react-native";
+import { View, Button, Text, TouchableOpacity, SafeAreaView, BackHandler } from "react-native";
 import { useRouter, Stack } from "expo-router";
 import { Drawer } from "expo-router/drawer";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-import Ionicons from '@expo/vector-icons/Ionicons';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-
 import { Colors } from "@/constants/checkpoint/Colors";
+import Icon from "@/components/Icon";
 import { useAuth } from "@/contexts/Authcontext";
 import Login from "../login";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
@@ -25,8 +22,7 @@ const CustomDrawerContent = (props: any) => {
 
         <DrawerItem
             icon={({color, size}) => (
-              <Ionicons
-                name="power"
+              <Icon.Power
                 size={24}
                 color={Colors.orange}
                 style={{
@@ -80,9 +76,13 @@ export default function AppLayout() {
                 backgroundColor: Colors.orange
               },
               headerRight: () => (
-                <TouchableOpacity onPress={() => Logout && Logout()}>
-                  <Ionicons name="power" size={24} color={Colors.white} />
-                </TouchableOpacity>
+                <View>
+                  
+                  <TouchableOpacity onPress={() => Logout && Logout()}>
+                    <Icon.Power size={24} color={Colors.white} />
+                  </TouchableOpacity>
+
+                </View>
               )
         }}>
 
