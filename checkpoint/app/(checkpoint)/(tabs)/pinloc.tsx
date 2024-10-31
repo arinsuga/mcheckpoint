@@ -1,6 +1,7 @@
 import {
   useState,
   useEffect,
+  useLayoutEffect,
   useCallback
 } from 'react';
 import {
@@ -13,57 +14,82 @@ import {
   View
 } from 'react-native';
 import { Camera } from 'react-native-vision-camera';
-import Ionicons from '@expo/vector-icons/Ionicons';
+
 
 import TakePhoto from '@/components/checkpoint/TakePhoto';
 import { Colors } from '@/constants/checkpoint/Colors';
-
+import Icon from '@/components/Icon';
 
 export default function Pinloc() {
   const [showcamera, setShowcamera] = useState(Camera.getCameraPermissionStatus());
-  const [quitApp, setQuitApp] = useState(false);
+  const [showRefresh, setShowRefresh] = useState(false);
+  const [reloadApp, setReloadApp] = useState(false);
 
 
   //Request Camera Permission
   const handlePermission = async () => {
     
-    console.log('Parent requesting camera permission...');
+    console.log('handlePermission - requesting camera permission...');
     const permission = await Camera.requestCameraPermission();
-    console.log(`Camere permission status : ${permission}`);
+    
+    console.log(`handlePermission - Camera permission status : ${permission}`);
+    console.log(`handlePermission - showCamera : ${showcamera}`);
+    console.log(`handlePermission - showRefresh : ${showRefresh}`);
+      
     setShowcamera(permission);
-    setQuitApp(permission === 'denied');
+    setShowRefresh(permission === 'denied');
 
   }
 
   useEffect(() => {
 
     console.log('useEffect parrent...');
-    console.log(showcamera);
-
+    console.log(`useEffect - showCamera : ${showcamera}`);
+    console.log(`useEffect - showRefresh : ${showRefresh}`);
+    
   }, [showcamera]);
 
-
-  if (showcamera !== 'granted') {
+  console.log(`outside - everything`);
+  console.log(`outside - showCamera : ${showcamera}`);
+  console.log(`outside - showRefresh : ${showRefresh}`);
+  if ((showcamera !== 'granted') && (!showRefresh)) {
 
     handlePermission();
 
   }
 
-  if (quitApp) {
+
+  if (showRefresh) {
 
     return(
       
         <View style={{
           flex: 1,
-          flexDirection: 'row',
           justifyContent: 'center',
           alignItems: 'center'
         }}>
 
 
-            <TouchableOpacity>
-                <Ionicons name="power" size={64} color={ Colors.orange }
-                onPress={() => BackHandler.exitApp()} />
+            <Text style={{ fontSize: 18, marginBottom: 10 }}>Please allow this app to use camera.</Text>
+            <Text style={{ fontSize: 18, marginBottom: 10, fontWeight: 'bold' }}>Or</Text>
+            <TouchableOpacity style={{
+              flex: 1,
+              flexDirection: "row",
+              alignItems: 'center',
+              justifyContent: 'space-around',
+              backgroundColor: Colors.orange,
+              padding: 6,
+              flexGrow: 0.07,
+              paddingHorizontal: 18,
+            }} onPress={() => {
+
+              setShowRefresh(false);
+              //BackHandler.exitApp();
+              //handlePermission();
+
+            }}>
+                <Icon.Power size={24} color={ Colors.white } />
+                <Text style={{ color: Colors.white, marginLeft: 10 }}>Exit Application</Text>
             </TouchableOpacity>
 
         </View>
@@ -73,14 +99,15 @@ export default function Pinloc() {
 
   }
 
+  if (showcamera === 'granted') {
+    return (
+      <SafeAreaView style={styles.container}>
 
-  return (
-    <SafeAreaView style={styles.container}>
+        <TakePhoto />
 
-      <TakePhoto />
-
-    </SafeAreaView>
-  );
+      </SafeAreaView>
+    );
+  }
 
 }
 

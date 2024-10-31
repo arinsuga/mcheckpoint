@@ -52,19 +52,19 @@ export default function AppLayout() {
   const { authState, Logout } = useAuth();
 
   React.useEffect(() => {
-    console.log('useEffect authstate rendered ....')
+    //console.log('useEffect authstate rendered ....')
     
   }, [authState]);
 
 
   if (!authState?.authenticated) {
 
-      console.log('Not authenticated');
+      //console.log('Not authenticated');
       return <Login />;
 
   } else {
 
-      console.log('authenticatedXXX');
+      //console.log('authenticatedXXX');
     
       return (
 
