@@ -3,6 +3,9 @@ import { useState, useRef, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { CameraView, CameraType, CameraCapturedPicture } from "expo-camera";
 
+import Icon from '@/components/Icon';
+import { Colors } from '@/constants/checkpoint/Colors';
+
 const TakePhoto = () => {
     const [facing, setFacing] = useState<CameraType>('front');
     const [photo, setPhoto] = useState<CameraCapturedPicture | undefined>(undefined);
@@ -27,9 +30,16 @@ const TakePhoto = () => {
 
   }
 
-  function toggleCameraFacing() {
+  const toggleCameraFacing = () => {
     setFacing(current => (current === 'back' ? 'front' : 'back'));
   }
+
+  const viewCapturedImage = () => {
+
+    alert('TODO : Image Viewer');
+
+  }
+
 
   return (
 
@@ -39,15 +49,19 @@ const TakePhoto = () => {
           ref={cameraRef}
       >
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
 
-            <Text style={styles.text}>Flip Camera</Text>
-            
-          </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={viewCapturedImage}>
+              <Icon.Image color={Colors.white} />
+            </TouchableOpacity>
 
-          <TouchableOpacity style={styles.button} onPress={capture}>
-            <Text style={ styles.text }>Rekam</Text>
-          </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={capture}>
+              <Icon.Capture color={Colors.white} size={98} />
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
+              <Icon.CameraRotate color={Colors.white} />
+            </TouchableOpacity>
+
         </View>
       </CameraView>
 
@@ -72,13 +86,12 @@ const styles = StyleSheet.create({
     buttonContainer: {
       flex: 1,
       flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'flex-end',
       backgroundColor: 'transparent',
-      margin: 64,
+      margin: 50,
     },
     button: {
-      flex: 1,
-      alignSelf: 'flex-end',
-      alignItems: 'center',
     },
     text: {
       fontSize: 24,

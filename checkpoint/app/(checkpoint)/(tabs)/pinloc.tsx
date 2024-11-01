@@ -89,7 +89,7 @@ export default function Pinloc() {
 
             }}>
                 <Icon.Power size={24} color={ Colors.white } />
-                <Text style={{ color: Colors.white, marginLeft: 10 }}>Exit Application</Text>
+                <Text style={{ color: Colors.white, marginLeft: 10 }}>Refresh</Text>
             </TouchableOpacity>
 
         </View>

@@ -35,36 +35,40 @@ export default function AppLayout() {
             onPress={() => router.canGoBack() && router.back()}
             /> :
             <></>),
-        }}
+            tabBarActiveTintColor: Colors.orange,
+            tabBarInactiveTintColor: Colors.grey,
+            tabBarStyle: {
+              height: 55,
+              paddingTop: 10
+            },
+            tabBarIconStyle: {
+              zIndex: 99,
+            },
+          }}
     >
       
           <Tabs.Screen name="index"
             options={{
-            tabBarIcon: () => <Icon.Home />,
-            tabBarIconStyle: {
-              color: Colors.red
-            }
+            tabBarIcon: ({focused, color, size}) => <Icon.Home color={color} size={size} />,
           }} />
           <Tabs.Screen name="pinloc" options={{
-            tabBarIcon: () => <Icon.Location size={56}
-              style={[{ position: "absolute", top: -30, backgroundColor: Colors.white, borderRadius: 50 }]}
-            />
+            tabBarIcon: ({focused, color, size}) => <Icon.Camera color={color} size={size} />
           }} />
           <Tabs.Screen name="history" options={{
-            tabBarIcon: () => <Icon.History />
+            tabBarIcon: ({focused, color, size}) => <Icon.History color={color} size={size} />
           }} />
 
           <Tabs.Screen name="dashboard" options={{
             href: null,
-            tabBarIcon: () => <FontAwesome name="dashboard" size={32} />
+            tabBarIcon: ({focused, color, size}) => <Icon.Dashboard size={size} color={color} />
           }} />
           <Tabs.Screen name="historydetail" options={{
             href: null,
-            tabBarIcon: () => <MaterialIcons name="my-location" size={32} />
+            tabBarIcon: ({focused, color, size}) => <Icon.Detail size={size} color={color} />
           }} />
           <Tabs.Screen name="historysearch" options={{
             href: null,
-            tabBarIcon: () => <MaterialIcons name="my-location" size={32} />
+            tabBarIcon: ({focused, color, size}) => <Icon.Search size={size} color={color} />
           }} />
 
     </Tabs>
