@@ -39,7 +39,7 @@ export default function AppLayout() {
             tabBarInactiveTintColor: Colors.grey,
             tabBarStyle: {
               height: 55,
-              paddingTop: 10
+              paddingTop: 10,
             },
             tabBarIconStyle: {
               zIndex: 99,
