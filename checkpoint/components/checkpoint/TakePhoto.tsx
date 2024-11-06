@@ -1,15 +1,36 @@
 
 import { useState, useRef, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions,
+} from 'react-native';
 import { CameraView, CameraType, CameraCapturedPicture } from "expo-camera";
+import {
+  Camera,
+  CameraDevice,
+  useCameraDevice,
+  CameraProps,
+  PhotoFile,
+  CameraPosition,
+  getCameraDevice,
+  TakePhotoOptions,
+} from 'react-native-vision-camera';
+import Reanimated, { Extrapolate, interpolate, useAnimatedGestureHandler, useAnimatedProps, useSharedValue } from 'react-native-reanimated'
 
 import Icon from '@/components/Icon';
 import { Colors } from '@/constants/checkpoint/Colors';
 
 const TakePhoto = () => {
-    const [facing, setFacing] = useState<CameraType>('front');
-    const [photo, setPhoto] = useState<CameraCapturedPicture | undefined>(undefined);
-    const cameraRef = useRef<CameraView | null>(null);
+    const [facing, setFacing] = useState<CameraPosition>('front');
+    const [cameraPosition, setCameraPosition] = useState<'front' | 'back'>('back')
+    const [photo, setPhoto] = useState<PhotoFile | undefined>(undefined);
+    const cameraRef = useRef<Camera>(null);
+
+
+    const phoneDevice = useCameraDevice(cameraPosition)
 
   useEffect(() => {
 
@@ -22,16 +43,17 @@ const TakePhoto = () => {
 
   const capture = async () => {
       
-        const options = {};
-
-        setPhoto(await cameraRef.current?.takePictureAsync(options));
+        const result = await cameraRef.current?.takePhoto({
+          enableShutterSound: false,
+        });
+        setPhoto(result);
         console.log('start Capture');
         console.log(photo);
 
   }
 
   const toggleCameraFacing = () => {
-    setFacing(current => (current === 'back' ? 'front' : 'back'));
+    setCameraPosition(current => current ==='front' ? 'back' : 'front');
   }
 
   const viewCapturedImage = () => {
@@ -41,30 +63,35 @@ const TakePhoto = () => {
   }
 
 
+
   return (
 
-      <CameraView
-          style={styles.camera}
-          facing={facing}
-          ref={cameraRef}
-      >
-        <View style={styles.buttonContainer}>
+        <View style={styles.container}>
+            <Camera
+                style={styles.camera}
+                ref={cameraRef}
+                photo={true}
+                device={phoneDevice}
+                isActive={true}
+            />
 
-            <TouchableOpacity style={styles.button} onPress={viewCapturedImage}>
-              <Icon.Image color={Colors.white} />
-            </TouchableOpacity>
+            <View style={styles.buttonContainer}>
 
-            <TouchableOpacity style={styles.button} onPress={capture}>
-              <Icon.Capture color={Colors.white} size={98} />
-            </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={viewCapturedImage}>
+                  <Icon.Image color={Colors.whiteDark} />
+                </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
-              <Icon.CameraRotate color={Colors.white} />
-            </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={capture}>
+                  <Icon.Capture color={Colors.whiteDark} size={98} />
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
+                  <Icon.CameraRotate color={Colors.whiteDark} />
+                </TouchableOpacity>
+
+            </View>
 
         </View>
-      </CameraView>
-
 
   )
 }
@@ -76,20 +103,22 @@ const styles = StyleSheet.create({
       flex: 1,
       justifyContent: 'center',
     },
+    buttonContainer: {
+      flex: 1,
+      flexDirection: 'row',
+      position: 'absolute',
+      justifyContent: 'space-around',
+      alignItems: 'flex-end',
+      backgroundColor: 'transparent',
+      width: Dimensions.get('window').width,
+      bottom: 60,
+    },
     message: {
       textAlign: 'center',
       paddingBottom: 10,
     },
     camera: {
       flex: 1,
-    },
-    buttonContainer: {
-      flex: 1,
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'flex-end',
-      backgroundColor: 'transparent',
-      margin: 50,
     },
     button: {
     },
