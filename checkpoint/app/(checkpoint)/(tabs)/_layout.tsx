@@ -51,9 +51,17 @@ export default function AppLayout() {
             options={{
             tabBarIcon: ({focused, color, size}) => <Icon.Home color={color} size={size} />,
           }} />
-          <Tabs.Screen name="pinloc" options={{
-            tabBarIcon: ({focused, color, size}) => <Icon.Camera color={color} size={size} />
-          }} />
+          <Tabs.Screen name="tabpinloc"
+                      options={{
+                        tabBarIcon: ({focused, color, size}) => <Icon.Camera color={color} size={size} />
+                      }}
+                      listeners={() => ({
+                        tabPress: (e) => {
+                          e.preventDefault();
+                          router.push('/pinloc');
+                        }
+                      })}
+          />
           <Tabs.Screen name="history" options={{
             tabBarIcon: ({focused, color, size}) => <Icon.History color={color} size={size} />
           }} />
