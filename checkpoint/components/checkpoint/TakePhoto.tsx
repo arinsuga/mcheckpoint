@@ -24,8 +24,7 @@ import Icon from '@/components/Icon';
 import { Colors } from '@/constants/checkpoint/Colors';
 
 const TakePhoto = () => {
-    const [facing, setFacing] = useState<CameraPosition>('front');
-    const [cameraPosition, setCameraPosition] = useState<'front' | 'back'>('back')
+    const [cameraPosition, setCameraPosition] = useState<'front' | 'back'>('front')
     const [photo, setPhoto] = useState<PhotoFile | undefined>(undefined);
     const cameraRef = useRef<Camera>(null);
 
@@ -35,8 +34,6 @@ const TakePhoto = () => {
   useEffect(() => {
 
     console.log('useEffect child 1...logging photo');
-    console.log(photo);
-    console.log('useEffect child 2...reseting photo');
     console.log(photo);
 
   }, [photo]);
@@ -73,6 +70,7 @@ const TakePhoto = () => {
                 photo={true}
                 device={phoneDevice}
                 isActive={true}
+                enableLocation={true}
             />
 
             <View style={styles.buttonContainer}>

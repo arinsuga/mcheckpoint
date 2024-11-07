@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import { Camera } from 'react-native-vision-camera';
+import { Camera, CameraPermissionRequestResult } from 'react-native-vision-camera';
 
 
 import TakePhoto from '@/components/checkpoint/TakePhoto';
@@ -21,45 +21,74 @@ import { Colors } from '@/constants/checkpoint/Colors';
 import Icon from '@/components/Icon';
 
 export default function Pinloc() {
-  const [showcamera, setShowcamera] = useState(Camera.getCameraPermissionStatus());
-  const [showRefresh, setShowRefresh] = useState(false);
+  const [isRefresh, setIsRefresh] = useState(false);
+  const [allowCamera, setAllowCamera] = useState(Camera.getCameraPermissionStatus());
+  const [allowLocation, setAllowLocation] = useState(Camera.getLocationPermissionStatus());
+  
+  const [showRefreshCamera, setShowRefreshCamera] = useState(false);
+  const [showRefreshLocation, setShowRefreshLocation] = useState(false);
   const [reloadApp, setReloadApp] = useState(false);
 
 
   //Request Camera Permission
   const handlePermission = async () => {
     
+    console.log('handlePermission - requesting Location permission');
+    const LocationPermision = await Camera.requestLocationPermission();
+
     console.log('handlePermission - requesting camera permission...');
-    const permission = await Camera.requestCameraPermission();
+    const CameraPermission = await Camera.requestCameraPermission();
     
-    console.log(`handlePermission - Camera permission status : ${permission}`);
-    console.log(`handlePermission - showCamera : ${showcamera}`);
-    console.log(`handlePermission - showRefresh : ${showRefresh}`);
-      
-    setShowcamera(permission);
-    setShowRefresh(permission === 'denied');
+    setAllowCamera(CameraPermission);
+    setShowRefreshCamera(CameraPermission === 'denied');
+
+    console.log(`handlePermission - Camera permission status : ${CameraPermission}`);
+    console.log(`handlePermission - allowCamera : ${allowCamera}`);
+    console.log(`handlePermission - showRefresh : ${showRefreshCamera}`);
+
+    setAllowLocation(LocationPermision);
+    setShowRefreshLocation(LocationPermision === 'denied');
+
+    console.log(`handlePermission - Location permission status : ${CameraPermission}`);
+    console.log(`handlePermission - allowLocation : ${allowLocation}`);
+    console.log(`handlePermission - showRefresh : ${showRefreshLocation}`);
 
   }
 
   useEffect(() => {
 
     console.log('useEffect parrent...');
-    console.log(`useEffect - showCamera : ${showcamera}`);
-    console.log(`useEffect - showRefresh : ${showRefresh}`);
+    console.log(`useEffect - allowCamera : ${allowCamera}`);
+    console.log(`useEffect - showRefreshCamera : ${showRefreshCamera}`);
+    console.log(`useEffect - allowLocation : ${allowLocation}`);
+    console.log(`useEffect - showRefreshLocation : ${showRefreshLocation}`);
     
-  }, [showcamera]);
+  }, [allowCamera, allowLocation]);
 
   console.log(`outside - everything`);
-  console.log(`outside - showCamera : ${showcamera}`);
-  console.log(`outside - showRefresh : ${showRefresh}`);
-  if ((showcamera !== 'granted') && (!showRefresh)) {
+  console.log(`outside - allowCamera : ${allowCamera}`);
+  console.log(`outside - showRefreshCamera : ${showRefreshCamera}`);
+  console.log(`outside - allowLocation : ${allowLocation}`);
+  console.log(`outside - showRefreshLocation : ${showRefreshLocation}`);
+  if ((allowCamera !== 'granted') && (!showRefreshCamera)) {
 
     handlePermission();
 
   }
 
 
-  if (showRefresh) {
+  if ((showRefreshCamera) || (showRefreshLocation)) {
+
+    let message: string = '';
+    if (showRefreshCamera) {
+      message = 'Please allow this app to use Camera';
+    }
+
+    if (showRefreshLocation) {
+      message !== '' ?
+      message = message + ' and Location / GPS also make sure to enable Location / GPS' :
+      message = 'please allow this app to use Location / GPS and make sure to enable Location / GPS'
+    }
 
     return(
       
@@ -70,7 +99,7 @@ export default function Pinloc() {
         }}>
 
 
-            <Text style={{ fontSize: 18, marginBottom: 10 }}>Please allow this app to use camera.</Text>
+            <Text style={{ fontSize: 18, marginBottom: 10 }}>{message}</Text>
             <Text style={{ fontSize: 18, marginBottom: 10, fontWeight: 'bold' }}>Or</Text>
             <TouchableOpacity style={{
               flex: 1,
@@ -83,9 +112,15 @@ export default function Pinloc() {
               paddingHorizontal: 18,
             }} onPress={() => {
 
-              setShowRefresh(false);
+              // setIsRefresh(true);
+              // setShowRefreshCamera(false);
+              // setShowRefreshLocation(false);
+
+              allowCamera === 'denied' && setShowRefreshCamera(false);
+              allowLocation === 'denied' && setShowRefreshLocation(false);
+
               //BackHandler.exitApp();
-              //handlePermission();
+              handlePermission();
 
             }}>
                 <Icon.Power size={24} color={ Colors.white } />
@@ -99,7 +134,7 @@ export default function Pinloc() {
 
   }
 
-  if (showcamera === 'granted') {
+  if ((allowCamera === 'granted') || (allowLocation === 'granted')) {
     return (
       <SafeAreaView style={styles.container}>
 

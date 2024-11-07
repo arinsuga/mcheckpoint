@@ -38,13 +38,22 @@
         }
       ],
       [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+        }
+      ],
+      [
         "react-native-vision-camera",
         {
           "cameraPermissionText": "$(PRODUCT_NAME) needs access to your Camera.",
   
           // optionally, if you want to record audio:
           "enableMicrophonePermission": true,
-          "microphonePermissionText": "$(PRODUCT_NAME) needs access to your Microphone."
+          "microphonePermissionText": "$(PRODUCT_NAME) needs access to your Microphone.",
+          "enableLocation": true,
+          "locationPermissionText": "[checkpoint] needs your location."
+  
         }
       ]
     ],
