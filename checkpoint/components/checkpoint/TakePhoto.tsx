@@ -24,12 +24,12 @@ import Icon from '@/components/Icon';
 import { Colors } from '@/constants/checkpoint/Colors';
 
 const TakePhoto = () => {
-    const [cameraPosition, setCameraPosition] = useState<'front' | 'back'>('front')
+    const [cameraPosition, setCameraPosition] = useState<'front' | 'back'>('front');
     const [photo, setPhoto] = useState<PhotoFile | undefined>(undefined);
     const cameraRef = useRef<Camera>(null);
 
 
-    const phoneDevice = useCameraDevice(cameraPosition)
+    const phoneDevice = useCameraDevice(cameraPosition);
 
   useEffect(() => {
 
@@ -38,14 +38,22 @@ const TakePhoto = () => {
 
   }, [photo]);
 
-  const capture = async () => {
+  const capturePhoto = async () => {
       
+      try {
+
+        console.log('Start Capture...');
         const result = await cameraRef.current?.takePhoto({
           enableShutterSound: false,
         });
+        
         setPhoto(result);
-        console.log('start Capture');
-        console.log(photo);
+
+      } catch {
+
+        console.log('failed to capture photo ...');
+
+      }
 
   }
 
@@ -79,7 +87,7 @@ const TakePhoto = () => {
                   <Icon.Image color={Colors.whiteDark} />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.button} onPress={capture}>
+                <TouchableOpacity style={styles.button} onPress={capturePhoto}>
                   <Icon.Capture color={Colors.whiteDark} size={98} />
                 </TouchableOpacity>
 
