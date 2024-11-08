@@ -30,57 +30,53 @@ export default function Pinloc() {
   const [reloadApp, setReloadApp] = useState(false);
 
 
-  //Request Camera Location
-  const handleLocationPermission = async () => {
+  //Request Camera and Location
+  const handleAllPermission = async () => {
     
     console.log('handlePermission - requesting Location permission...');
-
     const LocationPermissionStatus = await Camera.requestLocationPermission();
+    console.log('handlePermission - requesting Camera permission...');
+    const cameraPermissionStatus = await Camera.requestCameraPermission();
+
+    console.log('handlePermission - update STATE...');
     setAllowLocation(LocationPermissionStatus);
     setShowRefreshLocation(LocationPermissionStatus === 'denied');
-
-  }
-  
-  //Request Camera Permission
-  const handleCameraPermission = async () => {
-    
-    console.log('handlePermission - requesting Camera permission...');
-
-    const cameraPermissionStatus = await Camera.requestCameraPermission();
     setAllowCamera(cameraPermissionStatus);
     setShowRefreshCamera(cameraPermissionStatus === 'denied');
 
-  }
 
+  }
+  
   useEffect(() => {
 
-    console.log('useEffect parrent - LOCATION...');
-    console.log(`useEffect - allowLocation : ${allowLocation}`);
-    console.log(`useEffect - showRefreshLocation : ${showRefreshLocation}`);
+    // console.log('useEffect parrent - LOCATION...');
+    // console.log(`useEffect - allowLocation : ${allowLocation}`);
+    // console.log(`useEffect - showRefreshLocation : ${showRefreshLocation}`);
     
-    console.log('useEffect parrent - CAMERA...');
-    console.log(`useEffect - allowCamera : ${allowCamera}`);
-    console.log(`useEffect - showRefreshCamera : ${showRefreshCamera}`);
+    // console.log('useEffect parrent - CAMERA...');
+    // console.log(`useEffect - allowCamera : ${allowCamera}`);
+    // console.log(`useEffect - showRefreshCamera : ${showRefreshCamera}`);
 
+
+    if ((allowLocation !== 'granted') && (allowCamera !== 'granted')) {
+
+      console.log('========== useEffect ==========');
+      handleAllPermission();
+  
+    }
+  
   }, [allowCamera, allowLocation]);
 
-  console.log(`outside - everything - LOCATION`);
-  console.log(`outside - allowLocation : ${allowLocation}`);
-  console.log(`outside - showRefreshLocation : ${showRefreshLocation}`);
-  if ((allowLocation !== 'granted') && (!showRefreshLocation)) {
+  // console.log(`outside - everything - LOCATION and CAMERA`);
+  // console.log(`outside - allowLocation : ${allowLocation}`);
+  // console.log(`outside - showRefreshLocation : ${showRefreshLocation}`);
+  // console.log(`outside - allowCamera : ${allowCamera}`);
+  // console.log(`outside - showRefreshCamera : ${showRefreshCamera}`);
+  // if ((allowLocation !== 'granted') && (allowCamera !== 'granted')) {
 
-    handleLocationPermission();
+  //   handleAllPermission();
 
-  }
-
-  console.log(`outside - everything - CAMERA`);
-  console.log(`outside - allowCamera : ${allowCamera}`);
-  console.log(`outside - showRefreshCamera : ${showRefreshCamera}`);
-  if ((allowCamera !== 'granted') && (!showRefreshCamera)) {
-
-    handleCameraPermission();
-
-  }
+  // }
 
 
   if ((showRefreshCamera) || (showRefreshLocation)) {
@@ -139,7 +135,8 @@ export default function Pinloc() {
 
   }
 
-  if ((allowCamera === 'granted') || (allowLocation === 'granted')) {
+  if ((allowCamera === 'granted') && (allowLocation === 'granted')) {
+    console.log('camera OK');
     return (
       <SafeAreaView style={styles.container}>
 

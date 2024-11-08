@@ -81,6 +81,7 @@ const TakePhoto = () => {
                 enableLocation={true}
             />
 
+
             <View style={styles.buttonContainer}>
 
                 <TouchableOpacity style={styles.button} onPress={viewCapturedImage}>
