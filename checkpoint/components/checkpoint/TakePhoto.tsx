@@ -6,8 +6,10 @@ import {
   TouchableOpacity,
   StyleSheet,
   Dimensions,
+  Image,
+  Platform,
+  StatusBar,
 } from 'react-native';
-import { CameraView, CameraType, CameraCapturedPicture } from "expo-camera";
 import {
   Camera,
   CameraDevice,
@@ -26,6 +28,7 @@ import { Colors } from '@/constants/checkpoint/Colors';
 const TakePhoto = () => {
     const [cameraPosition, setCameraPosition] = useState<'front' | 'back'>('front');
     const [photo, setPhoto] = useState<PhotoFile | undefined>(undefined);
+    const [photoUri, setPhotoUri] = useState<string | undefined>(undefined);
     const cameraRef = useRef<Camera>(null);
 
 
@@ -35,7 +38,7 @@ const TakePhoto = () => {
 
     console.log('useEffect child 1...logging photo');
     console.log(photo);
-
+    
   }, [photo]);
 
   const capturePhoto = async () => {
@@ -47,7 +50,11 @@ const TakePhoto = () => {
           enableShutterSound: false,
         });
         
+        console.log(`file://${result.path}`);
+
+
         setPhoto(result);
+        setPhotoUri(result?.path);
 
       } catch {
 
@@ -71,6 +78,7 @@ const TakePhoto = () => {
 
   return (
 
+        !photo ? 
         <View style={styles.container}>
             <Camera
                 style={styles.camera}
@@ -98,6 +106,18 @@ const TakePhoto = () => {
 
             </View>
 
+        </View> :
+        <View style={{
+          flex: 1,
+          justifyContent: 'flex-start',
+          paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0, 
+        }}>
+            <Image style={{
+              width: Dimensions.get('window').width,
+              height: Dimensions.get('window').height/2,
+            }} source={{
+              uri: `file://${photo.path}` 
+            }} />
         </View>
 
   )
