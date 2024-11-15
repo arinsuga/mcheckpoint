@@ -1,6 +1,7 @@
 import React from 'react';
 import {
     FontAwesome,
+    FontAwesome6,
     Ionicons,
     MaterialIcons,
     Foundation,
@@ -65,6 +66,14 @@ export const IconImage = ({size = defaultSize, color=defaultColor, style}: IconP
     return <Ionicons name="image-outline" size={size} color={color} style={style} />
 }
 
+export const IconUser = ({size = defaultSize, color=defaultColor, style}: IconProps) => {
+    return <FontAwesome6 name="user" size={size} color={color} style={style} />
+}
+
+export const IconKey = ({size = defaultSize, color=defaultColor, style}: IconProps) => {
+    return <Ionicons name="key" size={size} color={color} style={style} />
+}
+
 const Icon = {
     Home: IconHome,
     History: IconHistory,
@@ -77,6 +86,8 @@ const Icon = {
     Detail: IconDetail,
     Search: IconSearch,
     Image: IconImage,
+    User: IconUser,
+    Key: IconKey,
 }
 
 export default Icon

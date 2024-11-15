@@ -16,7 +16,11 @@ import { useState, useEffect } from "react";
 
 import { Colors } from "../constants/checkpoint/Colors";
 import Logo from "../components/checkpoint/Logo";
+import Icon from "@/components/Icon";
 import { useAuth } from "@/contexts/Authcontext";
+
+import FieldUserName from "@/components/FieldUserName/FieldUserName";
+import FieldPassword from "@/components/FieldPassword/FieldPassword";
 
 import { useFocusEffect, useRouter } from "expo-router";
 
@@ -33,7 +37,19 @@ export default function Login() {
     result ? router.replace('/') : alert('Invalid username or password');
 
   }
-    
+
+  const usernamedOnChange = (nextText: string) => {
+
+    setPassword(nextText);
+
+  }
+
+  const passwordOnChange = (nextText: string) => {
+
+    setUsername(nextText);
+
+  }
+
 
   return (
     <SafeAreaView
@@ -53,31 +69,8 @@ export default function Login() {
 
       <View style={ styles.container }>
 
-
-      <View style={ styles.textInputGroup } >
-
-          <Image style={ styles.inputIcon } source={require('../assets/checkpoint/images/user.png')}  />
-          <TextInput
-            placeholderTextColor={ Colors.grey }
-            placeholder="Username"
-            style={ styles.textInput }
-            onChangeText={ (nextText) => setUsername(nextText) }
-          ></TextInput>
-
-        </View>
-
-        <View style={ [ styles.textInputGroup, { marginBottom: 30 } ] }>
-
-          <Image style={ styles.inputIcon } source={require('../assets/checkpoint/images/key.png')} />
-          <TextInput
-            placeholderTextColor={ Colors.grey }
-            secureTextEntry={ true }
-            placeholder="Password"
-            style={ styles.textInput }
-            onChangeText={ (nextText) => setPassword(nextText) }
-          ></TextInput>
-
-        </View>
+        <FieldUserName onChangeText={ usernamedOnChange } />
+        <FieldPassword onChangeText={ passwordOnChange } />
 
         <View>
 
