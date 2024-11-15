@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { CameraView, CameraType, CameraCapturedPicture } from "expo-camera";
 
-import Icon from '@/components/Icon';
+import Icon from '@/components/Icon/Icon';
 import { Colors } from '@/constants/checkpoint/Colors';
 
 const TakePhotoExpo = () => {

@@ -15,8 +15,8 @@ import {
 import { useState, useEffect } from "react";
 
 import { Colors } from "../constants/checkpoint/Colors";
-import Logo from "../components/checkpoint/Logo";
-import Icon from "@/components/Icon";
+import Logo from "../components/Logo/Logo";
+import Icon from "@/components/Icon/Icon";
 import { useAuth } from "@/contexts/Authcontext";
 
 import FieldUserName from "@/components/FieldUserName/FieldUserName";
@@ -40,13 +40,13 @@ export default function Login() {
 
   const usernamedOnChange = (nextText: string) => {
 
-    setPassword(nextText);
+    setUsername(nextText);
 
   }
 
   const passwordOnChange = (nextText: string) => {
 
-    setUsername(nextText);
+    setPassword(nextText);
 
   }
 

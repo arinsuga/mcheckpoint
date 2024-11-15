@@ -8,7 +8,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 import { Colors } from "@/constants/checkpoint/Colors";
-import Icon from "@/components/Icon";
+import Icon from "@/components/Icon/Icon";
 import { useAuth } from "@/contexts/Authcontext";
 
 export default function AppLayout() {

@@ -16,9 +16,9 @@ import {
 import { Camera, CameraPermissionRequestResult } from 'react-native-vision-camera';
 
 
-import TakePhoto from '@/components/checkpoint/TakePhoto';
+import TakePhoto from '@/components/TakePhoto/TakePhoto';
 import { Colors } from '@/constants/checkpoint/Colors';
-import Icon from '@/components/Icon';
+import Icon from '@/components/Icon/Icon';
 
 export default function Pinloc() {
   const [isRefresh, setIsRefresh] = useState(false);

@@ -1,7 +1,7 @@
 import { useRouter, Link } from "expo-router";
 import { Button, Text, View } from "react-native";
 import { useAuth } from "@/contexts/Authcontext";
-import Icon from "@/components/Icon";
+import Icon from "@/components/Icon/Icon";
 
 export default function Home() {
 

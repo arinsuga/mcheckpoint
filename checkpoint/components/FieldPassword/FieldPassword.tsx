@@ -5,7 +5,7 @@ import {
 } from "react-native";
 
 import { Colors } from "@/constants/checkpoint/Colors";
-import Icon from "../Icon";
+import Icon from "../Icon/Icon";
 
 type FieldUserNameProps = {
     onChangeText: (nexttext: string) => void;

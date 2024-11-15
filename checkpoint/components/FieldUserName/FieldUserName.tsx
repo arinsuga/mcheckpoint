@@ -5,7 +5,7 @@ import {
 } from "react-native";
 
 import { Colors } from "@/constants/checkpoint/Colors";
-import Icon from "../Icon";
+import Icon from "../Icon/Icon";
 
 type FieldUserNameProps = {
     onChangeText: (nexttext: string) => void;
@@ -19,7 +19,7 @@ export const FieldUserName = ({onChangeText}: FieldUserNameProps) => {
           <Icon.User size={20} color={Colors.greyLight} style={styles.inputIcon} />
           <TextInput
             placeholderTextColor={ Colors.grey }
-            secureTextEntry={ true }
+            secureTextEntry={ false }
             placeholder="Username"
             style={ styles.textInput }
             onChangeText={ (nextText) => onChangeText(nextText) }

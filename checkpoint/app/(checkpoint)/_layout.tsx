@@ -6,7 +6,7 @@ import { Drawer } from "expo-router/drawer";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { Colors } from "@/constants/checkpoint/Colors";
-import Icon from "@/components/Icon";
+import Icon from "@/components/Icon/Icon";
 import { useAuth } from "@/contexts/Authcontext";
 import Login from "../login";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";

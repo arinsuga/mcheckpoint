@@ -1,6 +1,6 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import Icon from '../Icon';
+import Icon from '../Icon/Icon';
 
 
 interface IData {

@@ -9,6 +9,7 @@ import {
   Image,
   Platform,
   StatusBar,
+  ScrollView,
 } from 'react-native';
 import {
   Camera,
@@ -20,15 +21,18 @@ import {
   getCameraDevice,
   TakePhotoOptions,
 } from 'react-native-vision-camera';
-import Reanimated, { Extrapolate, interpolate, useAnimatedGestureHandler, useAnimatedProps, useSharedValue } from 'react-native-reanimated'
 
-import Icon from '@/components/Icon';
+import FieldTextInput from '../FieldTextInput/FieldTextInput';
+import FieldMultilineTextInput from '../FieldMultilineTextInput/FieldMultilineTextInput';
+import CheckpointForm from '../CheckpointForm/CheckpointForm';
+
+import Icon from '@/components/Icon/Icon';
 import { Colors } from '@/constants/checkpoint/Colors';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const TakePhoto = () => {
     const [cameraPosition, setCameraPosition] = useState<'front' | 'back'>('front');
     const [photo, setPhoto] = useState<PhotoFile | undefined>(undefined);
-    const [photoUri, setPhotoUri] = useState<string | undefined>(undefined);
     const cameraRef = useRef<Camera>(null);
 
 
@@ -54,7 +58,6 @@ const TakePhoto = () => {
 
 
         setPhoto(result);
-        setPhotoUri(result?.path);
 
       } catch {
 
@@ -79,7 +82,7 @@ const TakePhoto = () => {
   return (
 
         !photo ? 
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <Camera
                 style={styles.camera}
                 ref={cameraRef}
@@ -106,19 +109,9 @@ const TakePhoto = () => {
 
             </View>
 
-        </View> :
-        <View style={{
-          flex: 1,
-          justifyContent: 'flex-start',
-          paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0, 
-        }}>
-            <Image style={{
-              width: Dimensions.get('window').width,
-              height: Dimensions.get('window').height/2,
-            }} source={{
-              uri: `file://${photo.path}` 
-            }} />
-        </View>
+        </SafeAreaView> :
+
+        <CheckpointForm uri={ `file://${photo.path}`} />
 
   )
 }
