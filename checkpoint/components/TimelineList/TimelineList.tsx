@@ -2,7 +2,16 @@ import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native
 import React from 'react'
 import Icon from '../Icon';
 
-const data = [
+
+interface IData {
+    time: string;
+    type: string;
+    title: string;
+    subtitle: string;
+    location: string;
+}
+
+const data: IData[] = [
     {
         time: '11:35',
         type: 'Checkin',
@@ -47,10 +56,10 @@ const data = [
     },
 ];
 
-/**
- * TODO: Buat TimelineItemProps type
- */
-const TimelineItem = ({item}) => {
+type TimelineItemProps = {
+    item: IData
+}
+const TimelineItem = ({item}: TimelineItemProps) => {
 
     const color = () => {
         if(item.type === 'Checkin') {
