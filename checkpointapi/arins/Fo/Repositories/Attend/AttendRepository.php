@@ -51,24 +51,46 @@ class AttendRepository extends EloquentRepository implements AttendRepositoryInt
 
         if (isset($parCheckpoint_dt1) && isset($parCheckpoint_dt2)) {
 
-            $result = $result->whereBetween($checkin_time, [$parCheckpoint_dt1, $parCheckpoint_dt2]);
-            $result = $result->orWhereBetween($checkout_time, [$parCheckpoint_dt1, $parCheckpoint_dt2]);
+            if ($parCheckpoint_dt1 == $parCheckpoint_dt2) {
 
-            // if ($parCheckpoint_dt1 == $parCheckpoint_dt2) {
+                $result = $result->where($checkin_time, '>=', $parCheckpoint_dt1);
+                $result = $result->orWhere($checkout_time, '>=', $parCheckpoint_dt1);
 
-            //     $result = $result->where($checkin_time, $parCheckpoint_dt1);
-            //     $result = $result->orWhere($checkout_time, $parCheckpoint_dt2);
+            } //end if
 
-            // } //end if
-
-            // if ($parCheckpoint_dt1 < $parCheckpoint_dt2) {
-
-            //     $result = $result->whereBetween($checkin_time, [$parCheckpoint_dt1, $parCheckpoint_dt2]);
-            //     $result = $result->orWhereBetween($checkout_time, [$parCheckpoint_dt1, $parCheckpoint_dt2]);
-
-            // } //end if
+            if ($parCheckpoint_dt1 < $parCheckpoint_dt2) {
+                $result = $result->whereBetween($checkin_time, [$parCheckpoint_dt1, $parCheckpoint_dt2]);
+                $result = $result->orWhereBetween($checkout_time, [$parCheckpoint_dt1, $parCheckpoint_dt2]);
+            }
             
         } //end if
+
+        return $result->get();
+    }
+
+    public function getAttendancesByUserIdAndCheckpointDate(
+        $parUserId=null, $parCheckpoint_dt)
+    {
+
+        $checkin_time = 'checkin_time';
+        $checkout_time = 'checkout_time';
+        $result = $this->data;
+
+
+
+        if (isset($parUserId)) {
+            $result = $result->where('user_id', $parUserId);
+            } else {
+            return null;
+        } //end if
+
+        if (isset($parCheckpoint_dt)) {
+
+            $result = $result->whereDate($checkin_time,$parCheckpoint_dt);
+            $result = $result->orWhereDate($checkout_time,$parCheckpoint_dt);
+            
+        } //end if
+
 
         return $result->get();
     }

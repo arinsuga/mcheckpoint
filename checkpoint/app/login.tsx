@@ -1,45 +1,81 @@
 
-import {
-  Button,
-  Image,
-  ImageBackground,
-  Platform,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View
-} from "react-native";
 import { useState, useEffect } from "react";
+import {
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  View,
+  StatusBar,
+  Dimensions,
+} from "react-native";
 
-import { Colors } from "../constants/checkpoint/Colors";
-import Logo from "../components/checkpoint/Logo";
+import Styles from "@/constants/Styles";
+import { Colors } from "../constants/Colors";
+import Logo from "../components/Logo/Logo";
 import { useAuth } from "@/contexts/Authcontext";
 
-import { useFocusEffect, useRouter } from "expo-router";
+//Interface
+import IAuth from "@/interfaces/IAuth";
 
-export default function Login() {
-  const { authState, Login } = useAuth();
+import FieldUserName from "@/components/FieldUserName/FieldUserName";
+import FieldPassword from "@/components/FieldPassword/FieldPassword";
+import WaitingIndicator from "@/components/WaitingIndicator/WaitingIndicator";
+
+import { useRouter } from "expo-router";
+
+export default function Login({ authstate }: { authstate: IAuth | null | undefined }) {
+  const { Login } = useAuth();
   const router = useRouter();
-  const [ username, setUsername ] = useState('admin'); //fortest
-  const [ password, setPassword ] = useState('admin'); //fortest
+  const [ username, setUsername ] = useState('imam@hadiprana.co.id'); //fortest
+  const [ password, setPassword ] = useState('hadiprana'); //fortest
+  const [ isWaiting, setIsWaiting ] = useState(false);
 
   const onLogin = async (username: string, password: string) => {
     
+    // console.log('Inside Login - onLogin')
+    // console.log({
+    //   username,
+    //   password
+    // });
+
+    setIsWaiting(true);
     const result = await (Login && Login(username, password));
     
     result ? router.replace('/') : alert('Invalid username or password');
 
   }
-    
+
+  const usernamedOnChange = (nextText: string) => {
+
+    setUsername(nextText);
+
+  }
+
+  const passwordOnChange = (nextText: string) => {
+
+    setPassword(nextText);
+
+  }
+
+
+  useEffect(() => {
+
+    // console.log('Inside Login - useLayoutEffect');
+    // console.log(`authstate : ${authstate}`);
+
+  }, [authstate]);
+
 
   return (
-    <SafeAreaView
-      style={ [ styles.rootContainer, { backgroundColor: Colors.whiteLight } ] }
-    >
 
+
+    (authstate?.authenticated === undefined) ?
+    <SafeAreaView style={ [ Styles.activityContainer, { backgroundColor: Colors.whiteLight } ] }>
+      <WaitingIndicator isWaiting={true} message="Inside login..." />
+    </SafeAreaView> :
+    <SafeAreaView style={ [ Styles.loginContainer, { backgroundColor: Colors.whiteLight } ] } >
+
+      <StatusBar barStyle={ "dark-content" }  />
       <View style={{
         flex: 1,
         alignItems: "center",
@@ -51,112 +87,41 @@ export default function Login() {
         <Logo size="s" />
       </View> 
 
-      <View style={ styles.container }>
+      <View style={{
+        display: authstate?.firstLogin ? 'none' : 'flex',
+        flex: 1,
+        alignItems: "center",
+        position: 'absolute',
+        top: (Dimensions.get('screen').height - 100) / 2,
+        alignSelf: "center",
+        width: '100%'
+      }}>
+        <Text> Authentication expired </Text>
+        <Text> Please login again </Text>
+      </View>
 
+      <View style={ Styles.container }>
 
-      <View style={ styles.textInputGroup } >
-
-          <Image style={ styles.inputIcon } source={require('../assets/checkpoint/images/user.png')}  />
-          <TextInput
-            placeholderTextColor={ Colors.grey }
-            placeholder="Username"
-            style={ styles.textInput }
-            onChangeText={ (nextText) => setUsername(nextText) }
-          ></TextInput>
-
-        </View>
-
-        <View style={ [ styles.textInputGroup, { marginBottom: 30 } ] }>
-
-          <Image style={ styles.inputIcon } source={require('../assets/checkpoint/images/key.png')} />
-          <TextInput
-            placeholderTextColor={ Colors.grey }
-            secureTextEntry={ true }
-            placeholder="Password"
-            style={ styles.textInput }
-            onChangeText={ (nextText) => setPassword(nextText) }
-          ></TextInput>
-
-        </View>
+        <FieldUserName onChangeText={ usernamedOnChange } />
+        <FieldPassword onChangeText={ passwordOnChange } />
 
         <View>
 
           <TouchableOpacity
-              style={ [styles.btn, styles.btnLogin] }
+              style={ [Styles.btn, Styles.btnLogin] }
               onPress={ () => onLogin(username, password) }
           >
 
-            <Text style={ styles.btnText }>Login</Text>
+            <Text style={ Styles.btnText }>Login</Text>
 
           </TouchableOpacity>
 
         </View>
-
       </View>
 
-
-
+      <WaitingIndicator isWaiting={isWaiting} />
 
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
-
-  rootContainer: {
-
-    flex: 1,
-    justifyContent: "flex-end",
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-
-  },
-
-  container: {
-    paddingBottom: 50,
-    paddingLeft: 30,
-    paddingRight: 30,
-  },
-
-  btn: {
-    alignItems: 'center',
-    padding: 15,
-    color: Colors.white,
-    borderRadius: 5,
-
-  },
-
-  btnLogin: {
-    
-    backgroundColor: Colors.bgOrange,
-
-  },
-
-  btnText: {
-    color: Colors.white,
-  },
-
-  
-  inputIcon: {
-
-    position: "absolute",
-    bottom: 10
-
-  },
-
-  textInputGroup: {
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.greyLight,
-    marginBottom: 5,
-    width: '75%'
-  },
-
-  textInput: {
-
-    fontSize: 17,
-    color: Colors.black,
-    paddingLeft: 30,
-    paddingTop: 30,
-
-  },
-
-});

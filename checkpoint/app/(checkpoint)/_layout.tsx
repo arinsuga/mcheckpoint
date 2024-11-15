@@ -1,72 +1,60 @@
 
-import React from "react";
-import { View, Button, Text, TouchableOpacity, SafeAreaView, BackHandler } from "react-native";
-import { useRouter, Stack } from "expo-router";
-import { Drawer } from "expo-router/drawer";
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import React, { useEffect } from "react";
+import { View, Text, TouchableOpacity } from "react-native";
+import { Stack } from "expo-router";
 
-import { Colors } from "@/constants/checkpoint/Colors";
-import Icon from "@/components/Icon";
+import { Colors } from "@/constants/Colors";
+import Icon from "@/components/Icon/Icon";
 import { useAuth } from "@/contexts/Authcontext";
+
+// Components
 import Login from "../login";
-import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-
-
-const CustomDrawerContent = (props: any) => {
-    const { Logout } = useAuth();
-    const router = useRouter();
-
-  return (
-
-      <DrawerContentScrollView {...props} >
-
-        <DrawerItem
-            icon={({color, size}) => (
-              <Icon.Power
-                size={24}
-                color={Colors.orange}
-                style={{
-                  marginRight: -20
-                }}
-              />
-            )}
-            label={"Logout"}
-            labelStyle={{
-              fontSize: 16,
-            }}
-            onPress={() => (Logout && Logout())}
-        />
-
-        <DrawerItem
-          label={"History"}
-          onPress={() => router.push('/(checkpoint)/(tabs)/history')}
-        />
-
-      </DrawerContentScrollView>
-
-    );
-
-}
+import WaitingIndicator from "@/components/WaitingIndicator/WaitingIndicator";
 
 export default function AppLayout() {
   const { authState, Logout } = useAuth();
 
-  React.useEffect(() => {
-    //console.log('useEffect authstate rendered ....')
+  // const { authState, Logout, Authenticate } = useAuth();
+  // const toggleShowLogin = useCallback(() => {
     
-  }, [authState]);
+  //   (Authenticate && Authenticate());
+
+  // }, [authState?.authenticated]);
+
+  // useLayoutEffect(() => {
+
+  //   toggleShowLogin();
+
+  // }, []);
 
 
-  if (!authState?.authenticated) {
+  //fortesting only, do not use for production
+  // useEffect(() => {
 
-      //console.log('Not authenticated');
-      return <Login />;
+  //   console.log('======= _layout - useEffect - authstate =======');
+  //   console.log(`firstLogin: ${authState?.firstLogin}`);
 
-  } else {
+  // });
 
-      //console.log('authenticatedXXX');
-    
-      return (
+  useEffect(() => {
+
+    console.log('======= _layout - useEffect - authstate =======');
+    console.log(`authetincated: ${authState?.authenticated}`);
+    console.log(`firstLogin: ${authState?.firstLogin}`);
+
+  }, []);
+
+  return (
+    <>
+      {
+
+       ((authState?.authenticated === undefined) || (authState?.firstLogin === undefined)) ? 
+
+        <WaitingIndicator isWaiting={true} message="Outside login...." /> :
+
+       (authState?.authenticated === false) ?
+        
+        <Login authstate={authState} /> :
 
         <Stack 
             screenOptions={{
@@ -91,9 +79,9 @@ export default function AppLayout() {
         </Stack>
 
 
+      }
+    </>
 
-      )
-  }
-
+  );
 
 }

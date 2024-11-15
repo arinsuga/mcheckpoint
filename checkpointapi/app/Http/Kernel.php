@@ -63,6 +63,9 @@ class Kernel extends HttpKernel
         'check.role' => \Arins\Bo\Http\Middleware\CheckRole::class,
         'is.admin' => \Arins\Bo\Http\Middleware\IsAdmin::class,
         'auth.admin' => \Arins\Bo\Http\Middleware\AuthenticateAdmin::class,
+
+        // Other middleware
+        'authjwt' => \App\Http\Middleware\AuthenticateJWT::class,        
     ];
 
     /**

@@ -1,68 +1,58 @@
+
+//Core Systems
 import {
     ReactNode,
     useState,
-    createContext,
     useContext,
+    createContext,
+    useEffect,
 } from 'react'
-import IUser from '@/interfaces/IUser';
 
+//Packages
+import { interval, switchMap, from, takeWhile } from 'rxjs';
 
-interface IState {
-    user?: IUser | null,
-    token?: string | null;
-    authenticated?: boolean | null;
-}
+//Interfaces
+import IAuth, { IUser } from '@/interfaces/IAuth';
+
+//Services
+import {
+    login,
+    logout,
+    authSubject,
+    initAuth,
+    storeAuth,
+    getAuth
+} from '@/services/AuthService'
 
 interface IProvider {
-    authState?: IState | null;
+    authState?: IAuth | null;
     Login?: (username?: string, password?: string) => Promise<any | null>;
     Logout?: () => Promise<any | null>;
     Register?: (email?: string, password?: string) => Promise<any | null>;
+    Authenticate?: () => Promise<boolean>;
 }
 
 const Providercontext = createContext<IProvider>({});
+
 
 export const useAuth = () => {
     return useContext(Providercontext);
 }
 
-
 const Authprovider = ({ children }: { children: ReactNode }) => {
-    const [authdata, setAuthdata] = useState<IState>({});
+    const [authdata, setAuthdata] = useState<IAuth | null>(null);
+
 
     const handleLogin = async (username?: string, password?: string) => {
         let result = false;
 
-        //User
-        if ((username?.toLocaleLowerCase() === 'user') && (password?.toLocaleLowerCase() === 'user')) {
-
+        try {
+            const auth = await login(username, password);
+            setAuthdata(auth);
             result = true;
-            setAuthdata({
-                user: {
-                    username,
-                    roles: ['user_roles'],
-                    email: 'user@gmail.com',
-                },
-                token: 'User token authenticated',
-                authenticated: result,
-            });
-    
-        }
 
-        //Admin
-        if ((username?.toLocaleLowerCase() === 'admin') && (password?.toLocaleLowerCase() === 'admin')) {
-
-            result = true;
-            setAuthdata({
-                user: {
-                    username,
-                    roles: ['admin_roles'],
-                    email: 'admin@gmail.com',
-                },
-                token: 'Admin token authenticated',
-                authenticated: result,
-            });
-    
+        } catch (error) {
+            console.log(error);
         }
 
         return result;
@@ -70,11 +60,9 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
 
     const handleLogout = async () => {
 
-        setAuthdata({
-            user: null,
-            token: null,
-            authenticated: null,
-        });
+        const auth = await logout();
+        
+        setAuthdata(auth);
 
         return true;
 
@@ -85,12 +73,114 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
         return true;
     }
 
+    const handleAuthantication = async () => {
+
+
+        try {
+
+            const auth = await getAuth();
+            // console.log('===== handleAuthentication =====');
+            // console.log(`authenticated : ${auth?.authenticated} - firstLogin : ${auth?.firstLogin}`);
+
+            if (auth) {
+
+                if (!auth.authenticated) {
+                    let authTemp: IAuth | null = await logout();
+                    setAuthdata({
+                        ...authTemp,
+                        firstLogin: auth.firstLogin,
+                    });
+
+                    // setAuthdata(await logout());
+                }
+
+            }
+
+            return auth ? auth.token ? auth.token.status as boolean : false : false;
+
+        } catch (error) {
+
+            console.log(error);
+            return false;
+
+        }
+
+        
+    }
+
+    //Authentication check 1
+    useEffect(() => {
+
+
+        const loadAuth = async () => {
+
+            setAuthdata(await initAuth());
+
+            const auth = await getAuth();
+            authSubject.next(auth);
     
+        }
+        loadAuth();
+
+    }, []);
+
+    //Authentication check 2
+    useEffect(() => {
+
+        const subscription = authSubject.subscribe((newAuth) => {
+
+
+            // console.log('=============== Authentication check 2 Running ===============');
+            // console.log(newAuth);
+
+            setAuthdata(newAuth);
+            newAuth && storeAuth(newAuth);
+
+        });
+        return () => authSubject.unsubscribe();
+
+    }, []);
+    
+
+    // Uncomment this code if you want to validate the authentication every 5 seconds (5000ms)
+    // useEffect(() => {
+
+    //     if (authdata) {
+
+    //         const validateAuth = interval(5000)
+    //         .pipe(
+    //             switchMap(async () => {
+
+    //                 console.log('Inside switchMap 1...');
+    //                 const auth = await getAuth();
+    //                 console.log(auth);
+
+    //                 return auth;
+    //             }),
+    //             takeWhile((result, index) => result?.authenticated as boolean, true)
+    //         )
+    //         .subscribe((result) => {
+
+    //             const now = new Date();
+    //             console.log(`Inside subscribe... ( ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')} )`);
+    //             console.log(result);
+
+    //             result?.token?.code === 402 && handleLogout();
+
+    //         });
+
+    //         return () => validateAuth.unsubscribe();
+
+    //     }
+
+    // }, [authdata]);
+
     const value: IProvider = {
         authState: authdata,
         Login: handleLogin,
         Logout: handleLogout,
         Register: handleRegister,
+        Authenticate: handleAuthantication,
     };
 
     return (

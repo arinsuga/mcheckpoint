@@ -1,20 +1,34 @@
+import React, { useState, useCallback } from "react";
 
-import { Text } from "react-native";
+//Packages
+import { useNavigationState } from "@react-navigation/native";
 import { useRouter, Tabs } from "expo-router";
-import { useRef } from "react";
-
 import Ionicons from '@expo/vector-icons/Ionicons';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 
-import { Colors } from "@/constants/checkpoint/Colors";
-import Icon from "@/components/Icon";
+//Contexts
 import { useAuth } from "@/contexts/Authcontext";
 
+//Constants
+import { Colors } from "@/constants/Colors";
+
+//Components
+import Icon from "@/components/Icon/Icon";
+
 export default function AppLayout() {
-  const { Logout } = useAuth();
+  const { Authenticate } = useAuth();
+
   const router = useRouter();
-  const viewRef = useRef(null);
+  let result: boolean = true;
+
+  const activeTabName = useNavigationState((state) => {
+
+    const tabName = state.routes[state.index].name;
+
+    //Check Authentication
+    Authenticate  && Authenticate();
+
+    return tabName;
+  });
 
   
 

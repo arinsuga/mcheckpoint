@@ -1,12 +1,20 @@
-import { useRouter, Link } from "expo-router";
-import { Button, Text, View } from "react-native";
-import { useAuth } from "@/contexts/Authcontext";
-import Icon from "@/components/Icon";
+import React, { useState } from "react";
+import { Text, View, TouchableOpacity } from "react-native";
+import Icon from "@/components/Icon/Icon";
+import { refreshAuthToken } from "@/services/AuthService";
+import { Colors } from "@/constants/Colors";
 
 export default function Home() {
+  const [token, setToken] = useState('');
 
-  const { authState } = useAuth();
-  const router = useRouter()
+  const handleRefreshToken = async () => {
+
+
+    const refreshToken = await refreshAuthToken();
+
+    setToken(refreshToken as string);
+
+  }
 
   return (
     <View
@@ -18,9 +26,11 @@ export default function Home() {
     >
 
         <Text>INDEX / HOME</Text>
+        <Text>{token}</Text>
         <Icon.Home />
-        <Icon.History />
-        <Icon.Location />
+        <TouchableOpacity style={ { backgroundColor: Colors.orange, paddingHorizontal: 10 } } onPress={ handleRefreshToken }>
+          <Text style={{ color: Colors.white }}>Get Refresh Token for Testing</Text>
+        </TouchableOpacity>
 
 
     </View>

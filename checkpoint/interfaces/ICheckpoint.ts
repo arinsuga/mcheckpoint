@@ -1,7 +1,13 @@
-import { CameraCapturedPicture } from "expo-camera";
+import {PhotoFile} from 'react-native-vision-camera';
 
 export default interface ICheckpoint {
-    files: CameraCapturedPicture[],
-    checkType: 'checkin' | 'checkout',
-    description: string,
+    file?: PhotoFile | undefined;
+    checkType: 'checkin' | 'checkout';
+    attend_id?: string;
+    latitude?: string;
+    longitude?: string;
+    imageTemp?: string;
+    title?: string;
+    subtitle?: string;
+    description?: string;
 }

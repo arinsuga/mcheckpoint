@@ -168,7 +168,7 @@ return [
         /*
          * Package Service Providers...
          */
-
+        
         /*
          * Application Service Providers...
          */
@@ -182,7 +182,7 @@ return [
          * Arins Service Providers
          */
         Arins\Providers\FacadeServiceProvider::class,
-        Arins\Providers\RouteServiceProvider::class,
+        // Arins\Providers\RouteServiceProvider::class,
         Arins\Providers\DataRepositoryServiceProvider::class,
         Arins\Providers\OtherRepositoryServiceProvider::class,
         
@@ -236,7 +236,6 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
     ],
 
 ];

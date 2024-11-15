@@ -45,8 +45,11 @@ trait ConvertStringToDate
         $result = null;
 
         if (isset($data)) {
+
             $tempDate = $this->constructDate($data, config('a1.date.date'));
-            $result = Carbon::create($tempDate->year, $tempDate->month, $tempDate->day, 0, 0, 0);
+            $result = Carbon::create($tempDate->year, $tempDate->month, $tempDate->day, 0, 0, 0, 'UTC');
+            $result->tz(config('a1.date.timezone'));
+
         } //end if
 
         // return $this->constructDate($data, config('a1.date.date'));
