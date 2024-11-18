@@ -10,7 +10,7 @@ import {
 import { CameraView, CameraType, CameraCapturedPicture } from "expo-camera";
 
 import Icon from '@/components/Icon/Icon';
-import { Colors } from '@/constants/checkpoint/Colors';
+import { Colors } from '@/constants/Colors';
 
 const TakePhotoExpo = () => {
     const [facing, setFacing] = useState<CameraType>('front');

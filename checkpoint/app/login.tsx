@@ -14,7 +14,7 @@ import {
 } from "react-native";
 import { useState, useEffect } from "react";
 
-import { Colors } from "../constants/checkpoint/Colors";
+import { Colors } from "../constants/Colors";
 import Logo from "../components/Logo/Logo";
 import Icon from "@/components/Icon/Icon";
 import { useAuth } from "@/contexts/Authcontext";

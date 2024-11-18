@@ -9,7 +9,7 @@ import {
 } from '@expo/vector-icons';
 
 import { Text, StyleProp, ViewStyle } from 'react-native';
-import { Colors } from '@/constants/checkpoint/Colors';
+import { Colors } from '@/constants/Colors';
 
 
 const defaultSize = 32;

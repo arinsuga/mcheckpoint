@@ -17,7 +17,7 @@ import { Camera, CameraPermissionRequestResult } from 'react-native-vision-camer
 
 
 import TakePhoto from '@/components/TakePhoto/TakePhoto';
-import { Colors } from '@/constants/checkpoint/Colors';
+import { Colors } from '@/constants/Colors';
 import Icon from '@/components/Icon/Icon';
 
 export default function Pinloc() {

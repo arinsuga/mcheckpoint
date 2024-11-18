@@ -7,41 +7,25 @@ import {
     ViewStyle
 } from "react-native";
 
-import { Colors } from "@/constants/checkpoint/Colors";
+import FormStyles from '@/constants/FormStyles';
+import { Colors } from "@/constants/Colors";
 import Icon from "../Icon/Icon";
 
-type FieldUserNameProps =  {
-    placeholder?: string,
-    placeholderTextColor?: string,
-    secureTextEntry?: boolean,
-    onChangeText?: (nexttext: string) => void,
-    onFocus?: () => void,
-    onBlur?: () => void,
-    style?: StyleProp<ViewStyle>,
-}
+import FieldTextInputProps from "@/props/FieldTextInputProps";
 
-export const FieldTextInput = ({
-    placeholder = '',
-    placeholderTextColor = Colors.grey,
-    secureTextEntry = false,
-    onChangeText,
-    onFocus,
-    onBlur,
-    style,  
-}: FieldUserNameProps) => {
+export const FieldTextInput = (props: FieldTextInputProps) => {
 
     return (
-        <View style={ [ styles.textInputGroup, { marginBottom: 30 } ] }>
+        <View style={ [ FormStyles.inputGroup, { marginBottom: 30 } ] }>
 
-          <Icon.User size={20} color={Colors.greyLight} style={styles.inputIcon} />
           <TextInput
-            placeholder={ placeholder }
-            placeholderTextColor={ placeholderTextColor }
-            secureTextEntry={ secureTextEntry }
-            style={ [ styles.textInput, style && style ] }
-            onChangeText={ (nextText) => onChangeText && onChangeText(nextText) }
-            onFocus={onFocus}
-            onBlur={onBlur}
+            placeholder={ props.placeholder }
+            placeholderTextColor={ props.placeholderTextColor }
+            secureTextEntry={ props.secureTextEntry }
+            onChangeText={ (nextText) => props.onChangeText && props.onChangeText(nextText) }
+            onFocus={props.onFocus}
+            onBlur={props.onBlur}
+            style={ [ FormStyles.textInput, props.style && props.style ] }
           ></TextInput>
 
         </View>
@@ -49,33 +33,3 @@ export const FieldTextInput = ({
 }
 
 export default FieldTextInput;
-
-const styles = StyleSheet.create({
-
-  
-  
-    
-    inputIcon: {
-  
-      position: "absolute",
-      bottom: 10
-  
-    },
-  
-    textInputGroup: {
-      borderBottomWidth: 1,
-      borderBottomColor: Colors.greyLight,
-      marginBottom: 5,
-      width: '75%'
-    },
-  
-    textInput: {
-  
-      fontSize: 17,
-      color: Colors.black,
-      paddingLeft: 30,
-      paddingTop: 30,
-  
-    },
-  
-  });

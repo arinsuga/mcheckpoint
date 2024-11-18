@@ -7,7 +7,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
-import { Colors } from "@/constants/checkpoint/Colors";
+import { Colors } from "@/constants/Colors";
 import Icon from "@/components/Icon/Icon";
 import { useAuth } from "@/contexts/Authcontext";
 

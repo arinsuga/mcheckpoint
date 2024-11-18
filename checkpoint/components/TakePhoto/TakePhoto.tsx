@@ -27,7 +27,7 @@ import FieldMultilineTextInput from '../FieldMultilineTextInput/FieldMultilineTe
 import CheckpointForm from '../CheckpointForm/CheckpointForm';
 
 import Icon from '@/components/Icon/Icon';
-import { Colors } from '@/constants/checkpoint/Colors';
+import { Colors } from '@/constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const TakePhoto = () => {

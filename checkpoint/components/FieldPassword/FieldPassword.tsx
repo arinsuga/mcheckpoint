@@ -4,7 +4,7 @@ import {
     StyleSheet,
 } from "react-native";
 
-import { Colors } from "@/constants/checkpoint/Colors";
+import { Colors } from "@/constants/Colors";
 import Icon from "../Icon/Icon";
 
 type FieldUserNameProps = {
