@@ -41,6 +41,8 @@ const CheckpointForm = ({uri}: IChekPointFormProps) => {
     BackHandler.addEventListener('hardwareBackPress', () => {
 
       showCaptured();
+      if (displacamera) router.back();
+      
       return true;
     });
 
