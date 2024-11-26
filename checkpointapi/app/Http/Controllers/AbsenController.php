@@ -1,6 +1,7 @@
 <?php
 
-namespace Arins\Fo\Http\Controllers\Absen;
+//namespace Arins\Fo\Http\Controllers\Absen;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -43,16 +44,16 @@ class AbsenController extends Controller
     UserRepositoryInterface $parDataUsers,
     LocaterInterface $poLocater)
     {
-        $this->middleware('auth');
-        $this->middleware('check.role:dnb-super,hrd-admin,dnb-admin')
-        ->only('checkHistoryAdmin');
+        // $this->middleware('auth');
+        // $this->middleware('check.role:dnb-super,hrd-admin,dnb-admin')
+        // ->only('checkHistoryAdmin');
 		$this->uploadDirectory = 'checkpoint';
         $this->sViewRoot = $psViewRoot;
         $this->data = $parData;
         $this->dataUsers = $parDataUsers;
         $this->oLocater = $poLocater;
         
-        $this->middleware('auth');
+        // $this->middleware('auth');
 
         //#HCD: Set NULL for production
         $this->ip = '103.119.144.11'; //BALI Fiber ( for testing purpose )
@@ -134,8 +135,10 @@ class AbsenController extends Controller
 
         $viewModel = Response::viewModel($data);
 
-        return view($this->sViewRoot.'.show',
-        ['viewModel' => $viewModel]);
+        return response()->json($viewModel);
+
+        // return view($this->sViewRoot.'.show',
+        // ['viewModel' => $viewModel]);
 
     }
     
@@ -242,8 +245,11 @@ class AbsenController extends Controller
 
         $viewModel = Response::viewModel($data);
 
-        return view($this->sViewRoot.'.check',
-        ['viewModel' => $viewModel]);
+        return response()->json($viewModel);
+
+        // return view($this->sViewRoot.'.check',
+        // ['viewModel' => $viewModel]);
+
 
     }
 
@@ -292,16 +298,26 @@ class AbsenController extends Controller
     //checkHistory
     public function checkHistory()
     {
-        return view($this->sViewRoot.'.check-history');
+
+        return response()->json('checkhistory');
+
+        // return view($this->sViewRoot.'.check-history');
+
     }
 
     //checkHistory
     public function checkHistoryAdmin()
     {
-        return view($this->sViewRoot.'.check-history', [
+        return response()->json([
             'admin' => true,
             'users' => $this->dataUsers->dnb()
         ]);
+
+        // return view($this->sViewRoot.'.check-history', [
+        //     'admin' => true,
+        //     'users' => $this->dataUsers->dnb()
+        // ]);
+
     }
 
     //checkHistoryPost
@@ -351,14 +367,23 @@ class AbsenController extends Controller
         $this->history($userId, $startDateIso, $endDateIso);
 
         if (isset($selectedUserId)) {
-            return view($this->sViewRoot.'.'.$resultView,
-                ['admin' => true,
-                'viewModel' => $this->viewModel
+
+            return response()->json(['admin' => true,
+            'viewModel' => $this->viewModel
             ]);
+
+            // return view($this->sViewRoot.'.'.$resultView,
+            //     ['admin' => true,
+            //     'viewModel' => $this->viewModel
+            // ]);
+
         } //end if
 
-        return view($this->sViewRoot.'.'.$resultView,
-        ['viewModel' => $this->viewModel]);
+        return response()->json($this->viewModel);
+
+        // return view($this->sViewRoot.'.'.$resultView,
+        // ['viewModel' => $this->viewModel]);
+
     }
 
     /**
@@ -379,8 +404,11 @@ class AbsenController extends Controller
 
         $this->history($user->id, $dateIso);
 
-        return view($this->sViewRoot.'.check-history-pdf',
-        ['viewModel' => $this->viewModel]);
+        return response()->json($this->viewModel);
+
+        // return view($this->sViewRoot.'.check-history-pdf',
+        // ['viewModel' => $this->viewModel]);
+
     }
 
     /**
@@ -395,6 +423,7 @@ class AbsenController extends Controller
      */
     public function checkin(Request $request)
     {
+
         $authUser = Auth::user();
         $attend = new Attend();
         
@@ -406,14 +435,21 @@ class AbsenController extends Controller
         //validasi upload foto mandatory
         if (!isset($upload)) {
 
-            return redirect('/')->with('status-failed', 'CHECKIN GAGAL - Foto harus dilampirkan')
-                                ->with('checkin_description', $request->input('checkin_description'));
+            return response()->json([
+                'status-failed' => 'CHECKIN GAGAL - Foto harus dilampirkan',
+                'checkin_description' => $request->input('checkin_description')
+            ], 500);
+
+
+            // return redirect('/')->with('status-failed', 'CHECKIN GAGAL - Foto harus dilampirkan')
+            //                     ->with('checkin_description', $request->input('checkin_description'));
             
         } //end if
 
 
         $host = $this->getFullURL($latitude, $longitude);
         $data = $this->oLocater->locate($host);
+        return response()->json(['host' => $host, '$data' => $data]);
 
         // $data = $parData;
         // $city1 = $data->results[0]->address_components[2]->short_name;
@@ -452,7 +488,11 @@ class AbsenController extends Controller
                 'metadata' => json_encode($data)
             ];
     
-            return redirect('/')->with('status', 'data absensi tersimpan');
+            
+            //API
+            return response()->json($response);
+
+            // return redirect('/')->with('status', 'data absensi tersimpan');
     
         } //end if
 
@@ -462,7 +502,11 @@ class AbsenController extends Controller
             'metadata' => json_encode($data)
         ];
 
-        return redirect('/')->with('status', 'data absensi tersimpan');
+        //API
+        return response()->json($response);
+        
+        // return redirect('/')->with('status', 'data absensi tersimpan');
+
     }
 
     /**
@@ -493,8 +537,13 @@ class AbsenController extends Controller
             //validasi upload foto mandatory
             if (!isset($upload)) {
 
-                return redirect('/')->with('status-failed', 'CHECKOUT GAGAL - Foto harus dilampirkan')
-                                     ->with('checkout_description', $request->input('checkout_description'));
+                return response()->json([
+                    'status-failed' => 'CHECKOUT GAGAL - Foto harus dilampirkan',
+                    'checkout_description' => $request->input('checkout_description')
+                ]);
+
+                // return redirect('/')->with('status-failed', 'CHECKOUT GAGAL - Foto harus dilampirkan')
+                //                      ->with('checkout_description', $request->input('checkout_description'));
                 
             } //end if
 
@@ -528,7 +577,10 @@ class AbsenController extends Controller
 
         } //end if
 
-        return redirect('/')->with('status', 'data absensi tersimpan');
+        return response()->json(['status' => 'data absensi tersimpan']);
+
+        // return redirect('/')->with('status', 'data absensi tersimpan');
+
     } //end method
 
 } //end method

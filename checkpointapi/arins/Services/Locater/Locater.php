@@ -75,6 +75,7 @@ class Locater implements LocaterInterface
             curl_setopt($ch, CURLOPT_URL, $host);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_USERAGENT, 'geoPlugin PHP Class v1.1');
+
             $response = curl_exec($ch);
             curl_close ($ch);
             
