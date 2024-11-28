@@ -36,7 +36,6 @@ class Geocoding extends Locater implements LocaterInterface
         //fetch api/webservices
         $response = $this->fetch($host);
 
-        
         return json_decode($response);
     } //end method
 

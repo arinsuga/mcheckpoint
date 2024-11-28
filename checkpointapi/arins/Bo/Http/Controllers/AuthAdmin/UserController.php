@@ -50,7 +50,6 @@ class UserController extends Controller
      */
     public function login(Request $request)
     {
-        return dd($request);
         $this->validateLogin($request);
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle

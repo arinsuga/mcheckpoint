@@ -182,7 +182,7 @@ return [
          * Arins Service Providers
          */
         Arins\Providers\FacadeServiceProvider::class,
-        // Arins\Providers\RouteServiceProvider::class,
+        Arins\Providers\RouteServiceProvider::class,
         Arins\Providers\DataRepositoryServiceProvider::class,
         Arins\Providers\OtherRepositoryServiceProvider::class,
         
