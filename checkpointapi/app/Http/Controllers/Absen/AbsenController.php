@@ -290,9 +290,8 @@ class AbsenController extends Controller
 
         } //end loop
 
-//        $this->viewModel = Response::viewModel($data);
+       $this->viewModel = Response::viewModel($data);
 
-        return response()->json($data);
     }
 
     //checkHistory
@@ -357,14 +356,21 @@ class AbsenController extends Controller
         $this->history($userId, $startDateIso, $endDateIso);
 
         if (isset($selectedUserId)) {
-            return view($this->sViewRoot.'.'.$resultView,
-                ['admin' => true,
-                'viewModel' => $this->viewModel
-            ]);
+
+            // return view($this->sViewRoot.'.'.$resultView,
+            //     ['admin' => true,
+            //     'viewModel' => $this->viewModel
+            // ]);
+
+            return response()->json($this->viewModel);
+
         } //end if
 
-        return view($this->sViewRoot.'.'.$resultView,
-        ['viewModel' => $this->viewModel]);
+        // return view($this->sViewRoot.'.'.$resultView,
+        // ['viewModel' => $this->viewModel]);
+
+        return response()->json($this->viewModel);
+
     }
 
     /**

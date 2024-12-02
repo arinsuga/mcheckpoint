@@ -32,7 +32,7 @@ Route::group(['middleware' => 'api'], function ($router) {
 
     // Route::get('/check-history','Absen\AbsenController@checkHistory')->name('absen.history');
     // Route::get('/check-history-admin','Absen\AbsenController@checkHistoryAdmin')->name('absen.history.admin');
-    // Route::post('/check-history-post','Absen\AbsenController@checkHistoryPost')->name('absen.history.post');
+    Route::post('absen/check-history-post','Absen\AbsenController@checkHistoryPost')->name('absen.history.post');
 
     Route::post('absen/checkin','Absen\AbsenController@checkin')->name('absen.checkin.post');
     Route::post('absen/checkout','Absen\AbsenController@checkout')->name('absen.checkout.post');
