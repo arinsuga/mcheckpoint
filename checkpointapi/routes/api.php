@@ -13,6 +13,29 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+Route::group(['middleware' => 'api'], function ($router) {
+    
+    Route::post('register', 'AuthController@register');
+    Route::post('login', 'AuthController@login');
+    Route::post('logout', 'AuthController@logout');
+    Route::post('refresh', 'AuthController@refresh');
+    Route::get('me', 'AuthController@me');
+
+
+    //Absen
+    // Route::resource('absen', 'Absen\AbsenController');
+    // Route::get('/','Absen\AbsenController@check')->name('absen');
+
+    // Route::get('/check-history','Absen\AbsenController@checkHistory')->name('absen.history');
+    // Route::get('/check-history-admin','Absen\AbsenController@checkHistoryAdmin')->name('absen.history.admin');
+    // Route::post('/check-history-post','Absen\AbsenController@checkHistoryPost')->name('absen.history.post');
+
+    Route::post('absen/checkin','Absen\AbsenController@checkin')->name('absen.checkin.post');
+    Route::post('absen/checkout','Absen\AbsenController@checkout')->name('absen.checkout.post');
+    
+
 });
