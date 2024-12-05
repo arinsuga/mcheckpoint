@@ -1,4 +1,5 @@
 
+//packages
 import { useState, useRef, useEffect } from 'react';
 import {
   View,
@@ -13,22 +14,20 @@ import {
 } from 'react-native';
 import {
   Camera,
-  CameraDevice,
   useCameraDevice,
-  CameraProps,
   PhotoFile,
-  CameraPosition,
-  getCameraDevice,
-  TakePhotoOptions,
 } from 'react-native-vision-camera';
-
-import FieldTextInput from '../FieldTextInput/FieldTextInput';
-import FieldMultilineTextInput from '../FieldMultilineTextInput/FieldMultilineTextInput';
-import CheckpointForm from '../CheckpointForm/CheckpointForm';
-
-import Icon from '@/components/Icon/Icon';
-import { Colors } from '@/constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+//components
+import FieldTextInput from '@/components/FieldTextInput/FieldTextInput';
+import FieldMultilineTextInput from '@/components/FieldMultilineTextInput/FieldMultilineTextInput';
+import CheckpointForm from '@/components/CheckpointForm/CheckpointForm';
+import CheckpointCamera from '@/components/CheckpointCamera/CheckpointCamera';
+import Icon from '@/components/Icon/Icon';
+
+//constants
+import { Colors } from '@/constants/Colors';
 
 const TakePhoto = () => {
     const [cameraPosition, setCameraPosition] = useState<'front' | 'back'>('front');
@@ -82,32 +81,13 @@ const TakePhoto = () => {
   return (
 
         !photo ? 
-        <SafeAreaView style={styles.container}>
-            <Camera
-                style={styles.camera}
-                ref={cameraRef}
-                photo={true}
-                device={phoneDevice}
-                isActive={true}
-                enableLocation={true}
-            />
+        <SafeAreaView style={{ flex: 1, justifyContent: 'center' }}>
 
-
-            <View style={styles.buttonContainer}>
-
-                <TouchableOpacity style={styles.button} onPress={viewCapturedImage}>
-                  <Icon.Image color={Colors.whiteDark} />
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.button} onPress={capturePhoto}>
-                  <Icon.Capture color={Colors.whiteDark} size={98} />
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
-                  <Icon.CameraRotate color={Colors.whiteDark} />
-                </TouchableOpacity>
-
-            </View>
+          <CheckpointCamera
+            viewCapturedImage={viewCapturedImage}
+            capturePhoto={capturePhoto}
+            toggleCameraFacing={toggleCameraFacing}
+          />
 
         </SafeAreaView> :
 
@@ -117,34 +97,3 @@ const TakePhoto = () => {
 }
 
 export default TakePhoto
-
-const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-    },
-    buttonContainer: {
-      flex: 1,
-      flexDirection: 'row',
-      position: 'absolute',
-      justifyContent: 'space-around',
-      alignItems: 'flex-end',
-      backgroundColor: 'transparent',
-      width: Dimensions.get('window').width,
-      bottom: 60,
-    },
-    message: {
-      textAlign: 'center',
-      paddingBottom: 10,
-    },
-    camera: {
-      flex: 1,
-    },
-    button: {
-    },
-    text: {
-      fontSize: 24,
-      fontWeight: 'bold',
-      color: 'white',
-    },
-  });
