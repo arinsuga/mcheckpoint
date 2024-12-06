@@ -1,8 +1,8 @@
 //systems
-import { useState, useRef, MutableRefObject, } from 'react';
+import { MutableRefObject, } from 'react';
 import { View, Dimensions, StyleSheet, TouchableOpacity, } from 'react-native';
 //packages
-import { Camera, useCameraDevice, PhotoFile, } from 'react-native-vision-camera';
+import { Camera, CameraDevice } from 'react-native-vision-camera';
 //components
 import Icon from '@/components/Icon/Icon';
 //components
@@ -12,7 +12,7 @@ interface ICameraInfoProps {
 
   cameraRef: MutableRefObject<Camera | null>;
   photo: boolean;
-  device: any;
+  device: CameraDevice;
   isActive: boolean;
   enableLocation: boolean;
 
