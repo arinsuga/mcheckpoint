@@ -1,7 +1,7 @@
 
 //packages
 import { useState, useRef, useEffect, } from 'react';
-import { Camera, useCameraDevice, PhotoFile, } from 'react-native-vision-camera';
+import { Camera, useCameraDevice, PhotoFile, CameraDevice, } from 'react-native-vision-camera';
 import { SafeAreaView, } from 'react-native-safe-area-context';
 
 //components
@@ -14,11 +14,12 @@ const TakePhoto = () => {
     const [photo, setPhoto] = useState<PhotoFile | undefined>(undefined);
     const cameraRef = useRef<Camera>(null);
     const phoneDevice = useCameraDevice(cameraPosition);
+    const cameraDevice = phoneDevice as CameraDevice;
 
     const cameraInfo = {
       cameraRef: cameraRef,
       photo: true,
-      device: phoneDevice,
+      device: cameraDevice,
       isActive: true,
       enableLocation: true,
     }
