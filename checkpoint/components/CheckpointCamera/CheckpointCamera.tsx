@@ -1,27 +1,12 @@
-import {
-  useState,
-  useRef,
-  MutableRefObject,
-
-} from 'react';
-
-import {
-    View,
-    Text,
-    Dimensions,
-    StyleSheet,
-    TouchableOpacity,
-} from 'react-native'
-import {
-  Camera,
-  useCameraDevice,
-  PhotoFile,
-  CameraDevice,
-} from 'react-native-vision-camera';
-
+//systems
+import { useState, useRef, MutableRefObject, } from 'react';
+import { View, Dimensions, StyleSheet, TouchableOpacity, } from 'react-native';
+//packages
+import { Camera, useCameraDevice, PhotoFile, } from 'react-native-vision-camera';
+//components
 import Icon from '@/components/Icon/Icon';
+//components
 import { Colors } from '@/constants/Colors';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface ICameraInfoProps {
 
@@ -43,10 +28,6 @@ interface CheckpointCameraProps {
 }
 
 const CheckpointCamera = (props: CheckpointCameraProps) => {
-  const [cameraPosition, setCameraPosition] = useState<'front' | 'back'>('front');
-  const [photo, setPhoto] = useState<PhotoFile | undefined>(undefined);
-  const cameraRef = useRef<Camera>(null);
-  const phoneDevice = useCameraDevice(cameraPosition);
 
   return (
 
@@ -63,15 +44,15 @@ const CheckpointCamera = (props: CheckpointCameraProps) => {
 
             <View style={styles.buttonContainer}>
 
-                <TouchableOpacity style={styles.button} onPress={props.viewCapturedImage}>
+                <TouchableOpacity onPress={props.viewCapturedImage}>
                   <Icon.Image color={Colors.whiteDark} />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.button} onPress={props.capturePhoto}>
+                <TouchableOpacity onPress={props.capturePhoto}>
                   <Icon.Capture color={Colors.whiteDark} size={98} />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.button} onPress={props.toggleCameraFacing}>
+                <TouchableOpacity onPress={props.toggleCameraFacing}>
                   <Icon.CameraRotate color={Colors.whiteDark} />
                 </TouchableOpacity>
 
@@ -85,10 +66,6 @@ const CheckpointCamera = (props: CheckpointCameraProps) => {
 export default CheckpointCamera
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-  },
   buttonContainer: {
     flex: 1,
     flexDirection: 'row',
@@ -98,19 +75,5 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     width: Dimensions.get('window').width,
     bottom: 60,
-  },
-  message: {
-    textAlign: 'center',
-    paddingBottom: 10,
-  },
-  camera: {
-    flex: 1,
-  },
-  button: {
-  },
-  text: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'white',
   },
 });
