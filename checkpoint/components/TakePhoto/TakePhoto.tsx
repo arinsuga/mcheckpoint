@@ -1,12 +1,8 @@
 
 //packages
-import { useState, useRef, useEffect } from 'react';
-import {
-  Camera,
-  useCameraDevice,
-  PhotoFile,
-} from 'react-native-vision-camera';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useState, useRef, useEffect, } from 'react';
+import { Camera, useCameraDevice, PhotoFile, } from 'react-native-vision-camera';
+import { SafeAreaView, } from 'react-native-safe-area-context';
 
 //components
 import CheckpointForm from '@/components/CheckpointForm/CheckpointForm';
