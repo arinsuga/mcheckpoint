@@ -22,7 +22,7 @@ interface IChekPointFormProps {
 }
 
 const CheckpointForm = ({uri}: IChekPointFormProps) => {
-    const [displacamera, setDisplaycamera] = useState(true);
+    const [displaycamera, setDisplaycamera] = useState(true);
     const router = useRouter();
 
 
@@ -41,7 +41,7 @@ const CheckpointForm = ({uri}: IChekPointFormProps) => {
     BackHandler.addEventListener('hardwareBackPress', () => {
 
       showCaptured();
-      if (displacamera) router.back();
+      if (displaycamera) router.back();
       
       return true;
     });
@@ -65,7 +65,7 @@ const CheckpointForm = ({uri}: IChekPointFormProps) => {
               source={{ uri: uri }}
               style={{
                 width: Dimensions.get('window').width,
-                height: displacamera ? Dimensions.get('window').height/2.5 : 0,
+                height: displaycamera ? Dimensions.get('window').height/2.5 : 0,
                 marginBottom: 50,
               }}
             />
