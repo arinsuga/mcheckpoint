@@ -23,7 +23,6 @@ import Icon from '@/components/Icon/Icon';
 import { Colors } from '@/constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-
 interface ICameraInfoProps {
 
   cameraRef: MutableRefObject<Camera | null>;

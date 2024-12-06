@@ -29,13 +29,22 @@ import Icon from '@/components/Icon/Icon';
 //constants
 import { Colors } from '@/constants/Colors';
 
+//interfaces
+import ICameraInfoProps from '@/interfaces/ICameraInfoProps';
+
 const TakePhoto = () => {
     const [cameraPosition, setCameraPosition] = useState<'front' | 'back'>('front');
     const [photo, setPhoto] = useState<PhotoFile | undefined>(undefined);
     const cameraRef = useRef<Camera>(null);
-
-
     const phoneDevice = useCameraDevice(cameraPosition);
+
+    const cameraInfo = {
+      cameraRef: cameraRef,
+      photo: true,
+      device: phoneDevice,
+      isActive: true,
+      enableLocation: true,
+    }
 
   useEffect(() => {
 
@@ -58,7 +67,7 @@ const TakePhoto = () => {
 
         setPhoto(result);
 
-      } catch {
+      } catch(e) {
 
         console.log('failed to capture photo ...');
 
@@ -87,6 +96,7 @@ const TakePhoto = () => {
             viewCapturedImage={viewCapturedImage}
             capturePhoto={capturePhoto}
             toggleCameraFacing={toggleCameraFacing}
+            cameraInfo={cameraInfo}
           />
 
         </SafeAreaView> :
