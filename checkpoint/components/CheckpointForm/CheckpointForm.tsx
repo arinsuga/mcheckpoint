@@ -38,13 +38,13 @@ const CheckpointForm = ({uri}: IChekPointFormProps) => {
 
     }
 
-    BackHandler.addEventListener('hardwareBackPress', () => {
+    // BackHandler.addEventListener('hardwareBackPress', () => {
 
-      showCaptured();
-      if (displaycamera) router.back();
+    //   showCaptured();
+    //   if (displaycamera) router.back();
       
-      return true;
-    });
+    //   return true;
+    // });
 
     const handleSave = () => {
       
@@ -88,7 +88,7 @@ const CheckpointForm = ({uri}: IChekPointFormProps) => {
             <TouchableOpacity
                 onPress={() => {
                   const success = handleSave();
-                  router.back();
+                  if (success) router.replace('/')
                 }}
                 style={{
                   flex: 0.3,

@@ -25,9 +25,6 @@ const TakePhoto = () => {
     }
 
     useEffect(() => {
-
-      console.log('useEffect child 1...logging photo');
-      console.log(photo);
       
     }, [photo]);
 
@@ -35,7 +32,6 @@ const TakePhoto = () => {
         
         try {
 
-          console.log('Start Capture...');
           const result = await cameraRef.current?.takePhoto({
             enableShutterSound: false,
           });
@@ -47,7 +43,6 @@ const TakePhoto = () => {
 
         } catch(e) {
 
-          console.log('failed to capture photo ...');
 
         }
 
