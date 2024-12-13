@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "zCkkDgxxYBMeU8dzFr01a8cm5uI4mnRbd5JOKxBJEjQ=",
+  "Source": "checkpointapicore",
+  "BasePath": "_content/checkpointapicore",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
