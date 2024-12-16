@@ -11,7 +11,6 @@ import { useAuth } from "@/contexts/Authcontext";
 import Login from "../login";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 
-
 const CustomDrawerContent = (props: any) => {
     const { Logout } = useAuth();
     const router = useRouter();

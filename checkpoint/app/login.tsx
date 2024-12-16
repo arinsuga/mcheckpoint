@@ -27,8 +27,8 @@ import { useFocusEffect, useRouter } from "expo-router";
 export default function Login() {
   const { authState, Login } = useAuth();
   const router = useRouter();
-  const [ username, setUsername ] = useState('admin'); //fortest
-  const [ password, setPassword ] = useState('admin'); //fortest
+  const [ username, setUsername ] = useState('imam@hadiprana.co.id'); //fortest
+  const [ password, setPassword ] = useState('hadiprana'); //fortest
 
   const onLogin = async (username: string, password: string) => {
     

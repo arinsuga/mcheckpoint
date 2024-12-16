@@ -6,6 +6,8 @@ import {
 } from 'react'
 import IUser from '@/interfaces/IUser';
 
+import { login } from '@/services/AuthService'
+
 
 interface IState {
     user?: IUser | null,
@@ -32,6 +34,25 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
 
     const handleLogin = async (username?: string, password?: string) => {
         let result = false;
+
+        try {
+            await login(username, password);
+
+            result = true;
+            setAuthdata({
+                user: {
+                    username,
+                    roles: ['admin_roles'],
+                    email: 'admin@gmail.com',
+                },
+                token: 'Admin token authenticated',
+                authenticated: result,
+            });
+
+        } catch (error) {
+            console.log('error masbro...');
+            console.log(error);
+        }
 
         //User
         if ((username?.toLocaleLowerCase() === 'user') && (password?.toLocaleLowerCase() === 'user')) {
