@@ -2,13 +2,11 @@
 import { useState } from 'react';
 import {
     SafeAreaView,
-    View,
     Text,
     Image,
     Platform,
     Dimensions,
     StatusBar,
-    BackHandler,
     TouchableOpacity,
 } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -16,6 +14,8 @@ import { useRouter } from 'expo-router';
 import FieldTextInput from '../FieldTextInput/FieldTextInput';
 import FieldMultilineTextInput from '../FieldMultilineTextInput/FieldMultilineTextInput';
 import { Colors } from '@/constants/Colors';
+import ICheckpoint from '@/interfaces/ICheckpoint';
+import { checkin } from '@/services/Chekpoint';
 
 interface IChekPointFormProps {
     uri: string
@@ -23,8 +23,8 @@ interface IChekPointFormProps {
 
 const CheckpointForm = ({uri}: IChekPointFormProps) => {
     const [displaycamera, setDisplaycamera] = useState(true);
+    const [checkpoint, setCheckpoint] = useState<ICheckpoint>({ checkType: 'checkin' });
     const router = useRouter();
-
 
     const hideCaptured = () => {
         
@@ -38,20 +38,21 @@ const CheckpointForm = ({uri}: IChekPointFormProps) => {
 
     }
 
-    // BackHandler.addEventListener('hardwareBackPress', () => {
+    const handleSave = async () => {
 
-    //   showCaptured();
-    //   if (displaycamera) router.back();
-      
-    //   return true;
-    // });
+        try {
 
-    const handleSave = () => {
-      
-        alert('Data tersimpan...');
+          const result = await checkin(checkpoint);
+          alert('Data tersimpan...');
+          return true;
+  
+        } catch (error) {
 
-        return true;
+            console.log(error);
+            alert('Data gagal disimpan...');
+            return false;
 
+        }
     }
 
   return (
@@ -73,6 +74,7 @@ const CheckpointForm = ({uri}: IChekPointFormProps) => {
             <FieldTextInput
               placeholder='Title'
               onFocus={hideCaptured}
+              onChangeText={(nextText) => setCheckpoint({ ...checkpoint, checkin_title: nextText })}
               style={{
                 width: Dimensions.get('window').width-50,
               }}
@@ -80,14 +82,15 @@ const CheckpointForm = ({uri}: IChekPointFormProps) => {
             <FieldMultilineTextInput
               placeholder='Description'
               onFocus={hideCaptured}
+              onChangeText={(nextText) => setCheckpoint({ ...checkpoint, checkin_description: nextText })}
               style={{
                 width: Dimensions.get('window').width-50,
               }}
             />
   
             <TouchableOpacity
-                onPress={() => {
-                  const success = handleSave();
+                onPress={ async() => {
+                  const success = await handleSave();
                   if (success) router.replace('/')
                 }}
                 style={{

@@ -1,11 +1,12 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwtDecode from 'jwt-decode';
+import IUser from '@/interfaces/IUser';
 
-export const login = async (username, password) => {
-//  const response = await axios.post(`${API_URL}/auth/login`, { username, password });
+const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
-    const API_URL = process.env.EXPO_PUBLIC_API_URL;
+export const login = async (username?: string, password?: string) => {
+
     const response = await axios.post(`${API_URL}/login`, { email: username, password });
 
     // const { token, refreshToken } = response.data;
@@ -18,7 +19,6 @@ export const login = async (username, password) => {
 
     await AsyncStorage.setItem('token', token);
     await AsyncStorage.setItem('refreshToken', 'refreshToken');
-    // await AsyncStorage.setItem('refreshToken', refreshToken);
 };
 
 export const logout = async () => {

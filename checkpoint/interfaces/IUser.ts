@@ -1,5 +1,5 @@
 export default interface IUser {
-    username?: string | null,
-    roles?: string[] | null,
-    email?: string | null
+    username?: string | null;
+    roles?: string[] | null;
+    email?: string | null;
 }
