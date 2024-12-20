@@ -10,13 +10,7 @@ export const login = async (username?: string, password?: string) => {
     const response = await axios.post(`${API_URL}/login`, { email: username, password });
 
     // const { token, refreshToken } = response.data;
-    const { token } = response.data;
-
-    console.log('token', token);
-
-    const tokenX = await getToken();
-    console.log('tokenX', tokenX);
-
+    const { token }: any = response.data;
     await AsyncStorage.setItem('token', token);
     await AsyncStorage.setItem('refreshToken', 'refreshToken');
 };

@@ -11,6 +11,8 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 
+import {PhotoFile} from 'react-native-vision-camera';
+
 import FieldTextInput from '../FieldTextInput/FieldTextInput';
 import FieldMultilineTextInput from '../FieldMultilineTextInput/FieldMultilineTextInput';
 import { Colors } from '@/constants/Colors';
@@ -18,12 +20,13 @@ import ICheckpoint from '@/interfaces/ICheckpoint';
 import { checkin } from '@/services/Chekpoint';
 
 interface IChekPointFormProps {
-    uri: string
+    uri: string;
+    upload: PhotoFile | undefined;
 }
 
-const CheckpointForm = ({uri}: IChekPointFormProps) => {
+const CheckpointForm = ({uri, upload}: IChekPointFormProps) => {
     const [displaycamera, setDisplaycamera] = useState(true);
-    const [checkpoint, setCheckpoint] = useState<ICheckpoint>({ checkType: 'checkin' });
+    const [checkpoint, setCheckpoint] = useState<ICheckpoint>({ upload: upload, checkType: 'checkin' });
     const router = useRouter();
 
     const hideCaptured = () => {

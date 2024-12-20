@@ -69,7 +69,7 @@ const TakePhoto = () => {
             />
 
           </SafeAreaView> :
-          <CheckpointForm uri={ `file://${photo.path}`} />
+          <CheckpointForm uri={ `file://${photo.path}`} upload={photo} />
 
     )
 }
