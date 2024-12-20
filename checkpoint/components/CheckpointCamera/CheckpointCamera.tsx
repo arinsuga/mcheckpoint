@@ -1,5 +1,5 @@
 //systems
-import { MutableRefObject, } from 'react';
+import React, { MutableRefObject, } from 'react';
 import { View, Dimensions, StyleSheet, TouchableOpacity, } from 'react-native';
 //packages
 import { Camera, CameraDevice } from 'react-native-vision-camera';

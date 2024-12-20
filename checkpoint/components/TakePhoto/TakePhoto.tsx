@@ -1,6 +1,6 @@
 
 //packages
-import { useState, useRef, useEffect, } from 'react';
+import React, { useState, useRef, useEffect, } from 'react';
 import { Camera, useCameraDevice, PhotoFile, CameraDevice, } from 'react-native-vision-camera';
 import { SafeAreaView, } from 'react-native-safe-area-context';
 
@@ -36,7 +36,7 @@ const TakePhoto = () => {
             enableShutterSound: false,
           });
           
-          console.log(`file://${result.path}`);
+//          console.log(`file://${result.path}`);
 
 
           setPhoto(result);
@@ -69,7 +69,7 @@ const TakePhoto = () => {
             />
 
           </SafeAreaView> :
-          <CheckpointForm uri={ `file://${photo.path}`} upload={photo} />
+          <CheckpointForm file={photo} />
 
     )
 }

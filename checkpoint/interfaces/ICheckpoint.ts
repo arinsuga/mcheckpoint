@@ -1,12 +1,13 @@
 import {PhotoFile} from 'react-native-vision-camera';
 
 export default interface ICheckpoint {
-    upload?: PhotoFile | undefined;
+    file?: PhotoFile | undefined;
+    upload?: { uri: string; type: string; name: string; path: string; } | undefined;
     checkType: 'checkin' | 'checkout';
-    latitude?: string;
-    longitude?: string;
-    imageTemp?: string;
-    checkin_title?: string;
-    checkin_subtitle?: string;
-    checkin_description?: string;
+    latitude: string;
+    longitude: string;
+    imageTemp: string;
+    checkin_title: string;
+    checkin_subtitle: string;
+    checkin_description: string;
 }

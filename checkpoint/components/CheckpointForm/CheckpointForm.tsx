@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
     SafeAreaView,
     Text,
@@ -20,33 +20,29 @@ import ICheckpoint from '@/interfaces/ICheckpoint';
 import { checkin } from '@/services/Chekpoint';
 
 interface IChekPointFormProps {
-    uri: string;
-    upload: PhotoFile | undefined;
+  file?: PhotoFile | undefined;
 }
 
-const CheckpointForm = ({uri, upload}: IChekPointFormProps) => {
+const CheckpointForm = ({file}: IChekPointFormProps) => {
+
+    const uri = `file://${file?.path}`;
     const [displaycamera, setDisplaycamera] = useState(true);
-    const [checkpoint, setCheckpoint] = useState<ICheckpoint>({ upload: upload, checkType: 'checkin' });
+    const [checkpoint, setCheckpoint] = useState<ICheckpoint>({ file: file, upload: { uri: uri }, checkType: 'checkin' });
     const router = useRouter();
 
-    const hideCaptured = () => {
-        
-        setDisplaycamera(false);
+    const hideCaptured = () => setDisplaycamera(false);
 
-    }
-
-    const showCaptured = () => {
-        
-      setDisplaycamera(true);
-
-    }
+    const showCaptured = () => setDisplaycamera(true);
 
     const handleSave = async () => {
 
         try {
 
           const result = await checkin(checkpoint);
+
           alert('Data tersimpan...');
+          console.log(result);
+
           return true;
   
         } catch (error) {
