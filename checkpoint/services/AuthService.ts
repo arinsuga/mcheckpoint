@@ -7,7 +7,7 @@ const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 export const login = async (username?: string, password?: string) => {
 
-    const response = await axios.post(`${API_URL}/login`, { email: username, password });
+  const response = await axios.post(`${API_URL}/login`, { email: username, password });
 
     // const { token, refreshToken } = response.data;
     const { token }: any = response.data;

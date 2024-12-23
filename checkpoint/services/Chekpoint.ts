@@ -27,7 +27,7 @@ export const checkin = async (checkinData: ICheckpoint) => {
       {
         headers: {
           'Authorization': `Bearer ${token}`,
-//          'Accept': 'application/json',
+          'Accept': 'application/json',
           'Content-Type': 'multipart/form-data',
         },
       });
