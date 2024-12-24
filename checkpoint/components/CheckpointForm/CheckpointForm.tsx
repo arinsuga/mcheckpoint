@@ -26,15 +26,16 @@ interface IChekPointFormProps {
 const CheckpointForm = ({file}: IChekPointFormProps) => {
 
     const uri = `file://${file?.path}`;
+    const router = useRouter();
     const [displaycamera, setDisplaycamera] = useState(true);
+    const [latitude, setLatitude] = useState('-6.2325772');
+    const [longitude, setLongitude] = useState('106.8106801');
     const [checkpoint, setCheckpoint] = useState<ICheckpoint>({
       file: file,
-      upload: { uri: uri },
       checkType: 'checkin',
-      latitude: '-6.2325772',
-      longitude: '106.8106801',
+      latitude: latitude,
+      longitude: longitude,
     });
-    const router = useRouter();
 
     const hideCaptured = () => setDisplaycamera(false);
 
