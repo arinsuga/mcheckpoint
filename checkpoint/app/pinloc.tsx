@@ -1,19 +1,14 @@
 import {
   useState,
   useEffect,
-  useLayoutEffect,
-  useCallback
 } from 'react';
 import {
-  BackHandler,
-  Button,
   SafeAreaView,
-  StyleSheet,
   Text,
   TouchableOpacity,
   View
 } from 'react-native';
-import { Camera, CameraPermissionRequestResult } from 'react-native-vision-camera';
+import { Camera } from 'react-native-vision-camera';
 
 
 import TakePhoto from '@/components/TakePhoto/TakePhoto';

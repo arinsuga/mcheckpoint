@@ -17,7 +17,7 @@ import FieldTextInput from '../FieldTextInput/FieldTextInput';
 import FieldMultilineTextInput from '../FieldMultilineTextInput/FieldMultilineTextInput';
 import { Colors } from '@/constants/Colors';
 import ICheckpoint from '@/interfaces/ICheckpoint';
-import { checkin } from '@/services/Chekpoint';
+import { checkin } from '@/services/ChekpointService';
 
 interface IChekPointFormProps {
   file?: PhotoFile | undefined;
@@ -48,7 +48,6 @@ const CheckpointForm = ({file}: IChekPointFormProps) => {
           const result = await checkin(checkpoint);
 
           alert('Data tersimpan...');
-          console.log(result);
 
           return true;
   
