@@ -16,9 +16,19 @@ export const useFileName = (filePath: string): string => {
 
     return fileName as string;
 }
-export const fileType = (filePath: string) => mime.getType(filePath);
+export const fileType = (filePath: string): string => {
 
-const Fileuse = {
+    const result = mime.getType(filePath);
+
+    if (!result) {
+        return '';
+    }
+
+    return result as string;
+
+}
+
+const Fileutils = {
 
     uri: useFileUri,
     url: useFileURL,
@@ -27,4 +37,4 @@ const Fileuse = {
 
 }
 
-export default Fileuse;
+export default Fileutils;

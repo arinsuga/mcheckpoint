@@ -2,6 +2,8 @@ import mime from 'mime';
 import axios from 'axios';
 import ICheckpoint from '../interfaces/ICheckpoint';
 import { getToken } from './AuthService';
+import Fileutils from '../utils/Fileutils';
+
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
@@ -11,18 +13,13 @@ export const checkin = async (checkinData: ICheckpoint) => {
   const token = await getToken();
   try {    
 
-    const formData = new FormData();
     const filePath = checkinData.file?.path as string;
-    const fileUri = `file://${filePath}`;
-    const fileURL = new URL(fileUri);
-    const upload = await fetch(fileUri);
-    const fileName = fileURL.pathname.split('/').pop();
-    const fileType = mime.getType(filePath);
-    //console.log({ formData, fileUri, fileURL, upload, fileName, filePath, fileType });
-
+    const fileUri = Fileutils.uri(filePath);
+    const fileName = Fileutils.name(filePath);
+    const fileType = Fileutils.type(filePath);
+    
+    const formData = new FormData();
     formData.append('upload', { uri: fileUri, type: fileType, name: fileName, });
-
-
     formData.append('latitude', checkinData.latitude as string);
     formData.append('longitude', checkinData.longitude as string);
     formData.append('imageTemp', checkinData.imageTemp as string);

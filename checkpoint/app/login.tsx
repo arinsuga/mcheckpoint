@@ -1,14 +1,10 @@
 
 import {
-  Button,
-  Image,
-  ImageBackground,
   Platform,
   SafeAreaView,
   StatusBar,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View
 } from "react-native";
@@ -16,13 +12,12 @@ import { useState, useEffect } from "react";
 
 import { Colors } from "../constants/Colors";
 import Logo from "../components/Logo/Logo";
-import Icon from "@/components/Icon/Icon";
 import { useAuth } from "@/contexts/Authcontext";
 
 import FieldUserName from "@/components/FieldUserName/FieldUserName";
 import FieldPassword from "@/components/FieldPassword/FieldPassword";
 
-import { useFocusEffect, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 
 export default function Login() {
   const { authState, Login } = useAuth();
