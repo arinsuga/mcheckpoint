@@ -7,17 +7,29 @@ const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 export const login = async (username?: string, password?: string) => {
 
-  const response = await axios.post(`${API_URL}/login`, { email: username, password });
+    await AsyncStorage.removeItem('token');
+    await AsyncStorage.removeItem('refreshToken');
+    await AsyncStorage.removeItem('username');
 
-    // const { token, refreshToken } = response.data;
+    const response = await axios.post(`${API_URL}/login`, { email: username, password });
     const { token }: any = response.data;
-    await AsyncStorage.setItem('token', token);
-    await AsyncStorage.setItem('refreshToken', 'refreshToken');
+
+    if (token) {
+      await AsyncStorage.setItem('token', token);
+      await AsyncStorage.setItem('refreshToken', 'refreshToken');
+      await AsyncStorage.setItem('username', username as string);
+    }
+
 };
 
 export const logout = async () => {
   await AsyncStorage.removeItem('token');
   await AsyncStorage.removeItem('refreshToken');
+};
+
+export const getUsername = async () => {
+  const token = await AsyncStorage.getItem('username');
+  return token;
 };
 
 export const getToken = async () => {

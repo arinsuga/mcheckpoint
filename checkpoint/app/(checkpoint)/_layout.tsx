@@ -63,8 +63,6 @@ export default function AppLayout() {
 
   } else {
 
-      //console.log('authenticatedXXX');
-    
       return (
 
         <Stack 
