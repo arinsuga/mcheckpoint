@@ -142,8 +142,15 @@ class AbsenController extends Controller
     }
     
     //Check
-    protected function check()
+    public function check($email)
     {
+        $response = [
+            'message' => 'data absensi tersimpan',
+            'result' => '111',
+            'tesinput' => $email
+        ];
+        return response()->json($response);
+
         if (Role::deny(Auth::user()->roles, 'hrd-admin')) {
 
             return redirect()->route('absen.history.admin');
@@ -340,37 +347,15 @@ class AbsenController extends Controller
 
         } //end if
 
-        // $tesData = [
-        //     '$startDateIso' =>[
-        //     '$startDateIso->year' => $startDateIso->year,
-        //     '$startDateIso->month' => $startDateIso->month,
-        //     '$startDateIso->day' => $startDateIso->day],
-        //     '$endDateIso' =>[
-        //         '$endDateIso->year' => $endDateIso->year,
-        //         '$endDateIso->month' => $endDateIso->month,
-        //         '$endDateIso->day' => $endDateIso->day],
-        // ];
-        // return dd($tesData);
-
-        // $this->history($user->id, $startDateIso, $endDateIso);
         $this->history($userId, $startDateIso, $endDateIso);
 
         if (isset($selectedUserId)) {
-
-            // return view($this->sViewRoot.'.'.$resultView,
-            //     ['admin' => true,
-            //     'viewModel' => $this->viewModel
-            // ]);
 
             return response()->json($this->viewModel);
 
         } //end if
 
-        // return view($this->sViewRoot.'.'.$resultView,
-        // ['viewModel' => $this->viewModel]);
-
         return response()->json($this->viewModel);
-
     }
 
     /**

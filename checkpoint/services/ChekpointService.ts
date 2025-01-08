@@ -52,7 +52,8 @@ export const checkout = async (checkoutData: ICheckpoint) => {
   console.log(`username : ${username}`);
   try {    
 
-    const attend = await axios.get(`${API_URL}/absen/attend/${username}`);
+    const attend = await axios.get(`${API_URL}/absen/check/${username}`);
+    console.log(attend);
 
     const filePath = checkoutData.file?.path as string;
     const fileUri = Fileutils.uri(filePath);

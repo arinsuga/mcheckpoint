@@ -28,7 +28,7 @@ Route::group(['middleware' => 'api'], function ($router) {
 
     //Absen
     // Route::resource('absen', 'Absen\AbsenController');
-    // Route::get('/','Absen\AbsenController@check')->name('absen');
+    Route::get('absen/check-by-email/{email}','Absen\AbsenController@check')->name('absen.check.by.email');
 
     // Route::get('/check-history','Absen\AbsenController@checkHistory')->name('absen.history');
     // Route::get('/check-history-admin','Absen\AbsenController@checkHistoryAdmin')->name('absen.history.admin');
