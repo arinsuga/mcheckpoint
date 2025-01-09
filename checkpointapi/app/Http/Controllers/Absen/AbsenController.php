@@ -144,12 +144,6 @@ class AbsenController extends Controller
     //Check
     public function check($email)
     {
-        $response = [
-            'message' => 'data absensi tersimpan',
-            'result' => '111',
-            'tesinput' => $email
-        ];
-        return response()->json($response);
 
         if (Role::deny(Auth::user()->roles, 'hrd-admin')) {
 
@@ -157,16 +151,17 @@ class AbsenController extends Controller
 
         } //end if
         
-        $user = Auth::user();
+        // $user = Auth::user();
+        $user = User::where('email', $email)->first();
         $date = Formater::date(now());
         $dateIso = ConvertDate::strDateToDate($date);
 
         $attend = $this->data->getOutstandingCheckoutByUserId($user->id);
 
+
         if (!$attend) {
             $attend = $this->data->getAttendancesByUserIdAndDate($user->id, $dateIso);
         } //end if
-        
         
         $action = 'absen.checkin.post';
         $actionButton = 'Checkin';

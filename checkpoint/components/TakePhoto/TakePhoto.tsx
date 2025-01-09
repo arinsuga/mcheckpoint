@@ -8,8 +8,14 @@ import { SafeAreaView, } from 'react-native-safe-area-context';
 import CheckpointForm from '@/components/CheckpointForm/CheckpointForm';
 import CheckpointCamera from '@/components/CheckpointCamera/CheckpointCamera';
 
+//services
+import { check,checkin, checkout } from '@/services/ChekpointService';
+import { getUsername } from '@/services/AuthService';
+
 const TakePhoto = () => {
 
+    const [action, setAction] = useState<'checkin' | 'checkout'>('checkin');  
+    const [actionbutton, setActionbutton] = useState<'Checkin' | 'Checkout'>('Checkin');  
     const [cameraPosition, setCameraPosition] = useState<'front' | 'back'>('front');
     const [photo, setPhoto] = useState<PhotoFile | undefined>(undefined);
     const cameraRef = useRef<Camera>(null);
@@ -25,21 +31,29 @@ const TakePhoto = () => {
     }
 
     useEffect(() => {
-      
-    }, [photo]);
+        const fetchData = async () => {
+
+          const username = await getUsername();
+          const checkResult = await check(username as string); 
+          const buttonText = checkResult.data.action_button
+
+          setAction(buttonText == 'Checkin' ? 'checkin' : 'checkout');
+          setActionbutton(buttonText);
+
+        }
+        fetchData();
+
+    }, []);
 
     const capturePhoto = async () => {
         
         try {
 
-          const result = await cameraRef.current?.takePhoto({
+          const photoResult = await cameraRef.current?.takePhoto({
             enableShutterSound: false,
           });
-          
-//          console.log(`file://${result.path}`);
 
-
-          setPhoto(result);
+          setPhoto(photoResult);
 
         } catch(e) {
 
@@ -69,7 +83,7 @@ const TakePhoto = () => {
             />
 
           </SafeAreaView> :
-          <CheckpointForm file={photo} />
+          <CheckpointForm action={action} actionbutton={actionbutton} file={photo} />
 
     )
 }

@@ -5,7 +5,32 @@ import { getToken, getUsername } from './AuthService';
 import Fileutils from '../utils/Fileutils';
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
-export const checkin = async (checkinData: ICheckpoint) => {
+export const check = async (username: string): Promise<any> => {
+
+  const token = await getToken();
+  try {    
+
+    const response = await axios.get(`${API_URL}/absen/check-by-email/${username}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',},
+    });
+
+    if (!response.data) return '';
+  
+    return response.data;
+
+  } catch (error) {
+
+    console.log(error);
+    return error;
+
+  }
+
+};
+
+export const checkin = async (checkinData: ICheckpoint): Promise<any> => {
 
   const token = await getToken();
   try {    
@@ -45,15 +70,10 @@ export const checkin = async (checkinData: ICheckpoint) => {
 
 };
 
-export const checkout = async (checkoutData: ICheckpoint) => {
+export const checkout = async (checkoutData: ICheckpoint): Promise<any> => {
 
   const token = await getToken();
-  const username = await getUsername();
-  console.log(`username : ${username}`);
   try {    
-
-    const attend = await axios.get(`${API_URL}/absen/check/${username}`);
-    console.log(attend);
 
     const filePath = checkoutData.file?.path as string;
     const fileUri = Fileutils.uri(filePath);

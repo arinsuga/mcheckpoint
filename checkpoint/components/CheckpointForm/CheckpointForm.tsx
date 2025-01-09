@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     SafeAreaView,
     Text,
@@ -17,25 +17,28 @@ import FieldTextInput from '../FieldTextInput/FieldTextInput';
 import FieldMultilineTextInput from '../FieldMultilineTextInput/FieldMultilineTextInput';
 import { Colors } from '@/constants/Colors';
 import ICheckpoint from '@/interfaces/ICheckpoint';
-import { checkin } from '@/services/ChekpointService';
+import { checkin, checkout } from '@/services/ChekpointService';
 
 interface IChekPointFormProps {
+  action: 'checkin' | 'checkout'; 
+  actionbutton: 'Checkin' | 'Checkout';
   file?: PhotoFile | undefined;
 }
 
-const CheckpointForm = ({file}: IChekPointFormProps) => {
+const CheckpointForm = ({action, actionbutton, file}: IChekPointFormProps) => {
 
     const uri = `file://${file?.path}`;
-    const router = useRouter();
     const [displaycamera, setDisplaycamera] = useState(true);
     const [latitude, setLatitude] = useState('-6.2325772');
     const [longitude, setLongitude] = useState('106.8106801');
     const [checkpoint, setCheckpoint] = useState<ICheckpoint>({
       file: file,
-      checkType: 'checkin',
+      checkType: action,
       latitude: latitude,
       longitude: longitude,
     });
+
+    const router = useRouter();
 
     const hideCaptured = () => setDisplaycamera(false);
 
@@ -45,9 +48,22 @@ const CheckpointForm = ({file}: IChekPointFormProps) => {
 
         try {
 
-          const result = await checkin(checkpoint);
+          if (action == 'checkin') {
 
-          alert('Data tersimpan...');
+            const result = await checkin(checkpoint);
+            alert('Data tersimpan...');
+
+          } else if (action == 'checkout') {
+
+            const result = await checkout(checkpoint);
+            alert('Data tersimpan...');
+
+          } else {
+
+            alert('Data gagal tersimpan...');
+
+          }
+
 
           return true;
   
@@ -107,7 +123,7 @@ const CheckpointForm = ({file}: IChekPointFormProps) => {
                   backgroundColor: Colors.primary,
                 }}
             >
-              <Text style={{color: Colors.white}}>Save</Text>
+              <Text style={{color: Colors.white}}>{actionbutton}</Text>
             </TouchableOpacity>
 
 
