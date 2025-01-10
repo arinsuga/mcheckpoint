@@ -21,19 +21,29 @@ import { checkin, checkout } from '@/services/ChekpointService';
 
 interface IChekPointFormProps {
   action: 'checkin' | 'checkout'; 
-  actionbutton: 'Checkin' | 'Checkout';
+  actionButton: 'Checkin' | 'Checkout' | '';
   file?: PhotoFile | undefined;
+  attendId?: string;
 }
 
-const CheckpointForm = ({action, actionbutton, file}: IChekPointFormProps) => {
+const CheckpointForm = ({action, actionButton, file, attendId}: IChekPointFormProps) => {
 
     const uri = `file://${file?.path}`;
     const [displaycamera, setDisplaycamera] = useState(true);
-    const [latitude, setLatitude] = useState('-6.2325772');
-    const [longitude, setLongitude] = useState('106.8106801');
+
+    //Senopati
+    // const [latitude, setLatitude] = useState('-6.2325772');
+    // const [longitude, setLongitude] = useState('106.8106801');
+
+    //Mie Gacoan Depok Sawangan
+    const [latitude, setLatitude] = useState('-6.3940795');
+    const [longitude, setLongitude] = useState('106.7898831,17');
+
+
     const [checkpoint, setCheckpoint] = useState<ICheckpoint>({
       file: file,
       checkType: action,
+      attend_id: attendId,
       latitude: latitude,
       longitude: longitude,
     });
@@ -51,12 +61,12 @@ const CheckpointForm = ({action, actionbutton, file}: IChekPointFormProps) => {
           if (action == 'checkin') {
 
             const result = await checkin(checkpoint);
-            alert('Data tersimpan...');
+            alert('Checkin berhasil...');
 
           } else if (action == 'checkout') {
 
             const result = await checkout(checkpoint);
-            alert('Data tersimpan...');
+            alert('Checkout berhasil...');
 
           } else {
 
@@ -123,7 +133,7 @@ const CheckpointForm = ({action, actionbutton, file}: IChekPointFormProps) => {
                   backgroundColor: Colors.primary,
                 }}
             >
-              <Text style={{color: Colors.white}}>{actionbutton}</Text>
+              <Text style={{color: Colors.white}}>{actionButton}</Text>
             </TouchableOpacity>
 
 

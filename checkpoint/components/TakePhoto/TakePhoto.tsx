@@ -15,7 +15,8 @@ import { getUsername } from '@/services/AuthService';
 const TakePhoto = () => {
 
     const [action, setAction] = useState<'checkin' | 'checkout'>('checkin');  
-    const [actionbutton, setActionbutton] = useState<'Checkin' | 'Checkout'>('Checkin');  
+    const [actionButton, setActionButton] = useState<'Checkin' | 'Checkout' | ''>('');
+    const [attendId, setAttendId] = useState<string>('');
     const [cameraPosition, setCameraPosition] = useState<'front' | 'back'>('front');
     const [photo, setPhoto] = useState<PhotoFile | undefined>(undefined);
     const cameraRef = useRef<Camera>(null);
@@ -32,14 +33,11 @@ const TakePhoto = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-
-          const username = await getUsername();
-          const checkResult = await check(username as string); 
-          const buttonText = checkResult.data.action_button
-
-          setAction(buttonText == 'Checkin' ? 'checkin' : 'checkout');
-          setActionbutton(buttonText);
-
+            const username = await getUsername();
+            const checkResult = await check(username as string); 
+            setAction(checkResult.data.action);
+            setActionButton(checkResult.data.action_button);
+            setAttendId(checkResult.data.attend_id);
         }
         fetchData();
 
@@ -83,7 +81,7 @@ const TakePhoto = () => {
             />
 
           </SafeAreaView> :
-          <CheckpointForm action={action} actionbutton={actionbutton} file={photo} />
+          <CheckpointForm action={action} actionButton={actionButton} file={photo} attendId={attendId} />
 
     )
 }

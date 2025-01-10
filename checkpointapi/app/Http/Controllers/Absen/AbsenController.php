@@ -163,7 +163,7 @@ class AbsenController extends Controller
             $attend = $this->data->getAttendancesByUserIdAndDate($user->id, $dateIso);
         } //end if
         
-        $action = 'absen.checkin.post';
+        $action = 'checkin';
         $actionButton = 'Checkin';
         
         $data = null;
@@ -202,7 +202,7 @@ class AbsenController extends Controller
             foreach ($attends as $item) {
                 if ( ($item->checkin_time) && (!$item->checkout_time) ) {
                     
-                    $action = 'absen.checkout.post';
+                    $action = 'checkout';
                     $actionButton = 'Checkout';
                     $attend = $item;
                     break;

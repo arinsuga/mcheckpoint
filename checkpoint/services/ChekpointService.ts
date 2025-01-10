@@ -82,6 +82,7 @@ export const checkout = async (checkoutData: ICheckpoint): Promise<any> => {
     
     const formData = new FormData();
     formData.append('upload', { uri: fileUri, type: fileType, name: fileName, });
+    formData.append('attend_id', checkoutData.attend_id as string);
     formData.append('latitude', checkoutData.latitude as string);
     formData.append('longitude', checkoutData.longitude as string);
     formData.append('imageTemp', checkoutData.imageTemp as string);
@@ -89,7 +90,7 @@ export const checkout = async (checkoutData: ICheckpoint): Promise<any> => {
     formData.append('checkout_subtitle', 'HPTEST - ' + checkoutData.checkin_subtitle as string);
     formData.append('checkout_description', 'HPTEST - ' + checkoutData.checkin_description as string);
 
-    const response = await axios.post(`${API_URL}/absen/checkin`, formData,
+    const response = await axios.post(`${API_URL}/absen/checkout`, formData,
       {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -98,9 +99,13 @@ export const checkout = async (checkoutData: ICheckpoint): Promise<any> => {
         },
       });
 
+      console.log(response);  
     return response;
 
   } catch (error) {
+
+    console.log(error);
+    console.log('ERROR mas bro...');  
 
     return error;
 
