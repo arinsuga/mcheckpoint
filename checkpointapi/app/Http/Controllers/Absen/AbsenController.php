@@ -145,11 +145,11 @@ class AbsenController extends Controller
     public function check($email)
     {
 
-        if (Role::deny(Auth::user()->roles, 'hrd-admin')) {
+        // if (Role::deny(Auth::user()->roles, 'hrd-admin')) {
 
-            return redirect()->route('absen.history.admin');
+        //     //todo: change not authorized return redirect()->route('absen.history.admin');
 
-        } //end if
+        // } //end if
         
         // $user = Auth::user();
         $user = User::where('email', $email)->first();
@@ -157,6 +157,7 @@ class AbsenController extends Controller
         $dateIso = ConvertDate::strDateToDate($date);
 
         $attend = $this->data->getOutstandingCheckoutByUserId($user->id);
+
 
 
         if (!$attend) {
@@ -491,6 +492,10 @@ class AbsenController extends Controller
         $data = null;
         $attend = Attend::find($request->input('attend_id'));
 
+        $tesData = [
+            'attend_id' => $request->input('attend_id'),
+            'attend' => (array)$attend
+        ];
 
         if ($attend)
         {
@@ -519,12 +524,14 @@ class AbsenController extends Controller
             if ($data)
             {
 
+
                 //create temporary uploaded image
                 $uploadTemp = Filex::uploadTemp($upload, $imageTemp, null, 'checkin');
                 //$request->session()->flash('imageTemp', $uploadTemp);
 
                 //copy temporary uploaded image to real path
                 $checkout_image = Filex::uploadOrCopyAndRemove('', $uploadTemp, $this->uploadDirectory, $upload, 'public', false, 'checkout');
+
                 
                 $attend->checkout_time = now();
                 $attend->checkout_city = $this->setCity($data);
@@ -537,7 +544,6 @@ class AbsenController extends Controller
                 $attend->checkout_title = $request->input('checkout_title');
                 $attend->checkout_subtitle = $request->input('checkout_subtitle');
                 $attend->checkout_description = $request->input('checkout_description');
-
                 $attend->save();
 
             } //end if
@@ -548,11 +554,10 @@ class AbsenController extends Controller
 
         $response = [
             'message' => 'data absensi tersimpan',
-            'result' => $data,
-            'metadata' => json_encode($data)
+            'result' => (array)$data,
         ];        
 
-        return response()->json($response);
+        return response()->json(Response::viewModel($attend));
 
     } //end method
 

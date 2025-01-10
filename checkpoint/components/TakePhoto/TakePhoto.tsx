@@ -35,9 +35,10 @@ const TakePhoto = () => {
         const fetchData = async () => {
             const username = await getUsername();
             const checkResult = await check(username as string); 
+
             setAction(checkResult.data.action);
             setActionButton(checkResult.data.action_button);
-            setAttendId(checkResult.data.attend_id);
+            setAttendId(checkResult.data.user.attend_id);
         }
         fetchData();
 

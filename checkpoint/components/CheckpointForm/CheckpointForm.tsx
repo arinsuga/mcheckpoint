@@ -36,8 +36,8 @@ const CheckpointForm = ({action, actionButton, file, attendId}: IChekPointFormPr
     // const [longitude, setLongitude] = useState('106.8106801');
 
     //Mie Gacoan Depok Sawangan
-    const [latitude, setLatitude] = useState('-6.3940795');
-    const [longitude, setLongitude] = useState('106.7898831,17');
+    const [latitude, setLatitude] = useState('-6.2423441');
+    const [longitude, setLongitude] = useState('106.8051293');
 
 
     const [checkpoint, setCheckpoint] = useState<ICheckpoint>({
@@ -60,16 +60,19 @@ const CheckpointForm = ({action, actionButton, file, attendId}: IChekPointFormPr
 
           if (action == 'checkin') {
 
+            console.log('Proses Checkin...');
             const result = await checkin(checkpoint);
             alert('Checkin berhasil...');
 
           } else if (action == 'checkout') {
 
+            console.log('Proses Checkout...');
             const result = await checkout(checkpoint);
             alert('Checkout berhasil...');
 
           } else {
 
+            console.log('Proses Gagal...');
             alert('Data gagal tersimpan...');
 
           }

@@ -99,8 +99,9 @@ export const checkout = async (checkoutData: ICheckpoint): Promise<any> => {
         },
       });
 
-      console.log(response);  
-    return response;
+      console.log(response.data);  
+      console.log('SUCCESS mas bro...');  
+      return response;
 
   } catch (error) {
 
