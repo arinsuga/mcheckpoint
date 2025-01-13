@@ -58,11 +58,15 @@ export const checkin = async (checkinData: ICheckpoint): Promise<any> => {
         },
       });
 
-      console.clear();
-      //console.log(response);
+      console.log(response.data);
+      console.log('Checkin SUCCESS mas bro...');  
+
     return response;
 
   } catch (error) {
+
+    console.log(error);  
+    console.log('Checkin ERROR mas bro...');  
 
     return error;
 
@@ -100,13 +104,13 @@ export const checkout = async (checkoutData: ICheckpoint): Promise<any> => {
       });
 
       console.log(response.data);  
-      console.log('SUCCESS mas bro...');  
+      console.log('Checkout SUCCESS mas bro...');  
       return response;
 
   } catch (error) {
 
     console.log(error);
-    console.log('ERROR mas bro...');  
+    console.log('Checkout ERROR mas bro...');  
 
     return error;
 

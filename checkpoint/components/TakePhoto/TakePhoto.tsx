@@ -14,6 +14,9 @@ import { getUsername } from '@/services/AuthService';
 
 const TakePhoto = () => {
 
+    //Senopati
+    const [latitude, setLatitude] = useState('-6.2325772'); //onlyfortest
+    const [longitude, setLongitude] = useState('106.8106801'); //onlyfortest
     const [action, setAction] = useState<'checkin' | 'checkout'>('checkin');  
     const [actionButton, setActionButton] = useState<'Checkin' | 'Checkout' | ''>('');
     const [attendId, setAttendId] = useState<string>('');
@@ -36,13 +39,27 @@ const TakePhoto = () => {
             const username = await getUsername();
             const checkResult = await check(username as string); 
 
+            console.log(checkResult.data);
+
+            const input = {
+              action: checkResult.data.action,
+              action_button: checkResult.data.action_button,
+              attendId: checkResult.data.user.attend_id,
+            };
+            console.log(input);
+
+            if (input.action == 'checkout') {
+              setLatitude('-6.2423441'); //onlyfortest
+              setLongitude('106.8051293'); //onlyfortest
+            }
+
             setAction(checkResult.data.action);
             setActionButton(checkResult.data.action_button);
             setAttendId(checkResult.data.user.attend_id);
         }
         fetchData();
 
-    }, []);
+    }, [actionButton]);
 
     const capturePhoto = async () => {
         
@@ -82,7 +99,14 @@ const TakePhoto = () => {
             />
 
           </SafeAreaView> :
-          <CheckpointForm action={action} actionButton={actionButton} file={photo} attendId={attendId} />
+          <CheckpointForm
+          action={action}
+          actionButton={actionButton}
+          file={photo}
+          attendId={attendId}
+          latitude={latitude}
+          longitude={longitude}
+          />
 
     )
 }

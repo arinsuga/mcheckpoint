@@ -24,21 +24,14 @@ interface IChekPointFormProps {
   actionButton: 'Checkin' | 'Checkout' | '';
   file?: PhotoFile | undefined;
   attendId?: string;
+  latitude?: string;
+  longitude?: string;
 }
 
-const CheckpointForm = ({action, actionButton, file, attendId}: IChekPointFormProps) => {
+const CheckpointForm = ({action, actionButton, file, attendId, latitude, longitude}: IChekPointFormProps) => {
 
     const uri = `file://${file?.path}`;
     const [displaycamera, setDisplaycamera] = useState(true);
-
-    //Senopati
-    // const [latitude, setLatitude] = useState('-6.2325772');
-    // const [longitude, setLongitude] = useState('106.8106801');
-
-    //Mie Gacoan Depok Sawangan
-    const [latitude, setLatitude] = useState('-6.2423441');
-    const [longitude, setLongitude] = useState('106.8051293');
-
 
     const [checkpoint, setCheckpoint] = useState<ICheckpoint>({
       file: file,
