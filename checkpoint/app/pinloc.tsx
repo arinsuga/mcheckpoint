@@ -103,7 +103,7 @@ export default function Pinloc() {
     return (
       <SafeAreaView style={{ flex: 1, justifyContent: 'center' }}>
 
-        <TakePhoto />
+        <TakePhoto LocationPermissionStatus={LocationPermissionStatus} />
 
       </SafeAreaView>
     );

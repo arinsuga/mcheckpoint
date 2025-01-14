@@ -41,6 +41,9 @@ const CheckpointForm = ({action, actionButton, file, attendId, latitude, longitu
       longitude: longitude,
     });
 
+    console.log('Inside CheckpointForm...');
+    console.log(checkpoint);
+
     const router = useRouter();
 
     const hideCaptured = () => setDisplaycamera(false);
