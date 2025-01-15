@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect, } from 'react';
 import { SafeAreaView, } from 'react-native-safe-area-context';
 import { Camera, useCameraDevice, PhotoFile, CameraDevice, } from 'react-native-vision-camera';
-import Exif from 'react-native-exif';
+import * as Location from 'expo-location';
 
 //components
 import CheckpointForm from '@/components/CheckpointForm/CheckpointForm';
@@ -13,18 +13,13 @@ import CheckpointCamera from '@/components/CheckpointCamera/CheckpointCamera';
 import { check } from '@/services/ChekpointService';
 import { getUsername } from '@/services/AuthService';
 
-const TakePhoto = ({LocationPermissionStatus}: {LocationPermissionStatus: any}) => {
+const TakePhoto = () => {
 
-    //Senopati
-    // const [latitude, setLatitude] = useState('-6.2325772'); //onlyfortest
-    // const [longitude, setLongitude] = useState('106.8106801'); //onlyfortest
-    const [latitude, setLatitude] = useState(''); //onlyfortest
-    const [longitude, setLongitude] = useState(''); //onlyfortest
 
     const [action, setAction] = useState<'checkin' | 'checkout'>('checkin');  
     const [actionButton, setActionButton] = useState<'Checkin' | 'Checkout' | ''>('');
     const [attendId, setAttendId] = useState<string>('');
-    const [cameraPosition, setCameraPosition] = useState<'front' | 'back'>('back');
+    const [cameraPosition, setCameraPosition] = useState<'front' | 'back'>('front');
     const [photo, setPhoto] = useState<PhotoFile | undefined>(undefined);
     const cameraRef = useRef<Camera>(null);
     const phoneDevice = useCameraDevice(cameraPosition);
@@ -36,7 +31,6 @@ const TakePhoto = ({LocationPermissionStatus}: {LocationPermissionStatus: any}) 
       device: cameraDevice,
       isActive: true,
       enableLocation: true,
-      LocationPermissionStatus: LocationPermissionStatus
     }
 
     useEffect(() => {
@@ -50,10 +44,10 @@ const TakePhoto = ({LocationPermissionStatus}: {LocationPermissionStatus: any}) 
               attendId: checkResult.data.user.attend_id,
             };
 
-            if (input.action == 'checkout') {
-              setLatitude('-6.2423441'); //onlyfortest
-              setLongitude('106.8051293'); //onlyfortest
-            }
+            // if (input.action == 'checkout') {
+            //   setLatitude('-6.2423441'); //onlyfortest
+            //   setLongitude('106.8051293'); //onlyfortest
+            // }
 
             setAction(checkResult.data.action);
             setActionButton(checkResult.data.action_button);
@@ -70,26 +64,12 @@ const TakePhoto = ({LocationPermissionStatus}: {LocationPermissionStatus: any}) 
 
           const photoResult = await cameraRef.current?.takePhoto({
             enableShutterSound: false,
-            enableLocation: true,
           });
           setPhoto(photoResult);
 
-          const metadata = await Exif.getExif(photoResult?.path);
-          setLatitude(metadata.GPSLatitude);
-          setLongitude(metadata.GPSLongitude);
-
-          console.log('inside TakePhoto ...');
-          console.log(metadata);
-          console.log(`Latitude: ${metadata.GPSLatitude}, Longitude: ${metadata.GPSLongitude}`);
-
-          // Exif.getExif(photoResult?.path).then((metadata: any) => {
-          //   setLatitude(metadata.latitude);
-          //   setLongitude(metadata.longitude);
-          // });
-
-
         } catch(e) {
 
+          console.log(e);
 
         }
 
@@ -121,8 +101,6 @@ const TakePhoto = ({LocationPermissionStatus}: {LocationPermissionStatus: any}) 
           actionButton={actionButton}
           file={photo}
           attendId={attendId}
-          latitude={latitude}
-          longitude={longitude}
           />
 
     )

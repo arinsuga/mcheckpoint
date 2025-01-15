@@ -12,6 +12,7 @@ import {
 import { useRouter } from 'expo-router';
 
 import {PhotoFile} from 'react-native-vision-camera';
+import * as Location from 'expo-location';
 
 import FieldTextInput from '../FieldTextInput/FieldTextInput';
 import FieldMultilineTextInput from '../FieldMultilineTextInput/FieldMultilineTextInput';
@@ -24,25 +25,40 @@ interface IChekPointFormProps {
   actionButton: 'Checkin' | 'Checkout' | '';
   file?: PhotoFile | undefined;
   attendId?: string;
-  latitude?: string;
-  longitude?: string;
 }
 
-const CheckpointForm = ({action, actionButton, file, attendId, latitude, longitude}: IChekPointFormProps) => {
+const CheckpointForm = ({action, actionButton, file, attendId}: IChekPointFormProps) => {
 
     const uri = `file://${file?.path}`;
     const [displaycamera, setDisplaycamera] = useState(true);
-
     const [checkpoint, setCheckpoint] = useState<ICheckpoint>({
       file: file,
       checkType: action,
       attend_id: attendId,
-      latitude: latitude,
-      longitude: longitude,
+      latitude: '',
+      longitude: '',
+    });
+
+
+
+useEffect(() => {
+
+  (async () => {
+
+    const currentPosition = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.Highest});
+    setCheckpoint({
+      ...checkpoint,
+      latitude: currentPosition.coords.latitude.toString(),
+      longitude: currentPosition.coords.longitude.toString()
     });
 
     console.log('Inside CheckpointForm...');
-    console.log(checkpoint);
+    console.log(`Latitude: ${currentPosition.coords.latitude.toString()}, Longitude : ${currentPosition.coords.longitude.toString()}`);
+  
+  })();
+
+
+}, []);
 
     const router = useRouter();
 
@@ -57,12 +73,14 @@ const CheckpointForm = ({action, actionButton, file, attendId, latitude, longitu
           if (action == 'checkin') {
 
             console.log('Proses Checkin...');
+            console.log(checkpoint);
             const result = await checkin(checkpoint);
             alert('Checkin berhasil...');
 
           } else if (action == 'checkout') {
 
             console.log('Proses Checkout...');
+            console.log(checkpoint);
             const result = await checkout(checkpoint);
             alert('Checkout berhasil...');
 

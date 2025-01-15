@@ -9,45 +9,54 @@ import {
   View
 } from 'react-native';
 import { Camera } from 'react-native-vision-camera';
-
+import * as Location from 'expo-location';
 
 import TakePhoto from '@/components/TakePhoto/TakePhoto';
 import { Colors } from '@/constants/Colors';
 import Icon from '@/components/Icon/Icon';
 
 export default function Pinloc() {
-  const [isRefresh, setIsRefresh] = useState(false);
   const [allowCamera, setAllowCamera] = useState(Camera.getCameraPermissionStatus());
-  const [allowLocation, setAllowLocation] = useState(Camera.getLocationPermissionStatus());
+  const [allowLocation, setAllowLocation] = useState<Location.PermissionStatus>(Location.PermissionStatus.UNDETERMINED);
   
   const [showRefreshCamera, setShowRefreshCamera] = useState(false);
   const [showRefreshLocation, setShowRefreshLocation] = useState(false);
-  const [reloadApp, setReloadApp] = useState(false);
-
 
   //Request Camera and Location
   const handleAllPermission = async () => {
     
-    const LocationPermissionStatus = await Camera.requestLocationPermission();
+    // const LocationPermissionStatus = await Camera.requestLocationPermission();
+    const {status} = await Location.requestForegroundPermissionsAsync();
     const cameraPermissionStatus = await Camera.requestCameraPermission();
 
-    setAllowLocation(LocationPermissionStatus);
-    setShowRefreshLocation(LocationPermissionStatus === 'denied');
+    setAllowLocation(status);
+    setShowRefreshLocation(status === Location.PermissionStatus.DENIED);
     setAllowCamera(cameraPermissionStatus);
     setShowRefreshCamera(cameraPermissionStatus === 'denied');
 
 
   }
-  
-  useEffect(() => {
 
-    if ((allowLocation !== 'granted') && (allowCamera !== 'granted')) {
+  if ((allowLocation !== Location.PermissionStatus.GRANTED) || (allowCamera !== 'granted')) {
 
-      handleAllPermission();
+    handleAllPermission();
+
+  }
+
+  console.log({
+    allowCamera, 
+    allowLocation,
+  })
+
+  // useEffect(() => {
+
+  //   if ((allowLocation !== Location.PermissionStatus.GRANTED) || (allowCamera !== 'granted')) {
+
+  //     handleAllPermission();
   
-    }
+  //   }
   
-  }, [allowCamera, allowLocation]);
+  // }, [allowCamera, allowLocation]);
 
   if ((showRefreshCamera) || (showRefreshLocation)) {
 
@@ -103,8 +112,15 @@ export default function Pinloc() {
     return (
       <SafeAreaView style={{ flex: 1, justifyContent: 'center' }}>
 
-        <TakePhoto LocationPermissionStatus={LocationPermissionStatus} />
+        <TakePhoto />
 
+      </SafeAreaView>
+    );
+  } else {
+
+    return (
+      <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 10 }}>
+        <Text>Camera and Location Waiting for permission to be granted</Text>
       </SafeAreaView>
     );
   }

@@ -15,7 +15,6 @@ interface ICameraInfoProps {
   device: CameraDevice;
   isActive: boolean;
   enableLocation: boolean;
-  LocationPermissionStatus: any;
 }
 
 interface CheckpointCameraProps {
@@ -39,7 +38,6 @@ const CheckpointCamera = (props: CheckpointCameraProps) => {
                 device={props.cameraInfo.device}
                 isActive={props.cameraInfo.isActive}
                 enableLocation={props.cameraInfo.enableLocation}
-                location={props.cameraInfo.LocationPermissionStatus}
             />
 
 
