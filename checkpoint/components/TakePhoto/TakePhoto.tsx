@@ -44,11 +44,6 @@ const TakePhoto = () => {
               attendId: checkResult.data.user.attend_id,
             };
 
-            // if (input.action == 'checkout') {
-            //   setLatitude('-6.2423441'); //onlyfortest
-            //   setLongitude('106.8051293'); //onlyfortest
-            // }
-
             setAction(checkResult.data.action);
             setActionButton(checkResult.data.action_button);
             setAttendId(checkResult.data.user.attend_id);
