@@ -4,17 +4,12 @@ import {
 } from 'react';
 import {
   SafeAreaView,
-  Text,
-  TouchableOpacity,
-  View
 } from 'react-native';
 import { Camera } from 'react-native-vision-camera';
 import * as Location from 'expo-location';
 
 import RequestPermission from '@/components/RequestPermission/RequestPermission';
 import TakePhoto from '@/components/TakePhoto/TakePhoto';
-import { Colors } from '@/constants/Colors';
-import Icon from '@/components/Icon/Icon';
 
 export default function Pinloc() {
   const [allowCamera, setAllowCamera] = useState(Camera.getCameraPermissionStatus());
