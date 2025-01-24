@@ -4,13 +4,13 @@ import ICheckpoint from '../interfaces/ICheckpoint';
 import { getToken, getUsername } from './AuthService';
 import Fileutils from '../utils/Fileutils';
 
-const API_URL = process.env.EXPO_PUBLIC_API_URL;
+const API_URL = `${process.env.EXPO_PUBLIC_API_URL}/absen`;
 export const check = async (username: string): Promise<any> => {
 
   const token = await getToken();
   try {    
 
-    const response = await axios.get(`${API_URL}/absen/check-by-email/${username}`, {
+    const response = await axios.get(`${API_URL}/check-by-email/${username}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json',
@@ -49,7 +49,7 @@ export const checkin = async (checkinData: ICheckpoint): Promise<any> => {
     formData.append('checkin_subtitle', 'HPTEST - ' + checkinData.checkin_subtitle as string);
     formData.append('checkin_description', 'HPTEST - ' + checkinData.checkin_description as string);
 
-    const response = await axios.post(`${API_URL}/absen/checkin`, formData,
+    const response = await axios.post(`${API_URL}/checkin`, formData,
       {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -94,7 +94,7 @@ export const checkout = async (checkoutData: ICheckpoint): Promise<any> => {
     formData.append('checkout_subtitle', 'HPTEST - ' + checkoutData.checkin_subtitle as string);
     formData.append('checkout_description', 'HPTEST - ' + checkoutData.checkin_description as string);
 
-    const response = await axios.post(`${API_URL}/absen/checkout`, formData,
+    const response = await axios.post(`${API_URL}/checkout`, formData,
       {
         headers: {
           'Authorization': `Bearer ${token}`,

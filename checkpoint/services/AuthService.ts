@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwtDecode from 'jwt-decode';
 import IUser from '@/interfaces/IUser';
 
-const API_URL = process.env.EXPO_PUBLIC_API_URL;
+const API_URL = `${process.env.EXPO_PUBLIC_API_URL}/auth`;
 
 export const login = async (username?: string, password?: string) => {
 
