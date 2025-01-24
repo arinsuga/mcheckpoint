@@ -51,19 +51,19 @@ export default function AppLayout() {
   const { authState, Logout } = useAuth();
 
   React.useEffect(() => {
-    //console.log('useEffect authstate rendered ....')
+
+    console.log('useEffect - _layout-checkpint ....')
+    console.log(authState);
     
   }, [authState]);
 
 
-  if (!authState?.authenticated) {
-
-      //console.log('Not authenticated');
-      return <Login />;
-
-  } else {
-
-      return (
+  return (
+    <>
+      {
+        (!authState?.authenticated) ?
+        
+        <Login /> :
 
         <Stack 
             screenOptions={{
@@ -88,9 +88,9 @@ export default function AppLayout() {
         </Stack>
 
 
+      }
+    </>
 
-      )
-  }
-
+  );
 
 }
