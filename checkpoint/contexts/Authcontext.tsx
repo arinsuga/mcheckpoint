@@ -6,7 +6,7 @@ import {
 } from 'react'
 import IUser from '@/interfaces/IUser';
 
-import { login } from '@/services/AuthService'
+import { login, getToken } from '@/services/AuthService'
 
 
 interface IState {
@@ -37,15 +37,15 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
 
         try {
             await login(username, password);
+            const token = await getToken();
 
             result = true;
             setAuthdata({
                 user: {
                     username,
                     roles: ['admin_roles'],
-                    email: 'admin@gmail.com',
                 },
-                token: 'Admin token authenticated',
+                token: token,
                 authenticated: result,
             });
 
@@ -62,7 +62,6 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
                 user: {
                     username,
                     roles: ['user_roles'],
-                    email: 'user@gmail.com',
                 },
                 token: 'User token authenticated',
                 authenticated: result,

@@ -14,7 +14,7 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'status']]);
     }
 
     public function register(Request $request)
@@ -90,11 +90,28 @@ class AuthController extends Controller
                 return response()->json(['user_not_found'], 404);
             }
         } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+
             return response()->json(['token_expired'], $e->getStatusCode());
         } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+
             return response()->json(['token_invalid'], $e->getStatusCode());
         } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
+
             return response()->json(['token_absent'], $e->getStatusCode());
+        } catch (\Throwable $e) {
+            
+            switch ($e->getMessage()) {
+                case 'Token Signature could not be verified.':
+                    return response()->json(['token_invalid'], 500);
+                    break;
+
+                case 'Token has expired':
+                    return response()->json(['token_expired'], 500);
+                    break;
+            }
+
+            return response()->json([$e->getMessage()], 500);
+
         }
 
         // If no exception is thrown, the user is authenticated
