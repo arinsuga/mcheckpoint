@@ -23,6 +23,7 @@ export const login = async (username?: string, password?: string) => {
 };
 
 export const logout = async () => {
+  await AsyncStorage.removeItem('username');
   await AsyncStorage.removeItem('token');
   await AsyncStorage.removeItem('refreshToken');
 };
@@ -44,26 +45,42 @@ export const getRefreshToken = async () => {
 
 export const refreshAuthToken = async () => {
   const refreshToken = await getRefreshToken();
-  const response = await axios.post(`${API_URL}/auth/refresh-token`, { refreshToken });
-  const { token } = response.data;
+  const response = await axios.post(`${API_URL}/refresh-token`, { refreshToken });
+  const { token } = response.data as { token: string };
   await AsyncStorage.setItem('token', token);
   return token;
 };
 
 export const isAuthenticated = async () => {
+
   const token = await getToken();
   if (!token) return false;
 
-  const decodedToken = jwtDecode(token);
-  const currentTime = Date.now() / 1000;
-  if (decodedToken.exp < currentTime) {
-    try {
-      await refreshAuthToken();
-      return true;
-    } catch (error) {
+  const response = await axios.get(`${API_URL}/status`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',},
+  });
+  if (!response.data) return false;
+
+  switch (response.data) {
+    case 'token_expired':
+      try {
+        await refreshAuthToken();
+        return true;
+      } catch (error) {
+        await logout();
+        return false;
+      }
+    
+    case 'token_invalid':
       await logout();
       return false;
-    }
+
+    default:
+      break;
   }
+
   return true;
 };

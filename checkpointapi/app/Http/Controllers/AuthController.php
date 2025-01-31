@@ -108,7 +108,11 @@ class AuthController extends Controller
                 case 'Token has expired':
                     return response()->json(['token_expired'], 500);
                     break;
-            }
+
+                default:
+                    return response()->json(['token_invalid'], 500);
+                    break;
+        }
 
             return response()->json([$e->getMessage()], 500);
 

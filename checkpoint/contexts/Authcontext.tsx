@@ -1,12 +1,15 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import {
     ReactNode,
     useState,
     createContext,
     useContext,
+    useEffect,
 } from 'react'
 import IUser from '@/interfaces/IUser';
 
-import { login, getToken } from '@/services/AuthService'
+import { login, logout, getUsername, getToken, isAuthenticated } from '@/services/AuthService'
 
 
 interface IState {
@@ -20,6 +23,7 @@ interface IProvider {
     Login?: (username?: string, password?: string) => Promise<any | null>;
     Logout?: () => Promise<any | null>;
     Register?: (email?: string, password?: string) => Promise<any | null>;
+    Authenticate?: () => Promise<void>;
 }
 
 const Providercontext = createContext<IProvider>({});
@@ -27,7 +31,6 @@ const Providercontext = createContext<IProvider>({});
 export const useAuth = () => {
     return useContext(Providercontext);
 }
-
 
 const Authprovider = ({ children }: { children: ReactNode }) => {
     const [authdata, setAuthdata] = useState<IState>({});
@@ -90,6 +93,8 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
 
     const handleLogout = async () => {
 
+        await logout();
+        
         setAuthdata({
             user: null,
             token: null,
@@ -105,12 +110,38 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
         return true;
     }
 
+    const handleAuthantication = async () => {
+
+        const username = await getUsername();
+        const token = await getToken();
+        const authenticated = await isAuthenticated();
+
+        console.log('useEffect - Authcontext - handleAuthentication ....');
+        console.log({
+            username,
+            token,
+            authenticated,
+        });
+
+
+        setAuthdata({    
+            user: {
+                username,
+                roles: ['admin_roles'],
+            },
+            token,
+            authenticated,
+        });
+        
+    }
+
     
     const value: IProvider = {
         authState: authdata,
         Login: handleLogin,
         Logout: handleLogout,
         Register: handleRegister,
+        Authenticate: handleAuthantication,
     };
 
     return (
