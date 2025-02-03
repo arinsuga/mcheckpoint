@@ -1,7 +1,7 @@
 
 //packages
 import React, { useState, useRef, useEffect, } from 'react';
-import { SafeAreaView, } from 'react-native-safe-area-context';
+import { View, } from 'react-native';
 import { Camera, useCameraDevice, PhotoFile, CameraDevice, } from 'react-native-vision-camera';
 import * as Location from 'expo-location';
 
@@ -81,7 +81,7 @@ const TakePhoto = () => {
     return (
 
           !photo ? 
-          <SafeAreaView style={{ flex: 1, justifyContent: 'center' }}>
+          <View style={{ flex: 1, justifyContent: 'center' }}>
 
             <CheckpointCamera
               viewCapturedImage={viewCapturedImage}
@@ -90,7 +90,7 @@ const TakePhoto = () => {
               cameraInfo={cameraInfo}
             />
 
-          </SafeAreaView> :
+          </View> :
           <CheckpointForm
           action={action}
           actionButton={actionButton}

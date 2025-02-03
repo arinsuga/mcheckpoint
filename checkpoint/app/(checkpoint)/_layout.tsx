@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, TouchableOpacity } from "react-native";
 import { useRouter, Stack } from "expo-router";
 

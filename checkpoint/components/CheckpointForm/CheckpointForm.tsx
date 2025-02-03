@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import {
-    SafeAreaView,
+    View,
     Text,
     Image,
     Platform,
@@ -104,7 +104,7 @@ useEffect(() => {
     }
 
   return (
-        <SafeAreaView style={{
+        <View style={{
           flex: 1,
           justifyContent: 'flex-start',
           alignItems: 'center',
@@ -154,7 +154,7 @@ useEffect(() => {
             </TouchableOpacity>
 
 
-        </SafeAreaView>
+        </View>
   )
 }
 
