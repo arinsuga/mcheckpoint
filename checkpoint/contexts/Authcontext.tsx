@@ -5,11 +5,10 @@ import {
     useState,
     createContext,
     useContext,
-    useEffect,
 } from 'react'
 import IUser from '@/interfaces/IUser';
 
-import { login, logout, getUsername, getToken, isAuthenticated, verifyToken } from '@/services/AuthService'
+import { login, logout, getUsername, getToken, verifyToken } from '@/services/AuthService'
 
 
 interface IState {
@@ -118,7 +117,6 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
             const username = await getUsername();
             const token = await getToken();
             const authenticated = await verifyToken(token);
-            // const authenticated = await isAuthenticated();
 
             console.log('Authcontext - handleAuthentication ....');
             console.log({
@@ -137,7 +135,7 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
                 authenticated: authenticated.status,
             });
 
-            return true;
+            return authenticated.status;
 
         } catch (error) {
 
@@ -150,7 +148,6 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
 
         
     }
-
     
     const value: IProvider = {
         authState: authdata,

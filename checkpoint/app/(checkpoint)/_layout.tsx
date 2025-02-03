@@ -48,15 +48,12 @@ import { getToken, verifyToken } from "@/services/AuthService";
 
 export default function AppLayout() {
   const { authState, Logout, Authenticate } = useAuth();
-  const [authentication, setAuthentication] = useState(false);
-  const [token, setToken] = useState<string | null>('');
+  const [ showLogin, setShowLogin ] = useState(false);
 
   const handleAuthentication = async () => {
 
     const token = await getToken();
     const status = await (Authenticate ? Authenticate() : false);
-
-    setToken(token);
 
   }
 
