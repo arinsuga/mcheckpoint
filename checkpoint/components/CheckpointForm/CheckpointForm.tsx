@@ -72,21 +72,16 @@ useEffect(() => {
 
           if (action == 'checkin') {
 
-            console.log('Proses Checkin...');
-            console.log(checkpoint);
             const result = await checkin(checkpoint);
             alert('Checkin berhasil...');
 
           } else if (action == 'checkout') {
 
-            console.log('Proses Checkout...');
-            console.log(checkpoint);
             const result = await checkout(checkpoint);
             alert('Checkout berhasil...');
 
           } else {
 
-            console.log('Proses Gagal...');
             alert('Data gagal tersimpan...');
 
           }
@@ -96,7 +91,6 @@ useEffect(() => {
   
         } catch (error) {
 
-            console.log(error);
             alert('Data gagal disimpan...');
             return false;
 

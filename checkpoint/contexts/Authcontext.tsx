@@ -9,7 +9,7 @@ import {
 } from 'react'
 import IUser from '@/interfaces/IUser';
 
-import { login, logout, getUsername, getToken, isAuthenticated } from '@/services/AuthService'
+import { login, logout, getUsername, getToken, isAuthenticated, verifyToken } from '@/services/AuthService'
 
 
 interface IState {
@@ -23,7 +23,7 @@ interface IProvider {
     Login?: (username?: string, password?: string) => Promise<any | null>;
     Logout?: () => Promise<any | null>;
     Register?: (email?: string, password?: string) => Promise<any | null>;
-    Authenticate?: () => Promise<void>;
+    Authenticate?: () => Promise<boolean>;
 }
 
 const Providercontext = createContext<IProvider>({});
@@ -112,26 +112,42 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
 
     const handleAuthantication = async () => {
 
-        const username = await getUsername();
-        const token = await getToken();
-        const authenticated = await isAuthenticated();
 
-        console.log('useEffect - Authcontext - handleAuthentication ....');
-        console.log({
-            username,
-            token,
-            authenticated,
-        });
+        try {
 
+            const username = await getUsername();
+            const token = await getToken();
+            const authenticated = await verifyToken(token);
+            // const authenticated = await isAuthenticated();
 
-        setAuthdata({    
-            user: {
+            console.log('Authcontext - handleAuthentication ....');
+            console.log({
                 username,
-                roles: ['admin_roles'],
-            },
-            token,
-            authenticated,
-        });
+                token,
+                authenticated,
+            });
+
+
+            setAuthdata({    
+                user: {
+                    username,
+                    roles: ['admin_roles'],
+                },
+                token,
+                authenticated: authenticated.status,
+            });
+
+            return true;
+
+        } catch (error) {
+
+            console.log('ERROR - Authcontext - handleAuthentication ....');
+            console.log(error);
+
+            return false;
+
+        }
+
         
     }
 

@@ -8,7 +8,7 @@ import Icon from "@/components/Icon/Icon";
 import { useAuth } from "@/contexts/Authcontext";
 import Login from "../login";
 //import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-import { getToken } from "@/services/AuthService";
+import { getToken, verifyToken } from "@/services/AuthService";
 
 // const CustomDrawerContent = (props: any) => {
 //     const { Logout } = useAuth();
@@ -47,14 +47,16 @@ import { getToken } from "@/services/AuthService";
 // }
 
 export default function AppLayout() {
-  const { authState, Logout } = useAuth();
+  const { authState, Logout, Authenticate } = useAuth();
   const [authentication, setAuthentication] = useState(false);
   const [token, setToken] = useState<string | null>('');
 
-  
   const handleAuthentication = async () => {
 
-    setToken(await getToken());
+    const token = await getToken();
+    const status = await (Authenticate ? Authenticate() : false);
+
+    setToken(token);
 
   }
 
@@ -62,11 +64,11 @@ export default function AppLayout() {
   useEffect(() => {
 
 
-    console.log('useEffect - _layout-checkpoint [] ....')
-    console.log({
-      localToken: token,
-      authState: authState,
-    });
+    // console.log('useEffect - _layout-checkpoint [] ....')
+    // console.log({
+    //   localToken: token,
+    //   authState: authState,
+    // });
 
     handleAuthentication();
     
@@ -76,14 +78,13 @@ export default function AppLayout() {
   useEffect(() => {
 
 
-    console.log('useEffect - _layout-checkpoint [token] ....')
+    console.log('useEffect - _layout-checkpoint [authState?.authenticated] ....')
     console.log({
-      localToken: token,
       authState: authState,
     });
 
     
-  }, [token]);
+  }, [authState?.authenticated]);
 
   return (
     <>
