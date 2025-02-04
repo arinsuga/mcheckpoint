@@ -1,12 +1,14 @@
 
 import {
   Platform,
+  Dimensions,
   SafeAreaView,
   StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
+  ActivityIndicator,
 } from "react-native";
 import { useState, useEffect } from "react";
 
@@ -16,6 +18,7 @@ import { useAuth } from "@/contexts/Authcontext";
 
 import FieldUserName from "@/components/FieldUserName/FieldUserName";
 import FieldPassword from "@/components/FieldPassword/FieldPassword";
+import WaitingIndicator from "@/components/WaitingIndicator/WaitingIndicator";
 
 import { useRouter } from "expo-router";
 
@@ -24,11 +27,13 @@ export default function Login({ authstate }: { authstate: boolean | null | undef
   const router = useRouter();
   const [ username, setUsername ] = useState('imam@hadiprana.co.id'); //fortest
   const [ password, setPassword ] = useState('hadiprana'); //fortest
+  const [ startLogin, setStartLogin ] = useState(false);
 
   console.log('Login - authstate', authstate);
 
   const onLogin = async (username: string, password: string) => {
     
+    setStartLogin(true);
     const result = await (Login && Login(username, password));
     
     result ? router.replace('/') : alert('Invalid username or password');
@@ -51,7 +56,10 @@ export default function Login({ authstate }: { authstate: boolean | null | undef
   return (
 
 
-    (authstate === undefined) ? null :
+    (authstate === undefined) ?
+    <SafeAreaView style={ [ styles.activityContainer, { backgroundColor: Colors.whiteLight } ] }>
+      <WaitingIndicator startWaiting={true} />
+    </SafeAreaView> :
     <SafeAreaView
       style={ [ styles.rootContainer, { backgroundColor: Colors.whiteLight } ] }
     >
@@ -84,11 +92,9 @@ export default function Login({ authstate }: { authstate: boolean | null | undef
           </TouchableOpacity>
 
         </View>
-
       </View>
 
-
-
+      <WaitingIndicator startWaiting={startLogin} />
 
     </SafeAreaView>
   );
@@ -100,6 +106,14 @@ const styles = StyleSheet.create({
 
     flex: 1,
     justifyContent: "flex-end",
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+
+  },
+
+  activityContainer: {
+
+    flex: 1,
+    justifyContent: "center",
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
 
   },
