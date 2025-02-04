@@ -19,11 +19,13 @@ import FieldPassword from "@/components/FieldPassword/FieldPassword";
 
 import { useRouter } from "expo-router";
 
-export default function Login() {
+export default function Login({ authstate }: { authstate: boolean | null | undefined }) {
   const { Login } = useAuth();
   const router = useRouter();
   const [ username, setUsername ] = useState('imam@hadiprana.co.id'); //fortest
   const [ password, setPassword ] = useState('hadiprana'); //fortest
+
+  console.log('Login - authstate', authstate);
 
   const onLogin = async (username: string, password: string) => {
     
@@ -47,6 +49,9 @@ export default function Login() {
 
 
   return (
+
+
+    (authstate === undefined) ? null :
     <SafeAreaView
       style={ [ styles.rootContainer, { backgroundColor: Colors.whiteLight } ] }
     >

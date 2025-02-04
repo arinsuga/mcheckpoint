@@ -97,7 +97,7 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
         setAuthdata({
             user: null,
             token: null,
-            authenticated: null,
+            authenticated: false,
         });
 
         return true;

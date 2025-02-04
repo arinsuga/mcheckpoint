@@ -1,6 +1,6 @@
 
-import React, { useEffect, useState } from "react";
-import { View, TouchableOpacity } from "react-native";
+import React, { useEffect, useLayoutEffect, useCallback, useState } from "react";
+import { Text, View, TouchableOpacity } from "react-native";
 import { useRouter, Stack } from "expo-router";
 
 import { Colors } from "@/constants/Colors";
@@ -9,6 +9,7 @@ import { useAuth } from "@/contexts/Authcontext";
 import Login from "../login";
 //import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { getToken, verifyToken } from "@/services/AuthService";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 // const CustomDrawerContent = (props: any) => {
 //     const { Logout } = useAuth();
@@ -48,47 +49,29 @@ import { getToken, verifyToken } from "@/services/AuthService";
 
 export default function AppLayout() {
   const { authState, Logout, Authenticate } = useAuth();
-  const [ showLogin, setShowLogin ] = useState(false);
-
-  const handleAuthentication = async () => {
-
-    const token = await getToken();
-    const status = await (Authenticate ? Authenticate() : false);
-
-  }
 
 
-  useEffect(() => {
-
-
-    // console.log('useEffect - _layout-checkpoint [] ....')
-    // console.log({
-    //   localToken: token,
-    //   authState: authState,
-    // });
-
-    handleAuthentication();
+  const toggleShowLogin = useCallback(() => {
     
+    (Authenticate && Authenticate());
+
+  }, [authState?.authenticated]);
+
+  useLayoutEffect(() => {
+
+    console.log(authState);
+    toggleShowLogin();
+
   }, []);
 
-
-  useEffect(() => {
-
-
-    console.log('useEffect - _layout-checkpoint [authState?.authenticated] ....')
-    console.log({
-      authState: authState,
-    });
-
-    
-  }, [authState?.authenticated]);
 
   return (
     <>
       {
+
         (!authState?.authenticated) ?
         
-        <Login /> :
+        <Login authstate={authState?.authenticated} /> :
 
         <Stack 
             screenOptions={{
