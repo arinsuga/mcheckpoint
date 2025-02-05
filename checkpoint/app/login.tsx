@@ -1,16 +1,14 @@
 
 import {
   Platform,
-  Dimensions,
   SafeAreaView,
   StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  ActivityIndicator,
 } from "react-native";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import { Colors } from "../constants/Colors";
 import Logo from "../components/Logo/Logo";
@@ -28,8 +26,6 @@ export default function Login({ authstate }: { authstate: boolean | null | undef
   const [ username, setUsername ] = useState('imam@hadiprana.co.id'); //fortest
   const [ password, setPassword ] = useState('hadiprana'); //fortest
   const [ startLogin, setStartLogin ] = useState(false);
-
-  console.log('Login - authstate', authstate);
 
   const onLogin = async (username: string, password: string) => {
     

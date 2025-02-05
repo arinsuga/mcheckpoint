@@ -39,22 +39,6 @@ export default function Pinloc() {
 
   }, []);
 
-
-  useEffect(() => {
-
-    let message: string = '';
-    if (showRefreshCamera) {
-      message = 'Please allow this app to use Camera';
-    }
-
-    if (showRefreshLocation) {
-      message !== '' ?
-      message = message + ' and Location / GPS also make sure to enable Location / GPS' :
-      message = 'please allow this app to use Location / GPS and make sure to enable Location / GPS'
-    }
-
-  }, [allowCamera, allowLocation]);
-
   return (
     <SafeAreaView style={{ flex: 1, justifyContent: 'center' }}>
 
@@ -62,7 +46,7 @@ export default function Pinloc() {
 
         (allowLocation === Location.PermissionStatus.GRANTED) && (allowCamera === 'granted') ?
 
-        <TakePhoto /> : <RequestPermission askPermission={handleAllPermission} />
+        <TakePhoto /> : <RequestPermission permissions={{allowLocation, allowCamera}} askPermission={handleAllPermission} />
 
       }
 

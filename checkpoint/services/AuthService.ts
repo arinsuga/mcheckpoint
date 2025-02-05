@@ -54,31 +54,6 @@ export const refreshAuthToken = async () => {
 
 export const verifyToken = (token: string | null) => {
 
-  // const decoded = jwtDecode(token as string).exp as number;
-  // const currentTime = Date.now() / 1000;
-
-  // const dateDecoded = new Date(decoded * 1000);
-  // let year = dateDecoded.getFullYear();
-  // let month = (dateDecoded.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
-  // let day = dateDecoded.getDate().toString().padStart(2, '0');
-  // let hours = dateDecoded.getHours().toString().padStart(2, '0');
-  // let minutes = dateDecoded.getMinutes().toString().padStart(2, '0');
-  // let seconds = dateDecoded.getSeconds().toString().padStart(2, '0');
-  // const formatDecoded = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-
-  // const dateCurrent = new Date(currentTime * 1000);
-  // year = dateCurrent.getFullYear();
-  // month = (dateCurrent.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
-  // day = dateCurrent.getDate().toString().padStart(2, '0');
-  // hours = dateCurrent.getHours().toString().padStart(2, '0');
-  // minutes = dateCurrent.getMinutes().toString().padStart(2, '0');
-  // seconds = dateCurrent.getSeconds().toString().padStart(2, '0');
-  // const formatCurrent = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-
-  // console.log('token inside verifyToken: ', token);
-  // console.log(`decoded ${decoded} == dateDecoded: ${dateDecoded} == formatDecoded: ${formatDecoded}`);
-  // console.log(`currentTime ${currentTime} == dateCurrent: ${dateCurrent} == formatCurrent: ${formatCurrent}`);
-
   try {
 
     const decoded = jwtDecode(token as string);

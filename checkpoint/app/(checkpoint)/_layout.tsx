@@ -59,7 +59,6 @@ export default function AppLayout() {
 
   useLayoutEffect(() => {
 
-    console.log(authState);
     toggleShowLogin();
 
   }, []);

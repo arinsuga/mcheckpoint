@@ -52,7 +52,6 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
             });
 
         } catch (error) {
-            console.log('error masbro...');
             console.log(error);
         }
 
@@ -118,14 +117,6 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
             const token = await getToken();
             const authenticated = await verifyToken(token);
 
-            console.log('Authcontext - handleAuthentication ....');
-            console.log({
-                username,
-                token,
-                authenticated,
-            });
-
-
             setAuthdata({    
                 user: {
                     username,
@@ -139,9 +130,7 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
 
         } catch (error) {
 
-            console.log('ERROR - Authcontext - handleAuthentication ....');
             console.log(error);
-
             return false;
 
         }
