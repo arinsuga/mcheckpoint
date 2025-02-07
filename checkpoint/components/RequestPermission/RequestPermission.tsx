@@ -23,7 +23,7 @@ const RequestPermission = ({ permissions, askPermission }: IRequestPermissionPro
 
       {
           (permissions.allowCamera === 'not-determined' || permissions.allowLocation === 'undetermined') ?
-          <WaitingIndicator startWaiting={true} /> :
+          <WaitingIndicator isWaiting={true} /> :
 
           <Text>
             {permissions.allowCamera === 'denied' ? 'Camera' : ''}

@@ -2,9 +2,7 @@ import {
   useState,
   useEffect,
 } from 'react';
-import {
-  SafeAreaView,
-} from 'react-native';
+import { SafeAreaView } from 'react-native';
 import { Camera } from 'react-native-vision-camera';
 import * as Location from 'expo-location';
 
@@ -14,9 +12,6 @@ import TakePhoto from '@/components/TakePhoto/TakePhoto';
 export default function Pinloc() {
   const [allowCamera, setAllowCamera] = useState(Camera.getCameraPermissionStatus());
   const [allowLocation, setAllowLocation] = useState<Location.PermissionStatus>(Location.PermissionStatus.UNDETERMINED);
-  
-  const [showRefreshCamera, setShowRefreshCamera] = useState(false);
-  const [showRefreshLocation, setShowRefreshLocation] = useState(false);
 
   //Request Camera and Location
   const handleAllPermission = async () => {
@@ -26,10 +21,7 @@ export default function Pinloc() {
     const cameraPermissionStatus = await Camera.requestCameraPermission();
 
     setAllowLocation(status);
-    setShowRefreshLocation(status === Location.PermissionStatus.DENIED);
     setAllowCamera(cameraPermissionStatus);
-    setShowRefreshCamera(cameraPermissionStatus === 'denied');
-
 
   }
 
@@ -52,7 +44,5 @@ export default function Pinloc() {
 
     </SafeAreaView>
   );
-
-
 
 }

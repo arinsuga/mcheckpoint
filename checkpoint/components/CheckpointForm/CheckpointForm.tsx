@@ -19,6 +19,7 @@ import FieldMultilineTextInput from '../FieldMultilineTextInput/FieldMultilineTe
 import { Colors } from '@/constants/Colors';
 import ICheckpoint from '@/interfaces/ICheckpoint';
 import { checkin, checkout } from '@/services/ChekpointService';
+import WaitingIndicator from '../WaitingIndicator/WaitingIndicator';
 
 interface IChekPointFormProps {
   action: 'checkin' | 'checkout'; 
@@ -28,6 +29,7 @@ interface IChekPointFormProps {
 }
 
 const CheckpointForm = ({action, actionButton, file, attendId}: IChekPointFormProps) => {
+    const [isWaiting, setIsWaiting] = useState(false);
 
     const uri = `file://${file?.path}`;
     const [displaycamera, setDisplaycamera] = useState(true);
@@ -70,6 +72,7 @@ useEffect(() => {
 
         try {
 
+          setIsWaiting(true);
           if (action == 'checkin') {
 
             const result = await checkin(checkpoint);
@@ -147,6 +150,7 @@ useEffect(() => {
               <Text style={{color: Colors.white}}>{actionButton}</Text>
             </TouchableOpacity>
 
+            <WaitingIndicator isWaiting={isWaiting} />
 
         </View>
   )

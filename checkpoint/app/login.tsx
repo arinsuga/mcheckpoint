@@ -1,15 +1,13 @@
 
 import {
-  Platform,
   SafeAreaView,
-  StatusBar,
-  StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
 import { useState } from "react";
 
+import Styles from "@/constants/Styles";
 import { Colors } from "../constants/Colors";
 import Logo from "../components/Logo/Logo";
 import { useAuth } from "@/contexts/Authcontext";
@@ -25,11 +23,11 @@ export default function Login({ authstate }: { authstate: boolean | null | undef
   const router = useRouter();
   const [ username, setUsername ] = useState('imam@hadiprana.co.id'); //fortest
   const [ password, setPassword ] = useState('hadiprana'); //fortest
-  const [ startLogin, setStartLogin ] = useState(false);
+  const [ isWaiting, setIsWaiting ] = useState(false);
 
   const onLogin = async (username: string, password: string) => {
     
-    setStartLogin(true);
+    setIsWaiting(true);
     const result = await (Login && Login(username, password));
     
     result ? router.replace('/') : alert('Invalid username or password');
@@ -53,11 +51,11 @@ export default function Login({ authstate }: { authstate: boolean | null | undef
 
 
     (authstate === undefined) ?
-    <SafeAreaView style={ [ styles.activityContainer, { backgroundColor: Colors.whiteLight } ] }>
-      <WaitingIndicator startWaiting={true} />
+    <SafeAreaView style={ [ Styles.activityContainer, { backgroundColor: Colors.whiteLight } ] }>
+      <WaitingIndicator isWaiting={true} />
     </SafeAreaView> :
     <SafeAreaView
-      style={ [ styles.rootContainer, { backgroundColor: Colors.whiteLight } ] }
+      style={ [ Styles.rootContainer, { backgroundColor: Colors.whiteLight } ] }
     >
 
       <View style={{
@@ -71,7 +69,7 @@ export default function Login({ authstate }: { authstate: boolean | null | undef
         <Logo size="s" />
       </View> 
 
-      <View style={ styles.container }>
+      <View style={ Styles.container }>
 
         <FieldUserName onChangeText={ usernamedOnChange } />
         <FieldPassword onChangeText={ passwordOnChange } />
@@ -79,87 +77,20 @@ export default function Login({ authstate }: { authstate: boolean | null | undef
         <View>
 
           <TouchableOpacity
-              style={ [styles.btn, styles.btnLogin] }
+              style={ [Styles.btn, Styles.btnLogin] }
               onPress={ () => onLogin(username, password) }
           >
 
-            <Text style={ styles.btnText }>Login</Text>
+            <Text style={ Styles.btnText }>Login</Text>
 
           </TouchableOpacity>
 
         </View>
       </View>
 
-      <WaitingIndicator startWaiting={startLogin} />
+      <WaitingIndicator isWaiting={isWaiting} />
 
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
-
-  rootContainer: {
-
-    flex: 1,
-    justifyContent: "flex-end",
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-
-  },
-
-  activityContainer: {
-
-    flex: 1,
-    justifyContent: "center",
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-
-  },
-
-  container: {
-    paddingBottom: 50,
-    paddingLeft: 30,
-    paddingRight: 30,
-  },
-
-  btn: {
-    alignItems: 'center',
-    padding: 15,
-    color: Colors.white,
-    borderRadius: 5,
-
-  },
-
-  btnLogin: {
-    
-    backgroundColor: Colors.bgOrange,
-
-  },
-
-  btnText: {
-    color: Colors.white,
-  },
-
-  
-  inputIcon: {
-
-    position: "absolute",
-    bottom: 10
-
-  },
-
-  textInputGroup: {
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.greyLight,
-    marginBottom: 5,
-    width: '75%'
-  },
-
-  textInput: {
-
-    fontSize: 17,
-    color: Colors.black,
-    paddingLeft: 30,
-    paddingTop: 30,
-
-  },
-
-});

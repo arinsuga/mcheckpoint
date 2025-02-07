@@ -1,12 +1,14 @@
 //systems
-import React, { MutableRefObject, } from 'react';
-import { View, Dimensions, StyleSheet, TouchableOpacity, } from 'react-native';
+import React, { MutableRefObject, useState } from 'react';
+import { View, TouchableOpacity } from 'react-native';
 //packages
 import { Camera, CameraDevice } from 'react-native-vision-camera';
 //components
 import Icon from '@/components/Icon/Icon';
-//components
+//constants
 import { Colors } from '@/constants/Colors';
+import Styles from '@/constants/Styles';
+import WaitingIndicator from '../WaitingIndicator/WaitingIndicator';
 
 interface ICameraInfoProps {
 
@@ -23,6 +25,7 @@ interface CheckpointCameraProps {
   capturePhoto: () => Promise<void>;
   toggleCameraFacing: () => void;
   cameraInfo: ICameraInfoProps
+  isWaiting: boolean;
 
 }
 
@@ -40,8 +43,7 @@ const CheckpointCamera = (props: CheckpointCameraProps) => {
                 enableLocation={props.cameraInfo.enableLocation}
             />
 
-
-            <View style={styles.buttonContainer}>
+            <View style={Styles.buttonContainer}>
 
                 <TouchableOpacity onPress={props.viewCapturedImage}>
                   <Icon.Image color={Colors.whiteDark} />
@@ -57,6 +59,8 @@ const CheckpointCamera = (props: CheckpointCameraProps) => {
 
             </View>
 
+            <WaitingIndicator isWaiting={props.isWaiting} />
+
         </>
     
   )
@@ -64,15 +68,3 @@ const CheckpointCamera = (props: CheckpointCameraProps) => {
 
 export default CheckpointCamera
 
-const styles = StyleSheet.create({
-  buttonContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    position: 'absolute',
-    justifyContent: 'space-around',
-    alignItems: 'flex-end',
-    backgroundColor: 'transparent',
-    width: Dimensions.get('window').width,
-    bottom: 60,
-  },
-});

@@ -4,11 +4,11 @@ import { View, Text, ActivityIndicator } from 'react-native';
 
 import { Colors } from '@/constants/Colors';
 
-const WaitingIndicator = ({startWaiting}: {startWaiting: boolean}) => {
+const WaitingIndicator = ({isWaiting}: {isWaiting: boolean}) => {
   return (
 
       <View style={{
-        display: startWaiting ? 'flex' : 'none',
+        display: isWaiting ? 'flex' : 'none',
         position: 'absolute',
         flex: 1,
         justifyContent: "center",

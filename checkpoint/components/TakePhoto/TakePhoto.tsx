@@ -3,7 +3,6 @@
 import React, { useState, useRef, useEffect, } from 'react';
 import { View, } from 'react-native';
 import { Camera, useCameraDevice, PhotoFile, CameraDevice, } from 'react-native-vision-camera';
-import * as Location from 'expo-location';
 
 //components
 import CheckpointForm from '@/components/CheckpointForm/CheckpointForm';
@@ -14,6 +13,7 @@ import { check } from '@/services/ChekpointService';
 import { getUsername } from '@/services/AuthService';
 
 const TakePhoto = () => {
+    const [isCaptureWaiting, setIsCaptureWaiting] = useState(false);
 
 
     const [action, setAction] = useState<'checkin' | 'checkout'>('checkin');  
@@ -57,10 +57,12 @@ const TakePhoto = () => {
         
         try {
 
+          setIsCaptureWaiting(true);
           const photoResult = await cameraRef.current?.takePhoto({
             enableShutterSound: false,
           });
           setPhoto(photoResult);
+          setIsCaptureWaiting(false);
 
         } catch(e) {
 
@@ -88,6 +90,7 @@ const TakePhoto = () => {
               capturePhoto={capturePhoto}
               toggleCameraFacing={toggleCameraFacing}
               cameraInfo={cameraInfo}
+              isWaiting={isCaptureWaiting}
             />
 
           </View> :

@@ -204,7 +204,4 @@ export const Colors = {
   bgPrimaryActive: primaryActive,
   bgPrimaryDisabled: primaryDisabled,
 
-
-
-
 };
