@@ -1,4 +1,4 @@
-
+import React from "react";
 import { Text } from "react-native";
 import { useRouter, Tabs } from "expo-router";
 import { useRef } from "react";
