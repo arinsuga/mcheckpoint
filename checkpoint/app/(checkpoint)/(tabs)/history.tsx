@@ -1,9 +1,8 @@
 import React from "react";
 import { Text, View } from "react-native";
-
-import { Link } from "expo-router";
 import DateList from "@/components/DateList/DateList";
 import TimelineList from "@/components/TimelineList/TimelineList";
+import WaitingIndicator from "@/components/WaitingIndicator/WaitingIndicator";
 
 import { getToken, getRefreshToken } from "@/services/AuthService";
 

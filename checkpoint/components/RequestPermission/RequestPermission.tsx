@@ -5,10 +5,11 @@ import { PermissionStatus } from 'expo-location';
 import WaitingIndicator from '../WaitingIndicator/WaitingIndicator';
 
 interface IRequestPermissionProps {
+  isWaiting: boolean;
   permissions: { allowLocation: PermissionStatus, allowCamera: CameraPermissionStatus;  };
   askPermission: () => Promise<void>;
 }
-const RequestPermission = ({ permissions, askPermission }: IRequestPermissionProps) => {
+const RequestPermission = ({ isWaiting, permissions, askPermission }: IRequestPermissionProps) => {
 
   // CameraPermissionStatus = "granted" | "not-determined" | "denied" | "restricted"
   // LocationPermissionStatus = GRANTED = 'granted' | UNDETERMINED = 'undetermined' | DENIED = 'denied'
@@ -23,7 +24,7 @@ const RequestPermission = ({ permissions, askPermission }: IRequestPermissionPro
 
       {
           (permissions.allowCamera === 'not-determined' || permissions.allowLocation === 'undetermined') ?
-          <WaitingIndicator isWaiting={true} /> :
+          <WaitingIndicator isWaiting={isWaiting} /> :
 
           <Text>
             {permissions.allowCamera === 'denied' ? 'Camera' : ''}

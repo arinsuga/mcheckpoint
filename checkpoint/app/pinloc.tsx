@@ -12,6 +12,7 @@ import TakePhoto from '@/components/TakePhoto/TakePhoto';
 export default function Pinloc() {
   const [allowCamera, setAllowCamera] = useState(Camera.getCameraPermissionStatus());
   const [allowLocation, setAllowLocation] = useState<Location.PermissionStatus>(Location.PermissionStatus.UNDETERMINED);
+  const [isWaiting, setIsWaiting] = useState(true);
 
   //Request Camera and Location
   const handleAllPermission = async () => {
@@ -22,6 +23,7 @@ export default function Pinloc() {
 
     setAllowLocation(status);
     setAllowCamera(cameraPermissionStatus);
+    setIsWaiting(false);
 
   }
 
@@ -38,7 +40,7 @@ export default function Pinloc() {
 
         (allowLocation === Location.PermissionStatus.GRANTED) && (allowCamera === 'granted') ?
 
-        <TakePhoto /> : <RequestPermission permissions={{allowLocation, allowCamera}} askPermission={handleAllPermission} />
+        <TakePhoto /> : <RequestPermission isWaiting={isWaiting} permissions={{allowLocation, allowCamera}} askPermission={handleAllPermission} />
 
       }
 
