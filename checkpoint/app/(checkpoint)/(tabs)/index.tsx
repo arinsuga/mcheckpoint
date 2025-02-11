@@ -1,12 +1,7 @@
-import { useRouter, Link } from "expo-router";
-import { Button, Text, View } from "react-native";
-import { useAuth } from "@/contexts/Authcontext";
+import { Text, View } from "react-native";
 import Icon from "@/components/Icon/Icon";
 
 export default function Home() {
-
-  const { authState } = useAuth();
-  const router = useRouter()
 
   return (
     <View

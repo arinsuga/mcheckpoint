@@ -1,22 +1,33 @@
+
 import { StyleSheet, Platform, Dimensions, StatusBar } from "react-native"
 
+//Constants
 import { Colors } from "./Colors";
+
+export const PaddingTop = Platform.OS === "android" ? StatusBar.currentHeight : 0;
 
 const Styles = StyleSheet.create({
 
     rootContainer: {
   
       flex: 1,
-      justifyContent: "flex-end",
-      paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+      paddingTop: PaddingTop,
   
     },
+
+    loginContainer: {
   
+      flex: 1,
+      justifyContent: "flex-end",
+      paddingTop: PaddingTop,
+  
+    },
+    
     activityContainer: {
   
       flex: 1,
       justifyContent: "center",
-      paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+      paddingTop: PaddingTop,
   
     },
   

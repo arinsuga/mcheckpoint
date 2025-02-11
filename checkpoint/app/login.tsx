@@ -1,11 +1,12 @@
 
+import { useState } from "react";
 import {
   SafeAreaView,
   Text,
   TouchableOpacity,
   View,
+  StatusBar,
 } from "react-native";
-import { useState } from "react";
 
 import Styles from "@/constants/Styles";
 import { Colors } from "../constants/Colors";
@@ -54,10 +55,9 @@ export default function Login({ authstate }: { authstate: boolean | null | undef
     <SafeAreaView style={ [ Styles.activityContainer, { backgroundColor: Colors.whiteLight } ] }>
       <WaitingIndicator isWaiting={true} />
     </SafeAreaView> :
-    <SafeAreaView
-      style={ [ Styles.rootContainer, { backgroundColor: Colors.whiteLight } ] }
-    >
+    <SafeAreaView style={ [ Styles.loginContainer, { backgroundColor: Colors.whiteLight } ] } >
 
+      <StatusBar barStyle={ "dark-content" }  />
       <View style={{
         flex: 1,
         alignItems: "center",
