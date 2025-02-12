@@ -1,13 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { SafeAreaView, Text, View } from "react-native";
+
+//plugins
+import moment from "moment";
+
+//Components
 import DateList from "@/components/DateList/DateList";
 import DateListNotuse from "@/components/DateList/DateListNotuse";
 import TimelineList from "@/components/TimelineList/TimelineList";
 
-//Components
+//Constants
 import { Colors } from "@/constants/Colors";
 
 export default function History() {
+    const [currentDate, setCurrentDate] = useState(moment());
 
   return (
     <SafeAreaView
@@ -30,7 +36,7 @@ export default function History() {
       {/* SECTION HEADER */}
 
       {/* DATE LIST FILTER */}
-      <DateList />
+      <DateList date={currentDate}  />
       {/* DATE LIST FILTER */}
       
       {/* DIVIDER */}

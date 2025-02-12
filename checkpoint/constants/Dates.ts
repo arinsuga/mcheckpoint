@@ -9,6 +9,8 @@ const Dates = {
 
   },
 
+  locale: 'id',
+
 };
 
 export default Dates;

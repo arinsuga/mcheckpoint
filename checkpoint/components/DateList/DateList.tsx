@@ -4,19 +4,21 @@ import { Dimensions, View } from 'react-native'
 //Packages
 import CalendarStrip from 'react-native-calendar-strip'
 import moment from 'moment';
+import 'moment/locale/id';
 
 //Constants
 import { Colors } from '@/constants/Colors';
 import Dates from '@/constants/Dates';
 
-const DateListStrip = () => {
-    const [currentDate, setCurrentDate] = useState(moment());
+const DateListStrip = ({ date }: {date: moment.Moment}) => {
+    const [currentDate, setCurrentDate] = useState(date);
     const [selectedDate, setSelectedDate] = useState(currentDate);
 
 
     useEffect(() => {
 
-        console.log(selectedDate.format(Dates.format.isoDate));
+        console.log(`currentdate: ${currentDate.format(Dates.format.isoDate)}`);
+        console.log(`startOfWeak: ${currentDate.clone().startOf('week').format(Dates.format.isoDate)}`);
 
     }, [selectedDate])
 
@@ -24,6 +26,7 @@ const DateListStrip = () => {
         <View style={{ width: Dimensions.get('screen').width, minHeight: 57}}>
            <CalendarStrip
                     scrollable={true}
+                    scrollerPaging={true}
                     dayComponentHeight={50}
                     dayContainerStyle={{
                         height: 50,
@@ -35,7 +38,7 @@ const DateListStrip = () => {
                     style={{height: 100, paddingTop: 10, paddingBottom: 10}}
                     calendarHeaderStyle={{color: Colors.black}}
                     calendarColor={Colors.white}
-                    dateNumberStyle={{color: Colors.black}}
+                    dateNumberStyle={ { color: Colors.black }}
                     dateNameStyle={{color: Colors.black}}
                     highlightDateNumberStyle={{color: Colors.white}}
                     highlightDateNameStyle={{color: Colors.white}}
