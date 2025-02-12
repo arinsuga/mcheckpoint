@@ -10,17 +10,17 @@ import 'moment/locale/id';
 import { Colors } from '@/constants/Colors';
 import Dates from '@/constants/Dates';
 
-const DateListStrip = ({ date }: {date: moment.Moment}) => {
+const DateListStrip = ({ date, onSelectedDate }: {date: moment.Moment, onSelectedDate: (date: moment.Moment) => void}) => {
     const [currentDate, setCurrentDate] = useState(date);
-    const [selectedDate, setSelectedDate] = useState(currentDate);
+    const [selectedDate, setSelectedDate] = useState(currentDate.clone());
 
 
-    useEffect(() => {
+    const handleSelectedDate = (date: moment.Moment) => {
 
-        console.log(`currentdate: ${currentDate.format(Dates.format.isoDate)}`);
-        console.log(`startOfWeak: ${currentDate.clone().startOf('week').format(Dates.format.isoDate)}`);
+        setSelectedDate(date);
+        onSelectedDate(date);
 
-    }, [selectedDate])
+    }
 
     return (
         <View style={{ width: Dimensions.get('screen').width, minHeight: 57}}>
@@ -33,7 +33,7 @@ const DateListStrip = ({ date }: {date: moment.Moment}) => {
                         borderRadius: 10,
                         alignItems: 'center'
                     }}
-                    calendarAnimation={{type: 'sequence', duration: 30}}
+                    calendarAnimation={{type: 'sequence', duration: 0}}
                     daySelectionAnimation={{type: 'background', duration: 0, highlightColor: Colors.orange}}
                     style={{height: 100, paddingTop: 10, paddingBottom: 10}}
                     calendarHeaderStyle={{color: Colors.black}}
@@ -45,6 +45,7 @@ const DateListStrip = ({ date }: {date: moment.Moment}) => {
                     disabledDateNameStyle={{color: Colors.grey}}
                     disabledDateNumberStyle={{color: Colors.grey}}
                     iconContainer={{flex: 0.1}}
+                    onDateSelected={date => handleSelectedDate(date)}
                     selectedDate={selectedDate}
             />
         </View>

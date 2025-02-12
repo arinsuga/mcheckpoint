@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView, Text, View } from "react-native";
 
 //plugins
@@ -14,39 +14,46 @@ import { Colors } from "@/constants/Colors";
 
 export default function History() {
     const [currentDate, setCurrentDate] = useState(moment());
+    const [selectedDate, setSelectedDate] = useState(currentDate.clone());
 
-  return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: Colors.white,
-      }}
-    >
-      {/* SECTION HEADER */}
-      <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 12}}>
-        <View style={{flexDirection: 'row', alignItems: 'center', columnGap: 8}}>
-          <Text style={{fontSize: 36, fontWeight: 'bold'}}>24</Text>
-          <View style={{flexDirection:'column'}}>
-            <Text style={{color: Colors.grey, fontWeight: 'bold'}}>Wed</Text>
-            <Text style={{color: Colors.grey, fontWeight: 'bold'}}>Jan 2020</Text>
+    const handleSelectedDate = (date: moment.Moment) => {
+
+        setSelectedDate(date);
+
+    }
+
+    return (
+      <SafeAreaView
+        style={{
+          flex: 1,
+          backgroundColor: Colors.white,
+        }}
+      >
+        {/* SECTION HEADER */}
+        <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 12}}>
+          <View style={{flexDirection: 'row', alignItems: 'center', columnGap: 8}}>
+            <Text style={{fontSize: 36, fontWeight: 'bold'}}>{ selectedDate.format('DD') }</Text>
+            <View style={{flexDirection:'column'}}>
+              <Text style={{color: Colors.grey, fontWeight: 'bold'}}>{ selectedDate.format('dddd') }</Text>
+              <Text style={{color: Colors.grey, fontWeight: 'bold'}}>{ selectedDate.format('MMM') } { selectedDate.format('YYYY') }</Text>
+            </View>
           </View>
+          <Text style={{fontWeight: 'bold', color: Colors.orange, fontSize: 16}}>
+            { currentDate.format('YYYY-MM-DD') === selectedDate.format('YYYY-MM-DD') ? 'Today' : '' }
+          </Text>
         </View>
-        <Text style={{fontWeight: 'bold', color: Colors.orange, fontSize: 16}}>Today</Text>
-      </View>
-      {/* SECTION HEADER */}
 
-      {/* DATE LIST FILTER */}
-      <DateList date={currentDate}  />
-      {/* DATE LIST FILTER */}
-      
-      {/* DIVIDER */}
-      <View style={{backgroundColor: Colors.white, height: 1}}></View>
-      {/* DIVIDER */}
-      
-      <View style={{paddingHorizontal: 12}}>
-        <TimelineList />
-      </View>
-    </SafeAreaView>
-  );
+        {/* DATE LIST FILTER */}
+        <DateList date={currentDate} onSelectedDate={handleSelectedDate}  />
+        
+        {/* DIVIDER */}
+        <View style={{backgroundColor: Colors.white, height: 1}}></View>
+        
+        {/* DATA LIST */}
+        <View style={{paddingHorizontal: 12}}>
+          <TimelineList />
+        </View>
+      </SafeAreaView>
+    );
 }
 
