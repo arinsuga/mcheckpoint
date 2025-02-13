@@ -4,7 +4,6 @@ import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native
 //Components
 import Icon from '../Icon/Icon';
 
-
 interface IData {
     time: string;
     type: string;
@@ -122,6 +121,7 @@ const Header = () => {
         </View>
     )
 }
+
 const TimelineList = () => {
     return (
         <View>

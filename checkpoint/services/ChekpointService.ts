@@ -1,8 +1,16 @@
 import mime from 'mime';
 import axios from 'axios';
-import ICheckpoint from '../interfaces/ICheckpoint';
-import { getToken, getUsername } from './AuthService';
 import Fileutils from '../utils/Fileutils';
+import moment from 'moment';
+
+//Interfaces
+import ICheckpoint from '../interfaces/ICheckpoint';
+
+//Services
+import { getToken, getUsername } from './AuthService';
+
+//Constants
+import Dates from '@/constants/Dates';
 
 const API_URL = `${process.env.EXPO_PUBLIC_API_URL}/absen`;
 export const check = async (username: string): Promise<any> => {
@@ -111,6 +119,48 @@ export const checkout = async (checkoutData: ICheckpoint): Promise<any> => {
 
     console.log(error);
     console.log('Checkout ERROR mas bro...');  
+
+    return error;
+
+  }
+
+};
+
+export const checkinHistory = async ({userName, startdt, enddt, history_media}: {
+  userName: string,
+  startdt: moment.Moment,
+  enddt: moment.Moment,
+  history_media: string,
+}): Promise<any> => {
+
+  const token = await getToken();
+  try {    
+
+    
+    const formData = new FormData();
+    formData.append('username', userName);
+    formData.append('startdt', startdt.format(Dates.format.date));
+    formData.append('enddt', enddt.format(Dates.format.date));
+    formData.append('history_media', history_media);
+
+    const response = await axios.post(`${API_URL}/check-history-post`, formData,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json',
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      console.log(response.data);
+      console.log('Check History SUCCESS mas bro...');  
+
+    return response;
+
+  } catch (error) {
+
+    console.log(error);  
+    console.log('Check History ERROR mas bro...');  
 
     return error;
 

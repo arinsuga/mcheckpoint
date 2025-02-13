@@ -293,7 +293,7 @@ class AbsenController extends Controller
 
         } //end loop
 
-       $this->viewModel = Response::viewModel($data);
+       $this->viewModel = Response::viewArray($data);
 
     }
 
@@ -315,16 +315,11 @@ class AbsenController extends Controller
     //checkHistoryPost
     public function checkHistoryPost(Request $request)
     {
-        $user = Auth::user();
-        $selectedUserId = $request->input('userid');
+        $selectedUsername = $request->input('username');
+        $userId = User::where('email', $selectedUsername)->first()->id;
         $startdt = $request->input('startdt');
         $enddt = $request->input('enddt');
         $historyMedia = $request->input('history_media');
-
-        $userId = $user->id;
-        if (isset($selectedUserId)) {
-            $userId = $selectedUserId;
-        } //end if
 
         $resultView = null;
         if ($historyMedia == 'view') {

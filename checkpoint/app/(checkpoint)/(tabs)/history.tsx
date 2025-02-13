@@ -6,21 +6,49 @@ import moment from "moment";
 
 //Components
 import DateList from "@/components/DateList/DateList";
-import DateListNotuse from "@/components/DateList/DateListNotuse";
 import TimelineList from "@/components/TimelineList/TimelineList";
 
 //Constants
 import { Colors } from "@/constants/Colors";
 
+//Serives
+import { getUsername } from "@/services/AuthService";
+import { checkinHistory } from '@/services/ChekpointService';
+
+
 export default function History() {
     const [currentDate, setCurrentDate] = useState(moment());
     const [selectedDate, setSelectedDate] = useState(currentDate.clone());
+    const [dataList, setDataList] = useState<any | null>(null);
 
-    const handleSelectedDate = (date: moment.Moment) => {
 
-        setSelectedDate(date);
+    const useDataList = async () => {
+
+      const data = await checkinHistory({
+        userName: await getUsername() as string,
+        startdt: selectedDate,
+        enddt: selectedDate,
+        history_media: 'view'
+      });
+
+      console.log(`inside useDataList... ${selectedDate.format('YYYY-MM-DD')}`);
+      console.log(data.data.data);
 
     }
+
+    const handleSelectedDate = async (date: moment.Moment) => {
+
+        setSelectedDate(date);
+        useDataList();
+
+    }
+
+
+    useEffect(() => {
+
+      useDataList();
+
+    }, []);
 
     return (
       <SafeAreaView

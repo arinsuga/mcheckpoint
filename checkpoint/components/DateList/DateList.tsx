@@ -8,18 +8,28 @@ import 'moment/locale/id';
 
 //Constants
 import { Colors } from '@/constants/Colors';
-import Dates from '@/constants/Dates';
 
-const DateListStrip = ({ date, onSelectedDate }: {date: moment.Moment, onSelectedDate: (date: moment.Moment) => void}) => {
+//Services
+import { checkinHistory } from '@/services/ChekpointService';
+
+const DateList = (
+    {
+        date,
+        onSelectedDate
+    }:
+    {
+        date: moment.Moment,
+        onSelectedDate: (date: moment.Moment) => void
+    }) => {
     const [currentDate, setCurrentDate] = useState(date);
     const [selectedDate, setSelectedDate] = useState(currentDate.clone());
 
 
-    const handleSelectedDate = (date: moment.Moment) => {
+    const handleSelectedDate = async (date: moment.Moment) => {
 
         setSelectedDate(date);
         onSelectedDate(date);
-
+        
     }
 
     return (
@@ -27,6 +37,7 @@ const DateListStrip = ({ date, onSelectedDate }: {date: moment.Moment, onSelecte
            <CalendarStrip
                     scrollable={true}
                     scrollerPaging={true}
+                    startingDate={moment().startOf('week')}
                     dayComponentHeight={50}
                     dayContainerStyle={{
                         height: 50,
@@ -52,4 +63,4 @@ const DateListStrip = ({ date, onSelectedDate }: {date: moment.Moment, onSelecte
     )
 }
 
-export default DateListStrip;
+export default DateList;
