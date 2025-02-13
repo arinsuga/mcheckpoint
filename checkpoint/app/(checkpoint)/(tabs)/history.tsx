@@ -22,33 +22,40 @@ export default function History() {
     const [dataList, setDataList] = useState<any | null>(null);
 
 
-    const useDataList = async () => {
+    const useDataList = async (date: moment.Moment) => {
 
       const data = await checkinHistory({
         userName: await getUsername() as string,
-        startdt: selectedDate,
-        enddt: selectedDate,
+        startdt: date,
+        enddt: date,
         history_media: 'view'
       });
 
-      console.log(`inside useDataList... ${selectedDate.format('YYYY-MM-DD')}`);
-      console.log(data.data.data);
-
+      setDataList(data.data.data);
     }
 
     const handleSelectedDate = async (date: moment.Moment) => {
 
         setSelectedDate(date);
-        useDataList();
+        useDataList(date);
 
     }
 
 
     useEffect(() => {
 
-      useDataList();
+      useDataList(selectedDate);
 
     }, []);
+
+
+    
+    useEffect(() => {
+
+      console.log(`inside useDataList... ${selectedDate.format('YYYY-MM-DD')}`);
+      console.log(dataList);
+
+    }, [dataList]);
 
     return (
       <SafeAreaView
