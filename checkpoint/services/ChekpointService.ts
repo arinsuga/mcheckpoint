@@ -152,15 +152,9 @@ export const checkinHistory = async ({userName, startdt, enddt, history_media}: 
         },
       });
 
-      console.log(response.data);
-      console.log('Check History SUCCESS mas bro...');  
-
     return response;
 
   } catch (error) {
-
-    console.log(error);  
-    console.log('Check History ERROR mas bro...');  
 
     return error;
 

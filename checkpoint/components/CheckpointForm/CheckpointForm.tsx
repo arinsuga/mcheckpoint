@@ -54,9 +54,6 @@ useEffect(() => {
       longitude: currentPosition.coords.longitude.toString()
     });
 
-    console.log('Inside CheckpointForm...');
-    console.log(`Latitude: ${currentPosition.coords.latitude.toString()}, Longitude : ${currentPosition.coords.longitude.toString()}`);
-  
   })();
 
 

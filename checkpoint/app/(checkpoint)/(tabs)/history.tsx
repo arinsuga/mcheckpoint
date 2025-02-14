@@ -11,7 +11,11 @@ import TimelineList from "@/components/TimelineList/TimelineList";
 //Constants
 import { Colors } from "@/constants/Colors";
 
-//Serives
+//Interfaces
+import ITimeLine from "@/interfaces/ITimeLine";
+import ICheckpointHistory from "@/interfaces/ICheckpointHistory";
+
+//Serivces
 import { getUsername } from "@/services/AuthService";
 import { checkinHistory } from '@/services/ChekpointService';
 
@@ -19,43 +23,61 @@ import { checkinHistory } from '@/services/ChekpointService';
 export default function History() {
     const [currentDate, setCurrentDate] = useState(moment());
     const [selectedDate, setSelectedDate] = useState(currentDate.clone());
-    const [dataList, setDataList] = useState<any | null>(null);
+    const [dataList, setDataList] = useState<ITimeLine[]>([]);
+
+    const fillDataLIst = (dataList: ICheckpointHistory[]): ITimeLine[] => {
+        let data: ITimeLine[] = [];
+
+        if ((dataList) && (dataList.length > 0)) {
+
+            dataList.map((item) => {
+                data.push({
+                    time: item.checkin_time,
+                    type: 'Checkin',
+                    title: item.name,
+                    subtitle: item.checkin_description,
+                    location: item.checkin_address
+                });
+        
+                if (item.checkout_time) {
+
+                    data.push({
+                        time: item.checkout_time,
+                        type: 'Checkout',
+                        title: item.name,
+                        subtitle: item.checkout_description,
+                        location: item.checkout_address
+                    });
+
+                }
+        
+            });
+
+        }
+
+        return data;
+    }
 
 
-    const useDataList = async (date: moment.Moment) => {
+    const useDataList = async (date: moment.Moment): Promise<ITimeLine[]> => {
 
-      const data = await checkinHistory({
+      const response = await checkinHistory({
         userName: await getUsername() as string,
         startdt: date,
         enddt: date,
         history_media: 'view'
       });
 
-      setDataList(data.data.data);
+      return fillDataLIst(response.data.data.attend_list);
     }
 
     const handleSelectedDate = async (date: moment.Moment) => {
 
         setSelectedDate(date);
-        useDataList(date);
+        setDataList(await useDataList(date));
 
     }
 
-
-    useEffect(() => {
-
-      useDataList(selectedDate);
-
-    }, []);
-
-
-    
-    useEffect(() => {
-
-      console.log(`inside useDataList... ${selectedDate.format('YYYY-MM-DD')}`);
-      console.log(dataList);
-
-    }, [dataList]);
 
     return (
       <SafeAreaView
@@ -86,7 +108,7 @@ export default function History() {
         
         {/* DATA LIST */}
         <View style={{paddingHorizontal: 12}}>
-          <TimelineList />
+          <TimelineList dataList={dataList} />
         </View>
       </SafeAreaView>
     );
