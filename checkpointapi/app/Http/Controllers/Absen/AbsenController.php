@@ -278,12 +278,21 @@ class AbsenController extends Controller
                     'user_id' => $value->user->id,
                     'name' => $value->user->name,
                     'attend_dt' => Formater::dateMonth($value->attend_dt),
+
                     'checkin_time' => Formater::time($value->checkin_time),
+                    'checkin_title' => Formater::time($value->checkin_title),
+                    'checkin_subtitle' => Formater::time($value->checkin_subtitle),
                     'checkin_address' => $value->checkin_address,
                     'checkin_description' => $value->checkin_description,
+                    'checkin_image' => asset('storage/' . $value->checkin_image),
+
                     'checkout_time' => Formater::time($value->checkout_time),
+                    'checkout_title' => Formater::time($value->checkout_title),
+                    'checkout_subtitle' => Formater::time($value->checkout_subtitle),
                     'checkout_address' => $value->checkout_address,
                     'checkout_description' => $value->checkout_description,
+                    'checkout_image' => asset('storage/' . $value->checkout_image),
+
                     'time_elapse' => $time_elapse1 . ':' . $time_elapse2,
     
     

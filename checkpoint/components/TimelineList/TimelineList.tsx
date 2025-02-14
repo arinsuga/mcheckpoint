@@ -16,8 +16,63 @@ interface IDataListProps {
     dataList: ITimeLine[];
 }
 
+
+let datax: ITimeLine[] = [
+    {
+        time: '11.35',
+        type: 'Checkin',
+        title: 'judul 1',
+        subtitle: 'Sub Judul 1',
+        location: 'Lokasi 1'
+
+    },
+    {
+        time: '11.35',
+        type: 'Checkout',
+        title: 'judul 1',
+        subtitle: 'Sub Judul 1',
+        location: 'Lokasi 1'
+
+    },
+    {
+        time: '11.35',
+        type: 'Checkin',
+        title: 'judul 1',
+        subtitle: 'Sub Judul 1',
+        location: 'Lokasi 1'
+
+    },
+    {
+        time: '11.35',
+        type: 'Checkout',
+        title: 'judul 1',
+        subtitle: 'Sub Judul 1',
+        location: 'Lokasi 1'
+
+    },
+    {
+        time: '11.35',
+        type: 'Checkin',
+        title: 'judul 1',
+        subtitle: 'Sub Judul 1',
+        location: 'Lokasi 1'
+
+    },
+    {
+        time: '11.35',
+        type: 'Checkout',
+        title: 'judul 1',
+        subtitle: 'Sub Judul 1',
+        location: 'Lokasi 1'
+
+    },
+]
+
 const TimelineList = ({ dataList }: IDataListProps) => {
-    const [data, setData] = useState<ITimeLine[]>([]);
+
+    console.log(`TimelineList - dataList...`);
+    console.log(dataList);
+
 
     return (
         <View>
@@ -25,8 +80,8 @@ const TimelineList = ({ dataList }: IDataListProps) => {
                 dataList &&
                 <FlatList
                     ListHeaderComponent={TimelineHeader}
-                    data={data}
-                    renderItem={TimelineItem}
+                    data={dataList}
+                    renderItem={({ item }) => <TimelineItem item={item} />}
                     contentContainerStyle={{paddingBottom: 150}}
                     showsVerticalScrollIndicator={false}
                 />

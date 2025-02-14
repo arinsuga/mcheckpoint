@@ -54,7 +54,7 @@ export default function History() {
             });
 
         }
-
+  
         return data;
     }
 
@@ -68,17 +68,28 @@ export default function History() {
         history_media: 'view'
       });
 
-      return fillDataLIst(response.data.data.attend_list);
+      const data = fillDataLIst(response.data.data.attend_list);
+      setDataList(data);
+
+      // console.log(`useDataList [${date}]...`);
+      // console.log(data);
+
+      return data;
     }
 
     const handleSelectedDate = async (date: moment.Moment) => {
 
+        const data = await useDataList(date);
         setSelectedDate(date);
-        setDataList(await useDataList(date));
-
+        setDataList(data);
     }
 
 
+    useEffect(() => {
+      useDataList(selectedDate);      
+    }, []);
+
+    
     return (
       <SafeAreaView
         style={{
