@@ -266,6 +266,8 @@ class AbsenController extends Controller
 
         $attends = $this->data->getAttendancesCustomFilter($userId, $checkpointDate1, $checkpointDate2);
         $attend_list = $attends->sortBy('attend_dt');
+
+        
         $data['attend_list'] = [];
         foreach ($attend_list as $key => $value) {
 
@@ -278,17 +280,17 @@ class AbsenController extends Controller
                     'user_id' => $value->user->id,
                     'name' => $value->user->name,
                     'attend_dt' => Formater::dateMonth($value->attend_dt),
-
+            
                     'checkin_time' => Formater::time($value->checkin_time),
-                    'checkin_title' => Formater::time($value->checkin_title),
-                    'checkin_subtitle' => Formater::time($value->checkin_subtitle),
+                    'checkin_title' => $value->checkin_title,
+                    'checkin_subtitle' => $value->checkin_subtitle,
                     'checkin_address' => $value->checkin_address,
                     'checkin_description' => $value->checkin_description,
                     'checkin_image' => asset('storage/' . $value->checkin_image),
 
                     'checkout_time' => Formater::time($value->checkout_time),
-                    'checkout_title' => Formater::time($value->checkout_title),
-                    'checkout_subtitle' => Formater::time($value->checkout_subtitle),
+                    'checkout_title' => $value->checkout_title,
+                    'checkout_subtitle' => $value->checkout_subtitle,
                     'checkout_address' => $value->checkout_address,
                     'checkout_description' => $value->checkout_description,
                     'checkout_image' => asset('storage/' . $value->checkout_image),
@@ -303,6 +305,8 @@ class AbsenController extends Controller
         } //end loop
 
        $this->viewModel = Response::viewArray($data);
+
+       return $data;
 
     }
 
@@ -343,25 +347,26 @@ class AbsenController extends Controller
         $startDateIso = ConvertDate::strDateToDate($startdt);
         $endDateIso = ConvertDate::strDateToDate($enddt);
 
-        if (isset($endDateIso)) {
+        // if (isset($endDateIso)) {
 
-            // $endDateIso = Carbon::create($endDateIso->year, $endDateIso->month, $endDateIso->day, 25, 0, 0);
-            $endDateIso = Carbon::create($endDateIso->year, $endDateIso->month, $endDateIso->day, 25, 0, 0, 'UTC');
+        //     // $endDateIso = Carbon::create($endDateIso->year, $endDateIso->month, $endDateIso->day, 25, 0, 0);
+        //     $endDateIso = Carbon::create($endDateIso->year, $endDateIso->month, $endDateIso->day, 25, 0, 0, 'UTC');
 
-        } //end if
-        return response()->json([
-            'tes' => 'hasil',
-            '$selectedUsername' => $selectedUsername,
-            '$userId' => $userId,
-            '$startdt' => $startdt,
-            '$enddt' => $enddt,
-            '$historyMedia' => $historyMedia,
-            '$startDateIso' => $startDateIso,
-            '$endDateIso' => $endDateIso,
-            ]);
+        // } //end if
+
+        // return response()->json([
+        //     'tes' => 'hasil',
+        //     '$selectedUsername' => $selectedUsername,
+        //     '$userId' => $userId,
+        //     '$startdt' => $startdt,
+        //     '$enddt' => $enddt,
+        //     '$historyMedia' => $historyMedia,
+        //     '$startDateIso' => $startDateIso,
+        //     '$endDateIso' => $endDateIso,
+        //     ]);
 
 
-        $this->history($userId, $startDateIso, $endDateIso);
+        $dd = $this->history($userId, $startDateIso, $endDateIso);
 
         if (isset($selectedUserId)) {
 

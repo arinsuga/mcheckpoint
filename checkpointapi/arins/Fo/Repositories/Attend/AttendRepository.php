@@ -51,22 +51,17 @@ class AttendRepository extends EloquentRepository implements AttendRepositoryInt
 
         if (isset($parCheckpoint_dt1) && isset($parCheckpoint_dt2)) {
 
-            $result = $result->whereBetween($checkin_time, [$parCheckpoint_dt1, $parCheckpoint_dt2]);
-            $result = $result->orWhereBetween($checkout_time, [$parCheckpoint_dt1, $parCheckpoint_dt2]);
+            if ($parCheckpoint_dt1 == $parCheckpoint_dt2) {
 
-            // if ($parCheckpoint_dt1 == $parCheckpoint_dt2) {
+                $result = $result->where($checkin_time, '>=', $parCheckpoint_dt1);
+                $result = $result->orWhere($checkout_time, '>=', $parCheckpoint_dt1);
 
-            //     $result = $result->where($checkin_time, $parCheckpoint_dt1);
-            //     $result = $result->orWhere($checkout_time, $parCheckpoint_dt2);
+            } //end if
 
-            // } //end if
-
-            // if ($parCheckpoint_dt1 < $parCheckpoint_dt2) {
-
-            //     $result = $result->whereBetween($checkin_time, [$parCheckpoint_dt1, $parCheckpoint_dt2]);
-            //     $result = $result->orWhereBetween($checkout_time, [$parCheckpoint_dt1, $parCheckpoint_dt2]);
-
-            // } //end if
+            if ($parCheckpoint_dt1 < $parCheckpoint_dt2) {
+                $result = $result->whereBetween($checkin_time, [$parCheckpoint_dt1, $parCheckpoint_dt2]);
+                $result = $result->orWhereBetween($checkout_time, [$parCheckpoint_dt1, $parCheckpoint_dt2]);
+            }
             
         } //end if
 
