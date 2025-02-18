@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 //Constats
@@ -6,7 +6,6 @@ import { Colors } from '@/constants/Colors';
 
 //Interfaces
 import ITimeLine from '@/interfaces/ITimeLine';
-import ICheckpointHistory from '@/interfaces/ICheckpointHistory';
 
 //Components
 import TimelineHeader from './TimelineHeader';
@@ -15,58 +14,6 @@ import TimelineItem from './TimelineItem';
 interface IDataListProps {
     dataList: ITimeLine[];
 }
-
-
-let datax: ITimeLine[] = [
-    {
-        time: '11.35',
-        type: 'Checkin',
-        title: 'judul 1',
-        subtitle: 'Sub Judul 1',
-        location: 'Lokasi 1'
-
-    },
-    {
-        time: '11.35',
-        type: 'Checkout',
-        title: 'judul 1',
-        subtitle: 'Sub Judul 1',
-        location: 'Lokasi 1'
-
-    },
-    {
-        time: '11.35',
-        type: 'Checkin',
-        title: 'judul 1',
-        subtitle: 'Sub Judul 1',
-        location: 'Lokasi 1'
-
-    },
-    {
-        time: '11.35',
-        type: 'Checkout',
-        title: 'judul 1',
-        subtitle: 'Sub Judul 1',
-        location: 'Lokasi 1'
-
-    },
-    {
-        time: '11.35',
-        type: 'Checkin',
-        title: 'judul 1',
-        subtitle: 'Sub Judul 1',
-        location: 'Lokasi 1'
-
-    },
-    {
-        time: '11.35',
-        type: 'Checkout',
-        title: 'judul 1',
-        subtitle: 'Sub Judul 1',
-        location: 'Lokasi 1'
-
-    },
-]
 
 const TimelineList = ({ dataList }: IDataListProps) => {
 

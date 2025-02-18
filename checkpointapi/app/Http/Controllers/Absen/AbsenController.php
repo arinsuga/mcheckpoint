@@ -324,6 +324,7 @@ class AbsenController extends Controller
     //checkHistoryPost
     public function checkHistoryPost(Request $request)
     {
+
         $selectedUsername = $request->input('username');
         $userId = User::where('email', $selectedUsername)->first()->id;
         $startdt = $request->input('startdt');
@@ -341,11 +342,24 @@ class AbsenController extends Controller
 
         $startDateIso = ConvertDate::strDateToDate($startdt);
         $endDateIso = ConvertDate::strDateToDate($enddt);
+
         if (isset($endDateIso)) {
 
-            $endDateIso = Carbon::create($endDateIso->year, $endDateIso->month, $endDateIso->day, 25, 0, 0);
+            // $endDateIso = Carbon::create($endDateIso->year, $endDateIso->month, $endDateIso->day, 25, 0, 0);
+            $endDateIso = Carbon::create($endDateIso->year, $endDateIso->month, $endDateIso->day, 25, 0, 0, 'UTC');
 
         } //end if
+        return response()->json([
+            'tes' => 'hasil',
+            '$selectedUsername' => $selectedUsername,
+            '$userId' => $userId,
+            '$startdt' => $startdt,
+            '$enddt' => $enddt,
+            '$historyMedia' => $historyMedia,
+            '$startDateIso' => $startDateIso,
+            '$endDateIso' => $endDateIso,
+            ]);
+
 
         $this->history($userId, $startDateIso, $endDateIso);
 
