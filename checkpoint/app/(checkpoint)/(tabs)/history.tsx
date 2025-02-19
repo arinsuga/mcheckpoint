@@ -71,8 +71,8 @@ export default function History() {
       const data = fillDataLIst(response.data.data.attend_list);
       setDataList(data);
 
-      // console.log(`useDataList [${date}]...`);
-      // console.log(data);
+      console.log(`useDataList [${date}]...`);
+      console.log(response.data.data.attend_list);
 
       return data;
     }

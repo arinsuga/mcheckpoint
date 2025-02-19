@@ -10,5 +10,6 @@ interface AttendRepositoryInterface extends DataRepositoryInterface
     function getAttendanceByUserIdAndDate($parUserId, $parAttend_dt = null);
     function getAttendancesByUserIdAndDate($parUserId, $parAttend_dt = null);
     function getAttendancesCustomFilter($parUserId, $parCheckpoint_dt1, $parCheckpoint_dt2);
+    function getAttendancesByUserIdAndCheckpointDate($parUserId, $parCheckpoint_dt);
     function getOutstandingCheckoutByUserId($parUserId);
 }

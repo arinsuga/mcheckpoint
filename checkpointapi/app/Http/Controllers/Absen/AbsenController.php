@@ -254,28 +254,16 @@ class AbsenController extends Controller
 
     }
 
-    protected function history($userId=null, $checkpointDate1=null, $checkpointDate2=null)
+    protected function fillAttendList($userId=null, $attend_list=null)
     {
-        $data = null;
-
-        $user = User::find($userId);
-        $data['user'] = [
-            'name' => $user->name,
-            'dept' => $user->dept
-        ];
-
-        $attends = $this->data->getAttendancesCustomFilter($userId, $checkpointDate1, $checkpointDate2);
-        $attend_list = $attends->sortBy('attend_dt');
-
-        
-        $data['attend_list'] = [];
+        $data = [];
         foreach ($attend_list as $key => $value) {
 
             if ($value->user_id == $userId) {
 
                 $time_elapse1 = $value->checkin_time->diffInHours($value->checkout_time);
                 $time_elapse2 = $value->checkin_time->diff($value->checkout_time)->format('%I:%S');
-                $data['attend_list'][$key] = [
+                $data[$key] = [
                     'id' => $value->id,
                     'user_id' => $value->user->id,
                     'name' => $value->user->name,
@@ -304,6 +292,25 @@ class AbsenController extends Controller
 
         } //end loop
 
+        return $data;
+    }
+
+    protected function history($userId=null, $checkpointDate1=null, $checkpointDate2=null)
+    {
+        $data = null;
+
+        $user = User::find($userId);
+        $data['user'] = [
+            'name' => $user->name,
+            'dept' => $user->dept
+        ];
+
+        $attends = $this->data->getAttendancesCustomFilter($userId, $checkpointDate1, $checkpointDate2);
+        $attend_list = $attends->sortBy('attend_dt');
+
+        
+        $data['attend_list'] = $this->fillAttendList($userId, $attend_list);
+
        $this->viewModel = Response::viewArray($data);
 
        return $data;
@@ -330,7 +337,7 @@ class AbsenController extends Controller
     {
 
         $selectedUsername = $request->input('username');
-        $userId = User::where('email', $selectedUsername)->first()->id;
+        $selectedUserId = User::where('email', $selectedUsername)->first()->id;
         $startdt = $request->input('startdt');
         $enddt = $request->input('enddt');
         $historyMedia = $request->input('history_media');
@@ -347,12 +354,6 @@ class AbsenController extends Controller
         $startDateIso = ConvertDate::strDateToDate($startdt);
         $endDateIso = ConvertDate::strDateToDate($enddt);
 
-        // if (isset($endDateIso)) {
-
-        //     // $endDateIso = Carbon::create($endDateIso->year, $endDateIso->month, $endDateIso->day, 25, 0, 0);
-        //     $endDateIso = Carbon::create($endDateIso->year, $endDateIso->month, $endDateIso->day, 25, 0, 0, 'UTC');
-
-        // } //end if
 
         // return response()->json([
         //     'tes' => 'hasil',
@@ -366,10 +367,80 @@ class AbsenController extends Controller
         //     ]);
 
 
-        $dd = $this->history($userId, $startDateIso, $endDateIso);
+        $dd = $this->history($selectedUserId, $startDateIso, $endDateIso);
 
         if (isset($selectedUserId)) {
 
+            return response()->json($this->viewModel);
+
+        } //end if
+
+        return response()->json($this->viewModel);
+    }
+
+
+    protected function historyByUserIdAndCheckpointDate($userId=null, $checkpointDate=null)
+    {
+        $data = null;
+
+        $user = User::find($userId);
+        $data['user'] = [
+            'name' => $user->name,
+            'dept' => $user->dept
+        ];
+
+        $attends = $this->data->getAttendancesByUserIdAndCheckpointDate($userId, $checkpointDate);
+
+        $attend_list = $attends->sortBy('attend_dt');
+
+
+        
+        $data['attend_list'] = $this->fillAttendList($userId, $attend_list);
+
+       $this->viewModel = Response::viewArray($data);
+
+       return $data;
+
+    }
+
+    //postHistoryByUserIdAndCheckpointDate
+    public function postHistoryByUserIdAndCheckpointDate(Request $request)
+    {
+
+        $selectedUsername = $request->input('username');
+        $selectedUserId = User::where('email', $selectedUsername)->first()->id;
+        $checkpointDate = $request->input('checkpoint_date');
+        $historyMedia = $request->input('history_media');
+
+        $resultView = null;
+        if ($historyMedia == 'view') {
+            $resultView = 'check-history-view';
+        } //end if
+
+        if ($historyMedia == 'pdf') {
+            $resultView = 'check-history-pdf';
+        } //end if
+
+        $checkpointDateIso = ConvertDate::strDateToDate($checkpointDate);
+
+
+        // return response()->json([
+        //     'tes' => 'hasil',
+        //     '$selectedUsername' => $selectedUsername,
+        //     '$userId' => $userId,
+        //     '$startdt' => $startdt,
+        //     '$enddt' => $enddt,
+        //     '$historyMedia' => $historyMedia,
+        //     '$startDateIso' => $startDateIso,
+        //     '$endDateIso' => $endDateIso,
+        //     ]);
+
+
+        $dd = $this->historyByUserIdAndCheckpointDate($selectedUserId, $checkpointDateIso);
+
+
+        if (isset($selectedUserId)) {
+        
             return response()->json($this->viewModel);
 
         } //end if

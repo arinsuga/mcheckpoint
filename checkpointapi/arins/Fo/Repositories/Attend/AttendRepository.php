@@ -68,6 +68,33 @@ class AttendRepository extends EloquentRepository implements AttendRepositoryInt
         return $result->get();
     }
 
+    public function getAttendancesByUserIdAndCheckpointDate(
+        $parUserId=null, $parCheckpoint_dt)
+    {
+
+        $checkin_time = 'checkin_time';
+        $checkout_time = 'checkout_time';
+        $result = $this->data;
+
+
+
+        if (isset($parUserId)) {
+            $result = $result->where('user_id', $parUserId);
+            } else {
+            return null;
+        } //end if
+
+        if (isset($parCheckpoint_dt)) {
+
+            $result = $result->whereDate($checkin_time,$parCheckpoint_dt);
+            $result = $result->orWhereDate($checkout_time,$parCheckpoint_dt);
+            
+        } //end if
+
+
+        return $result->get();
+    }
+
     public function getOutstandingCheckoutByUserId($parUserId)
     {
 

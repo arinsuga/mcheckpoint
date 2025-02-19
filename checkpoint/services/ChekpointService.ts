@@ -136,7 +136,6 @@ export const checkinHistory = async ({userName, startdt, enddt, history_media}: 
   const token = await getToken();
   try {    
 
-    
     const formData = new FormData();
     formData.append('username', userName);
     formData.append('startdt', startdt.format(Dates.format.date));
