@@ -269,6 +269,9 @@ class AbsenController extends Controller
                     'name' => $value->user->name,
                     'attend_dt' => Formater::dateMonth($value->attend_dt),
             
+                    'checkin_milliseconds' => (isset($value->checkin_time)) ? $value->checkin_time->timestamp*1000 : $value->checkin_time,
+                    'checkin_datetime' => $value->checkin_time,
+                    'checkin_date' => Formater::date($value->checkin_time),
                     'checkin_time' => Formater::time($value->checkin_time),
                     'checkin_title' => $value->checkin_title,
                     'checkin_subtitle' => $value->checkin_subtitle,
@@ -276,6 +279,9 @@ class AbsenController extends Controller
                     'checkin_description' => $value->checkin_description,
                     'checkin_image' => asset('storage/' . $value->checkin_image),
 
+                    'checkout_milliseconds' => (isset($value->checkout_time)) ? $value->checkout_time->timestamp*1000 : $value->checkout_time,
+                    'checkout_datetime' => $value->checkout_time,
+                    'checkout_date' => Formater::date($value->checkout_time),
                     'checkout_time' => Formater::time($value->checkout_time),
                     'checkout_title' => $value->checkout_title,
                     'checkout_subtitle' => $value->checkout_subtitle,
