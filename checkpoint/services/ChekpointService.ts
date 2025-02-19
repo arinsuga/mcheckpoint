@@ -160,3 +160,37 @@ export const checkinHistory = async ({userName, startdt, enddt, history_media}: 
   }
 
 };
+
+//historyByUserIdCheckpointdate
+export const historyByUserIdCheckpointDate = async ({userName, checkpointDate, history_media}: {
+  userName: string,
+  checkpointDate: moment.Moment,
+  history_media: string,
+}): Promise<any> => {
+
+  const token = await getToken();
+  try {    
+
+    const formData = new FormData();
+    formData.append('username', userName);
+    formData.append('checkpoint_date', checkpointDate.format(Dates.format.date));
+    formData.append('history_media', history_media);
+
+    const response = await axios.post(`${API_URL}/post-history-by-userid-checkpointdate`, formData,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json',
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+    return response;
+
+  } catch (error) {
+
+    return error;
+
+  }
+
+};

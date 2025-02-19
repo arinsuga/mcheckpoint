@@ -17,7 +17,7 @@ import ICheckpointHistory from "@/interfaces/ICheckpointHistory";
 
 //Serivces
 import { getUsername } from "@/services/AuthService";
-import { checkinHistory } from '@/services/ChekpointService';
+import { historyByUserIdCheckpointDate } from '@/services/ChekpointService';
 
 
 export default function History() {
@@ -61,10 +61,9 @@ export default function History() {
 
     const useDataList = async (date: moment.Moment): Promise<ITimeLine[]> => {
 
-      const response = await checkinHistory({
+      const response = await historyByUserIdCheckpointDate({
         userName: await getUsername() as string,
-        startdt: date,
-        enddt: date,
+        checkpointDate: date,
         history_media: 'view'
       });
 
