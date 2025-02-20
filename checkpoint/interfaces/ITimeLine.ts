@@ -1,8 +1,15 @@
 export default interface ITimeLine {
-    time: string;
     type: 'Checkin' | 'Checkout';
+    date: string;
+    time: string;
+    datetime: string;
+    latitude: string;
+    longitude: string;
+    milliseconds: string;
     title: string;
     subtitle: string;
-    location: string;
+    address: string;
+    description: string;
+    image: string;
 }
 

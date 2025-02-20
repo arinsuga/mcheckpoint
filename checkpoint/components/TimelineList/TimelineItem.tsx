@@ -1,5 +1,6 @@
-import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, Image, TouchableOpacity, LayoutChangeEvent } from "react-native";
+import WebView from "react-native-webview";
 
 //Components
 import Icon from '@/components/Icon/Icon';
@@ -11,8 +12,9 @@ import ITimeLine from "@/interfaces/ITimeLine";
 type TimelineItemProps = {
     item: ITimeLine
 }
-
 const TimelineItem = ({item}: TimelineItemProps) => {
+    const [parentheight, setParentHeight] = useState(0);
+
 
     const color = () => {
         if(item.type === 'Checkin') {
@@ -32,6 +34,12 @@ const TimelineItem = ({item}: TimelineItemProps) => {
             }
         }
     }
+
+    const onLayout = (event: LayoutChangeEvent) => {
+        const { height } = event.nativeEvent.layout;
+        setParentHeight(height);
+    }
+
     return (
         <TouchableOpacity style={styles.itemContainer} activeOpacity={0.8}>
             <View style={styles.itemLeft}>
@@ -39,14 +47,25 @@ const TimelineItem = ({item}: TimelineItemProps) => {
                 <Text style={{color: color()?.type}}>{ item.type }</Text>
             </View>
             <View style={styles.itemRight}>
-                <View style={[styles.card, {backgroundColor: color()?.bg}]}>
+                <View style={[styles.card, {backgroundColor: color()?.bg}]} onLayout={onLayout}>
+                    <View style={{ height: parentheight/2 }}>
+                        
+                        <Image
+                        source={{ uri: item.image }}
+                        style={{
+                            width: '100%',
+                            height: parentheight/2,
+                        }}
+                        />
+
+                    </View>
                     <View>
                         <Text style={[styles.itemTitle, {color: color()?.text}]}>{item.title}</Text>
                         <Text style={[styles.itemSubtitle, {color: color()?.text}]}>{item.subtitle}</Text>
                     </View>
                     <View style={styles.wrapIcon}>
                         <Icon.Location color={color()?.icon} size={16}/>
-                        <Text style={{color: color()?.text}}>{item.location}</Text>
+                        <Text style={{color: color()?.text}}>{item.address}</Text>
                     </View>
                 </View>
             </View>
@@ -59,7 +78,7 @@ export default TimelineItem;
 const styles = StyleSheet.create({
     itemContainer: {flexDirection: 'row'},
     itemLeft: {flex: 1, alignItems: 'center'},
-    itemRight: {flex:4, paddingHorizontal: 12, paddingBottom: 20, borderLeftWidth: 3, borderLeftColor: 'white'},
+    itemRight: {flex:3, paddingBottom: 20, borderLeftWidth: 3, borderLeftColor: 'white'},
     card: { backgroundColor: '#d16224', borderRadius: 10, padding: 24, rowGap: 10},
     itemTitle: {color: 'white', fontSize: 16, fontWeight: 'bold'},
     itemSubtitle: {color: 'white', fontSize: 12, fontWeight: '500'},

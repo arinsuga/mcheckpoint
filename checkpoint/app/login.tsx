@@ -28,6 +28,12 @@ export default function Login({ authstate }: { authstate: boolean | null | undef
 
   const onLogin = async (username: string, password: string) => {
     
+    console.log('Inside Login - onLogin')
+    console.log({
+      username,
+      password
+    });
+
     setIsWaiting(true);
     const result = await (Login && Login(username, password));
     

@@ -269,6 +269,8 @@ class AbsenController extends Controller
                     'name' => $value->user->name,
                     'attend_dt' => Formater::dateMonth($value->attend_dt),
             
+                    'checkin_latitude' => $value->checkin_latitude,
+                    'checkin_longitude' => $value->checkin_longitude,
                     'checkin_milliseconds' => (isset($value->checkin_time)) ? $value->checkin_time->timestamp*1000 : $value->checkin_time,
                     'checkin_datetime' => $value->checkin_time,
                     'checkin_date' => Formater::date($value->checkin_time),
@@ -277,8 +279,10 @@ class AbsenController extends Controller
                     'checkin_subtitle' => $value->checkin_subtitle,
                     'checkin_address' => $value->checkin_address,
                     'checkin_description' => $value->checkin_description,
-                    'checkin_image' => asset('storage/' . $value->checkin_image),
+                    'checkin_image' => (isset($value->checkin_image)) ? asset('storage/' . $value->checkin_image) : null,
 
+                    'checkout_latitude' => $value->checkout_latitude,
+                    'checkout_longitude' => $value->checkout_longitude,
                     'checkout_milliseconds' => (isset($value->checkout_time)) ? $value->checkout_time->timestamp*1000 : $value->checkout_time,
                     'checkout_datetime' => $value->checkout_time,
                     'checkout_date' => Formater::date($value->checkout_time),
@@ -287,7 +291,7 @@ class AbsenController extends Controller
                     'checkout_subtitle' => $value->checkout_subtitle,
                     'checkout_address' => $value->checkout_address,
                     'checkout_description' => $value->checkout_description,
-                    'checkout_image' => asset('storage/' . $value->checkout_image),
+                    'checkout_image' => (isset($value->checkout_image)) ?asset('storage/' . $value->checkout_image) : null,
 
                     'time_elapse' => $time_elapse1 . ':' . $time_elapse2,
     

@@ -32,21 +32,35 @@ export default function History() {
 
             dataList.map((item) => {
                 data.push({
-                    time: item.checkin_time,
                     type: 'Checkin',
-                    title: item.name,
-                    subtitle: item.checkin_description,
-                    location: item.checkin_address
+                    date: item.checkin_date,
+                    time: item.checkin_time,
+                    datetime: item.checkin_datetime,
+                    latitude: item.checkin_latitude,
+                    longitude: item.checkin_longitude,
+                    milliseconds: item.checkin_milliseconds,
+                    title: item.checkin_title,
+                    subtitle: item.checkin_subtitle,
+                    address: item.checkin_address,
+                    description: item.checkin_description,
+                    image: item.checkin_image,
                 });
         
                 if (item.checkout_time) {
 
                     data.push({
-                        time: item.checkout_time,
                         type: 'Checkout',
-                        title: item.name,
-                        subtitle: item.checkout_description,
-                        location: item.checkout_address
+                        date: item.checkout_date,
+                        time: item.checkout_time,
+                        datetime: item.checkout_datetime,
+                        latitude: item.checkout_latitude,
+                        longitude: item.checkout_longitude,
+                        milliseconds: item.checkout_milliseconds,
+                        title: item.checkout_title,
+                        subtitle: item.checkout_subtitle,
+                        address: item.checkout_address,
+                        description: item.checkout_description,
+                        image: item.checkout_image,
                     });
 
                 }
@@ -70,8 +84,11 @@ export default function History() {
       const data = fillDataLIst(response.data.data.attend_list);
       setDataList(data);
 
+
+      const tempdata = response.data.data.attend_list[0];
       console.log(`useDataList [${date}]...`);
-      console.log(response.data.data.attend_list);
+      console.log(tempdata);
+      console.log(`tempdata.checkout_subtitle :  ${tempdata.checkout_subtitle ? 'data ada' : 'data tidak ada'}`);
 
       return data;
     }
