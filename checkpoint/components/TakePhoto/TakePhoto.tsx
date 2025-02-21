@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect, } from 'react';
 import { View, } from 'react-native';
 import { Camera, useCameraDevice, PhotoFile, CameraDevice, } from 'react-native-vision-camera';
+import * as ImageManipulator from 'expo-image-manipulator';
 
 //components
 import CheckpointForm from '@/components/CheckpointForm/CheckpointForm';
@@ -21,6 +22,8 @@ const TakePhoto = () => {
     const [attendId, setAttendId] = useState<string>('');
     const [cameraPosition, setCameraPosition] = useState<'front' | 'back'>('front');
     const [photo, setPhoto] = useState<PhotoFile | undefined>(undefined);
+    const [photoCompressed, setPhotoCompressed] = useState<ImageManipulator.ImageResult | undefined>(undefined);
+
     const cameraRef = useRef<Camera>(null);
     const phoneDevice = useCameraDevice(cameraPosition);
     const cameraDevice = phoneDevice as CameraDevice;
@@ -61,8 +64,18 @@ const TakePhoto = () => {
           const photoResult = await cameraRef.current?.takePhoto({
             enableShutterSound: false,
           });
-
           setPhoto(photoResult);
+
+          const compressedPhotoResult = await ImageManipulator.manipulateAsync(
+            `file://${photoResult?.path}`,
+            [
+              { resize: { width: 800 } }
+            ],
+            {
+              compress: 0.3, format: ImageManipulator.SaveFormat.JPEG
+            }
+          );
+          setPhotoCompressed(compressedPhotoResult);
           setIsCaptureWaiting(false);
 
         } catch(e) {
@@ -81,9 +94,23 @@ const TakePhoto = () => {
       alert('TODO : Image Viewer');
     }
 
+
+    useEffect(() => {
+
+      console.log('Inside takephoto - useEffect....')
+      console.log('photoResult....');
+      console.log(photo);
+
+      console.log('compressedPhotoResult....');
+      console.log(photoCompressed);
+
+
+
+    }, [photoCompressed]);
+
     return (
 
-          !photo ? 
+          !photoCompressed ? 
           <View style={{ flex: 1, justifyContent: 'center' }}>
 
             <CheckpointCamera
@@ -99,6 +126,7 @@ const TakePhoto = () => {
           action={action}
           actionButton={actionButton}
           file={photo}
+          fileCompressed={photoCompressed}
           attendId={attendId}
           />
 

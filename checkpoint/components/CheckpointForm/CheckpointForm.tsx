@@ -13,6 +13,7 @@ import { useRouter } from 'expo-router';
 
 import {PhotoFile} from 'react-native-vision-camera';
 import * as Location from 'expo-location';
+import * as ImageManipulator from 'expo-image-manipulator';
 
 import FieldTextInput from '../FieldTextInput/FieldTextInput';
 import FieldMultilineTextInput from '../FieldMultilineTextInput/FieldMultilineTextInput';
@@ -25,14 +26,16 @@ interface IChekPointFormProps {
   action: 'checkin' | 'checkout'; 
   actionButton: 'Checkin' | 'Checkout' | '';
   file?: PhotoFile | undefined;
+  fileCompressed?: ImageManipulator.ImageResult | undefined;
   attendId?: string;
 }
 
-const CheckpointForm = ({action, actionButton, file, attendId}: IChekPointFormProps) => {
+const CheckpointForm = ({action, actionButton, file, fileCompressed, attendId}: IChekPointFormProps) => {
     const [isWaiting, setIsWaiting] = useState(false);
     const [displaycamera, setDisplaycamera] = useState(true);
     const [checkpoint, setCheckpoint] = useState<ICheckpoint>({
       file: file,
+      fileCompressed: fileCompressed,
       checkType: action,
       attend_id: attendId,
       latitude: '',
@@ -43,6 +46,9 @@ const CheckpointForm = ({action, actionButton, file, attendId}: IChekPointFormPr
 
 
 useEffect(() => {
+
+  console.log('chekpointForm - checkpoint...');
+  console.log(checkpoint);
 
   (async () => {
 
