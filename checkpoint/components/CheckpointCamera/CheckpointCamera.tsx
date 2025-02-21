@@ -41,6 +41,7 @@ const CheckpointCamera = (props: CheckpointCameraProps) => {
                 device={props.cameraInfo.device}
                 isActive={props.cameraInfo.isActive}
                 enableLocation={props.cameraInfo.enableLocation}
+                photoQualityBalance='speed'
             />
 
             <View style={Styles.buttonContainer}>

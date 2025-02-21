@@ -30,8 +30,6 @@ interface IChekPointFormProps {
 
 const CheckpointForm = ({action, actionButton, file, attendId}: IChekPointFormProps) => {
     const [isWaiting, setIsWaiting] = useState(false);
-
-    const uri = `file://${file?.path}`;
     const [displaycamera, setDisplaycamera] = useState(true);
     const [checkpoint, setCheckpoint] = useState<ICheckpoint>({
       file: file,
@@ -40,6 +38,7 @@ const CheckpointForm = ({action, actionButton, file, attendId}: IChekPointFormPr
       latitude: '',
       longitude: '',
     });
+    const uri = `file://${file?.path}`;
 
 
 
@@ -116,7 +115,7 @@ useEffect(() => {
             <FieldTextInput
               placeholder='Title'
               onFocus={hideCaptured}
-              onChangeText={(nextText) => setCheckpoint({ ...checkpoint, checkin_title: nextText })}
+              onChangeText={(nextText) => setCheckpoint({ ...checkpoint, title: nextText })}
               style={{
                 width: Dimensions.get('window').width-50,
               }}
@@ -124,7 +123,7 @@ useEffect(() => {
             <FieldMultilineTextInput
               placeholder='Description'
               onFocus={hideCaptured}
-              onChangeText={(nextText) => setCheckpoint({ ...checkpoint, checkin_description: nextText })}
+              onChangeText={(nextText) => setCheckpoint({ ...checkpoint, description: nextText })}
               style={{
                 width: Dimensions.get('window').width-50,
               }}

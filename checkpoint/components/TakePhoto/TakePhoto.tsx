@@ -61,6 +61,7 @@ const TakePhoto = () => {
           const photoResult = await cameraRef.current?.takePhoto({
             enableShutterSound: false,
           });
+
           setPhoto(photoResult);
           setIsCaptureWaiting(false);
 

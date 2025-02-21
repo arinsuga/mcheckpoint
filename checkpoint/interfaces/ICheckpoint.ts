@@ -7,7 +7,7 @@ export default interface ICheckpoint {
     latitude?: string;
     longitude?: string;
     imageTemp?: string;
-    checkin_title?: string;
-    checkin_subtitle?: string;
-    checkin_description?: string;
+    title?: string;
+    subtitle?: string;
+    description?: string;
 }

@@ -84,12 +84,6 @@ export default function History() {
       const data = fillDataLIst(response.data.data.attend_list);
       setDataList(data);
 
-
-      const tempdata = response.data.data.attend_list[0];
-      console.log(`useDataList [${date}]...`);
-      console.log(tempdata);
-      console.log(`tempdata.checkout_subtitle :  ${tempdata.checkout_subtitle ? 'data ada' : 'data tidak ada'}`);
-
       return data;
     }
 
