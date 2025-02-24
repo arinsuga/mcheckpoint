@@ -3,7 +3,6 @@
 import React, { useState, useRef, useEffect, } from 'react';
 import { View, } from 'react-native';
 import { Camera, useCameraDevice, PhotoFile, CameraDevice, } from 'react-native-vision-camera';
-import * as ImageManipulator from 'expo-image-manipulator';
 
 //components
 import CheckpointForm from '@/components/CheckpointForm/CheckpointForm';

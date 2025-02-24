@@ -13,7 +13,6 @@ import { useRouter } from 'expo-router';
 
 import {PhotoFile} from 'react-native-vision-camera';
 import * as Location from 'expo-location';
-import * as ImageManipulator from 'expo-image-manipulator';
 
 import FieldTextInput from '../FieldTextInput/FieldTextInput';
 import FieldMultilineTextInput from '../FieldMultilineTextInput/FieldMultilineTextInput';

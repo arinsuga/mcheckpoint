@@ -14,6 +14,9 @@ import { getToken, getUsername } from './AuthService';
 //Constants
 import Dates from '@/constants/Dates';
 
+//Utils
+import Compressutils from '@/utils/Compressutils';
+
 const API_URL = `${process.env.EXPO_PUBLIC_API_URL}/absen`;
 export const check = async (username: string): Promise<any> => {
 
@@ -45,6 +48,14 @@ export const checkin = async (checkinData: ICheckpoint): Promise<any> => {
   const token = await getToken();
   try {    
 
+
+    // const filePath = checkinData.file?.path as string;
+
+    const testPhoto = await Compressutils.photo(checkinData.file);
+    const testUri   = await Compressutils.photoUri(testPhoto);
+    const testpath  = await Fileutils.path(testPhoto);
+
+    console.log(Compressutils.photoUri);
 
     const filePath = checkinData.file?.path as string;
     const fileUri = Fileutils.uri(filePath);

@@ -1,5 +1,4 @@
 import {PhotoFile} from 'react-native-vision-camera';
-import * as ImageManipulator from 'expo-image-manipulator';
 
 export default interface ICheckpoint {
     file?: PhotoFile | undefined;
