@@ -26,16 +26,14 @@ interface IChekPointFormProps {
   action: 'checkin' | 'checkout'; 
   actionButton: 'Checkin' | 'Checkout' | '';
   file?: PhotoFile | undefined;
-  fileCompressed?: ImageManipulator.ImageResult | undefined;
   attendId?: string;
 }
 
-const CheckpointForm = ({action, actionButton, file, fileCompressed, attendId}: IChekPointFormProps) => {
+const CheckpointForm = ({action, actionButton, file, attendId}: IChekPointFormProps) => {
     const [isWaiting, setIsWaiting] = useState(false);
     const [displaycamera, setDisplaycamera] = useState(true);
     const [checkpoint, setCheckpoint] = useState<ICheckpoint>({
       file: file,
-      fileCompressed: fileCompressed,
       checkType: action,
       attend_id: attendId,
       latitude: '',

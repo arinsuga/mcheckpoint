@@ -22,7 +22,6 @@ const TakePhoto = () => {
     const [attendId, setAttendId] = useState<string>('');
     const [cameraPosition, setCameraPosition] = useState<'front' | 'back'>('front');
     const [photo, setPhoto] = useState<PhotoFile | undefined>(undefined);
-    const [photoCompressed, setPhotoCompressed] = useState<ImageManipulator.ImageResult | undefined>(undefined);
 
     const cameraRef = useRef<Camera>(null);
     const phoneDevice = useCameraDevice(cameraPosition);
@@ -65,18 +64,18 @@ const TakePhoto = () => {
             enableShutterSound: false,
           });
           setPhoto(photoResult);
-
-          const compressedPhotoResult = await ImageManipulator.manipulateAsync(
-            `file://${photoResult?.path}`,
-            [
-              { resize: { width: 800 } }
-            ],
-            {
-              compress: 0.3, format: ImageManipulator.SaveFormat.JPEG
-            }
-          );
-          setPhotoCompressed(compressedPhotoResult);
           setIsCaptureWaiting(false);
+
+          // const compressedPhotoResult = await ImageManipulator.manipulateAsync(
+          //   `file://${photoResult?.path}`,
+          //   [
+          //     { resize: { width: 800 } }
+          //   ],
+          //   {
+          //     compress: 0.3, format: ImageManipulator.SaveFormat.JPEG
+          //   }
+          // );
+
 
         } catch(e) {
 
@@ -101,16 +100,12 @@ const TakePhoto = () => {
       console.log('photoResult....');
       console.log(photo);
 
-      console.log('compressedPhotoResult....');
-      console.log(photoCompressed);
 
-
-
-    }, [photoCompressed]);
+    }, [photo]);
 
     return (
 
-          !photoCompressed ? 
+          !photo ? 
           <View style={{ flex: 1, justifyContent: 'center' }}>
 
             <CheckpointCamera
@@ -126,7 +121,6 @@ const TakePhoto = () => {
           action={action}
           actionButton={actionButton}
           file={photo}
-          fileCompressed={photoCompressed}
           attendId={attendId}
           />
 

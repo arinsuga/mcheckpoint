@@ -46,8 +46,7 @@ export const checkin = async (checkinData: ICheckpoint): Promise<any> => {
   try {    
 
 
-    // const filePath = checkinData.file?.path as string;
-    const filePath = (checkinData.fileCompressed?.uri as string).replace('file://', '');
+    const filePath = checkinData.file?.path as string;
     const fileUri = Fileutils.uri(filePath);
     const fileName = Fileutils.name(filePath);
     const fileType = Fileutils.type(filePath);
@@ -91,10 +90,8 @@ export const checkout = async (checkoutData: ICheckpoint): Promise<any> => {
   const token = await getToken();
   try {    
 
-    console.log(checkoutData.fileCompressed?.uri);
 
-    // const filePath = checkoutData.file?.path as string;
-    const filePath = (checkoutData.fileCompressed?.uri as string).replace('file://', '');
+    const filePath = checkoutData.file?.path as string;
     const fileUri = Fileutils.uri(filePath);
     const fileName = Fileutils.name(filePath);
     const fileType = Fileutils.type(filePath);
