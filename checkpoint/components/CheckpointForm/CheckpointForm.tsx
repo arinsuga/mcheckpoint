@@ -44,8 +44,8 @@ const CheckpointForm = ({action, actionButton, file, attendId}: IChekPointFormPr
 
 useEffect(() => {
 
-  console.log('chekpointForm - checkpoint...');
-  console.log(checkpoint);
+  // console.log('chekpointForm - checkpoint...');
+  // console.log(checkpoint);
 
   (async () => {
 

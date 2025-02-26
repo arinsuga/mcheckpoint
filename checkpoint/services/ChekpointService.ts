@@ -48,20 +48,12 @@ export const checkin = async (checkinData: ICheckpoint): Promise<any> => {
   const token = await getToken();
   try {    
 
-
-    // const filePath = checkinData.file?.path as string;
-
-    const testPhoto = await Compressutils.photo(checkinData.file);
-    const testUri   = await Compressutils.photoUri(testPhoto);
-    const testpath  = await Fileutils.path(testPhoto);
-
-    console.log(Compressutils.photoUri);
-
-    const filePath = checkinData.file?.path as string;
-    const fileUri = Fileutils.uri(filePath);
+    const filePhoto = await Compressutils.photoFileToJPEG(checkinData.file);
+    const fileUri   = filePhoto?.uri ? filePhoto?.uri as string : '';
+    const filePath  = Fileutils.path(fileUri);
     const fileName = Fileutils.name(filePath);
     const fileType = Fileutils.type(filePath);
-    
+
     const formData = new FormData();
     formData.append('upload', { uri: fileUri, type: fileType, name: fileName, });
     formData.append('latitude', checkinData.latitude as string);
@@ -80,14 +72,14 @@ export const checkin = async (checkinData: ICheckpoint): Promise<any> => {
         },
       });
 
-      console.log(response.data);
+      // console.log(response.data);
       console.log('Checkin SUCCESS mas bro...');  
 
     return response;
 
   } catch (error) {
 
-    console.log(error);  
+    // console.log(error);  
     console.log('Checkin ERROR mas bro...');  
 
     return error;
@@ -101,12 +93,12 @@ export const checkout = async (checkoutData: ICheckpoint): Promise<any> => {
   const token = await getToken();
   try {    
 
-
-    const filePath = checkoutData.file?.path as string;
-    const fileUri = Fileutils.uri(filePath);
+    const filePhoto = await Compressutils.photoFileToJPEG(checkoutData.file);
+    const fileUri   = filePhoto?.uri ? filePhoto?.uri as string : '';
+    const filePath  = Fileutils.path(fileUri);
     const fileName = Fileutils.name(filePath);
     const fileType = Fileutils.type(filePath);
-    
+
     const formData = new FormData();
     formData.append('upload', { uri: fileUri, type: fileType, name: fileName, });
     formData.append('attend_id', checkoutData.attend_id as string);
@@ -126,13 +118,13 @@ export const checkout = async (checkoutData: ICheckpoint): Promise<any> => {
         },
       });
 
-      console.log(response.data);  
+      // console.log(response.data);  
       console.log('Checkout SUCCESS mas bro...');  
       return response;
 
   } catch (error) {
 
-    console.log(error);
+    // console.log(error);
     console.log('Checkout ERROR mas bro...');  
 
     return error;

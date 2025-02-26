@@ -1,6 +1,7 @@
 import mime from 'mime';
 
 export const useFileUri = (filePath: string): string => `file://${filePath}`;
+export const useFilePath = (fileUri: string): string => fileUri.replace('file://', '');
 export const useFileURL = (filePath: string): URL => {
     const fileUri = useFileUri(filePath);
     const url = new URL(fileUri);
@@ -31,6 +32,7 @@ export const fileType = (filePath: string): string => {
 const Fileutils = {
 
     uri: useFileUri,
+    path: useFilePath,
     url: useFileURL,
     name: useFileName,
     type: fileType,

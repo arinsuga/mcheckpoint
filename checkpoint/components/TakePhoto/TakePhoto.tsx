@@ -93,14 +93,14 @@ const TakePhoto = () => {
     }
 
 
-    useEffect(() => {
+    // useEffect(() => {
 
-      console.log('Inside takephoto - useEffect....')
-      console.log('photoResult....');
-      console.log(photo);
+    //   console.log('Inside takephoto - useEffect....')
+    //   console.log('photoResult....');
+    //   console.log(photo);
 
 
-    }, [photo]);
+    // }, [photo]);
 
     return (
 
