@@ -23,14 +23,16 @@ const TimelineItem = ({item}: TimelineItemProps) => {
                 text: Colors.white,
                 icon: Colors.white,
                 type: Colors.orange,
+                border: Colors.white,
             }
         }
         if(item.type === 'Checkout') {
             return {
-                bg: Colors.whiteLight,
+                bg: Colors.whiteDark,
                 text: Colors.greyDark,
                 icon: Colors.greyDark,
                 type: Colors.greyDark,
+                border: Colors.orange,
             }
         }
     }
@@ -80,5 +82,5 @@ export default TimelineItem;
 const styles = StyleSheet.create({
     itemContainer: {flexDirection: 'row'},
     itemLeft: {flex: 1, alignItems: 'center'},
-    itemRight: {flex:3, paddingBottom: 20, borderLeftWidth: 3, borderLeftColor: 'white'},
+    itemRight: {flex:3, paddingBottom: 20, borderLeftWidth: 3, borderLeftColor: Colors.white},
 });

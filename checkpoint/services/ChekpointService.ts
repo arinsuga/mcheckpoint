@@ -18,6 +18,8 @@ import Dates from '@/constants/Dates';
 import Compressutils from '@/utils/Compressutils';
 
 const API_URL = `${process.env.EXPO_PUBLIC_API_URL}/absen`;
+const compressPercent = 0.8;
+const compressWidth = 1024;
 export const check = async (username: string): Promise<any> => {
 
   const token = await getToken();
@@ -48,7 +50,7 @@ export const checkin = async (checkinData: ICheckpoint): Promise<any> => {
   const token = await getToken();
   try {    
 
-    const filePhoto = await Compressutils.photoFileToJPEG(checkinData.file);
+    const filePhoto = await Compressutils.photoFileToJPEG(checkinData.file, undefined, compressPercent);
     const fileUri   = filePhoto?.uri ? filePhoto?.uri as string : '';
     const filePath  = Fileutils.path(fileUri);
     const fileName = Fileutils.name(filePath);
@@ -79,7 +81,7 @@ export const checkin = async (checkinData: ICheckpoint): Promise<any> => {
 
   } catch (error) {
 
-    // console.log(error);  
+    console.log(error);  
     console.log('Checkin ERROR mas bro...');  
 
     return error;
@@ -93,7 +95,7 @@ export const checkout = async (checkoutData: ICheckpoint): Promise<any> => {
   const token = await getToken();
   try {    
 
-    const filePhoto = await Compressutils.photoFileToJPEG(checkoutData.file);
+    const filePhoto = await Compressutils.photoFileToJPEG(checkoutData.file, undefined, compressPercent);
     const fileUri   = filePhoto?.uri ? filePhoto?.uri as string : '';
     const filePath  = Fileutils.path(fileUri);
     const fileName = Fileutils.name(filePath);
@@ -124,7 +126,7 @@ export const checkout = async (checkoutData: ICheckpoint): Promise<any> => {
 
   } catch (error) {
 
-    // console.log(error);
+    console.log(error);
     console.log('Checkout ERROR mas bro...');  
 
     return error;

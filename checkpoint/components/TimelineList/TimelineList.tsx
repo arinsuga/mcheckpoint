@@ -17,8 +17,8 @@ interface IDataListProps {
 
 const TimelineList = ({ dataList }: IDataListProps) => {
 
-    console.log(`TimelineList - dataList...`);
-    console.log(dataList);
+    // console.log(`TimelineList - dataList...`);
+    // console.log(dataList);
 
 
     return (
