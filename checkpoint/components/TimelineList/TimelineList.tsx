@@ -17,10 +17,6 @@ interface IDataListProps {
 
 const TimelineList = ({ dataList }: IDataListProps) => {
 
-    // console.log(`TimelineList - dataList...`);
-    // console.log(dataList);
-
-
     return (
         <View>
             {
@@ -31,6 +27,7 @@ const TimelineList = ({ dataList }: IDataListProps) => {
                     renderItem={({ item }) => <TimelineItem item={item} />}
                     contentContainerStyle={{paddingBottom: 150}}
                     showsVerticalScrollIndicator={false}
+                    keyExtractor={item => item.id}
                 />
             }
         </View>

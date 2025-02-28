@@ -434,18 +434,6 @@ class AbsenController extends Controller
         $checkpointDateIso = ConvertDate::strDateToDate($checkpointDate);
 
 
-        // return response()->json([
-        //     'tes' => 'hasil',
-        //     '$selectedUsername' => $selectedUsername,
-        //     '$userId' => $userId,
-        //     '$startdt' => $startdt,
-        //     '$enddt' => $enddt,
-        //     '$historyMedia' => $historyMedia,
-        //     '$startDateIso' => $startDateIso,
-        //     '$endDateIso' => $endDateIso,
-        //     ]);
-
-
         $dd = $this->historyByUserIdAndCheckpointDate($selectedUserId, $checkpointDateIso);
 
 

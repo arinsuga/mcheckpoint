@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, Text, View } from "react-native";
 
-//plugins
+//Packages
 import moment from "moment";
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
 
 //Components
 import DateList from "@/components/DateList/DateList";
@@ -29,9 +31,9 @@ export default function History() {
         let data: ITimeLine[] = [];
 
         if ((dataList) && (dataList.length > 0)) {
-
             dataList.map((item) => {
                 data.push({
+                    id: uuidv4(),
                     type: 'Checkin',
                     date: item.checkin_date,
                     time: item.checkin_time,
@@ -49,6 +51,7 @@ export default function History() {
                 if (item.checkout_time) {
 
                     data.push({
+                        id: uuidv4(),
                         type: 'Checkout',
                         date: item.checkout_date,
                         time: item.checkout_time,
@@ -75,6 +78,7 @@ export default function History() {
 
     const useDataList = async (date: moment.Moment): Promise<ITimeLine[]> => {
 
+      setDataList([]);
       const response = await historyByUserIdCheckpointDate({
         userName: await getUsername() as string,
         checkpointDate: date,
@@ -91,11 +95,12 @@ export default function History() {
 
         const data = await useDataList(date);
         setSelectedDate(date);
-        setDataList(data);
+        // setDataList(data);
     }
 
 
     useEffect(() => {
+      console.log('history-useEffect rendered.....');
       useDataList(selectedDate);      
     }, []);
 

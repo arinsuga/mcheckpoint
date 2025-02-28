@@ -1,4 +1,5 @@
 export default interface ITimeLine {
+    id: string;
     type: 'Checkin' | 'Checkout';
     date: string;
     time: string;
