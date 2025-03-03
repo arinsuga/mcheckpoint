@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 //Components
 import DateList from "@/components/DateList/DateList";
 import TimelineList from "@/components/TimelineList/TimelineList";
+import WaitingIndicator from "@/components/WaitingIndicator/WaitingIndicator";
 
 //Constants
 import { Colors } from "@/constants/Colors";
@@ -26,6 +27,7 @@ export default function History() {
     const [currentDate, setCurrentDate] = useState(moment());
     const [selectedDate, setSelectedDate] = useState(currentDate.clone());
     const [dataList, setDataList] = useState<ITimeLine[]>([]);
+    const [isWaiting, setIsWaiting] = useState(true);
 
     const fillDataLIst = (dataList: ICheckpointHistory[]): ITimeLine[] => {
         let data: ITimeLine[] = [];
@@ -87,13 +89,15 @@ export default function History() {
 
       const data = fillDataLIst(response.data.data.attend_list);
       setDataList(data);
+      setIsWaiting(false);
 
       return data;
     }
 
     const handleSelectedDate = async (date: moment.Moment) => {
 
-        const data = await useDataList(date);
+      setIsWaiting(true);
+      const data = await useDataList(date);
         setSelectedDate(date);
         // setDataList(data);
     }
@@ -112,6 +116,9 @@ export default function History() {
           backgroundColor: Colors.white,
         }}
       >
+
+        <WaitingIndicator isWaiting={isWaiting} />
+
         {/* SECTION HEADER */}
         <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 12}}>
           <View style={{flexDirection: 'row', alignItems: 'center', columnGap: 8}}>

@@ -65,17 +65,6 @@ const TakePhoto = () => {
           setPhoto(photoResult);
           setIsCaptureWaiting(false);
 
-          // const compressedPhotoResult = await ImageManipulator.manipulateAsync(
-          //   `file://${photoResult?.path}`,
-          //   [
-          //     { resize: { width: 800 } }
-          //   ],
-          //   {
-          //     compress: 0.3, format: ImageManipulator.SaveFormat.JPEG
-          //   }
-          // );
-
-
         } catch(e) {
 
           console.log(e);
@@ -91,16 +80,6 @@ const TakePhoto = () => {
     const viewCapturedImage = () => {
       alert('TODO : Image Viewer');
     }
-
-
-    // useEffect(() => {
-
-    //   console.log('Inside takephoto - useEffect....')
-    //   console.log('photoResult....');
-    //   console.log(photo);
-
-
-    // }, [photo]);
 
     return (
 
