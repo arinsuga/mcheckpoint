@@ -18,8 +18,8 @@ import Dates from '@/constants/Dates';
 import Compressutils from '@/utils/Compressutils';
 
 const API_URL = `${process.env.EXPO_PUBLIC_API_URL}/absen`;
-const compressPercent = 0.8;
-const compressWidth = 1024;
+const compressPercent = 0.5;
+const compressWidth = 400;
 export const check = async (username: string): Promise<any> => {
 
   const token = await getToken();
@@ -50,7 +50,7 @@ export const checkin = async (checkinData: ICheckpoint): Promise<any> => {
   const token = await getToken();
   try {    
 
-    const filePhoto = await Compressutils.photoFileToJPEG(checkinData.file, undefined, compressPercent);
+    const filePhoto = await Compressutils.photoFileToJPEG(checkinData.file, compressWidth, compressPercent);
     const fileUri   = filePhoto?.uri ? filePhoto?.uri as string : '';
     const filePath  = Fileutils.path(fileUri);
     const fileName = Fileutils.name(filePath);
@@ -95,7 +95,7 @@ export const checkout = async (checkoutData: ICheckpoint): Promise<any> => {
   const token = await getToken();
   try {    
 
-    const filePhoto = await Compressutils.photoFileToJPEG(checkoutData.file, undefined, compressPercent);
+    const filePhoto = await Compressutils.photoFileToJPEG(checkoutData.file, compressWidth, compressPercent);
     const fileUri   = filePhoto?.uri ? filePhoto?.uri as string : '';
     const filePath  = Fileutils.path(fileUri);
     const fileName = Fileutils.name(filePath);

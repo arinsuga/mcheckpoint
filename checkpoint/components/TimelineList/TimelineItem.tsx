@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, LayoutChangeEvent } from "rea
 
 //Packages
 import CachedImage from "expo-cached-image";
+import FastImage from "react-native-fast-image";
 
 //Components
 import Icon from '@/components/Icon/Icon';
@@ -47,6 +48,7 @@ const TimelineItem = memo(({item}: TimelineItemProps) => {
     return (
         <TouchableOpacity style={styles.itemContainer} activeOpacity={0.8}>
             <View style={styles.itemLeft}>
+                <Text style={{fontWeight: 'bold'}}>{ item.date }</Text>
                 <Text style={{fontWeight: 'bold'}}>{ item.time }</Text>
                 <Text style={{color: color()?.type}}>{ item.type }</Text>
             </View>
@@ -67,7 +69,17 @@ const TimelineItem = memo(({item}: TimelineItemProps) => {
                             marginTop: 10,
                         }}
                     /> */}
-                    
+
+                    <FastImage
+                        source={{ uri: item.image, priority: FastImage.priority.normal }}
+                        resizeMode={ FastImage.resizeMode.contain }
+                        style={{
+                            width: '100%',
+                            height: parentheight/2,
+                            marginTop: 10,
+                        }}
+                    />
+
                     <View style={{flexDirection: 'row', alignItems: 'center', columnGap: 14 }}>
                         <Icon.Location color={color()?.icon} size={16}/>
                         <View>
@@ -84,6 +96,6 @@ export default TimelineItem;
 
 const styles = StyleSheet.create({
     itemContainer: {flexDirection: 'row'},
-    itemLeft: {flex: 1, alignItems: 'center'},
+    itemLeft: {flex: 1, alignItems: 'center', justifyContent: 'flex-start'},
     itemRight: {flex:3, paddingBottom: 20, borderLeftWidth: 3, borderLeftColor: Colors.white},
 });

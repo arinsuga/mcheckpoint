@@ -19,12 +19,12 @@ use Illuminate\Http\Request;
 
 Route::group(['middleware' => 'api'], function ($router) {
     
-    Route::post('auth/register', 'AuthController@register');
-    Route::post('auth/login', 'AuthController@login');
-    Route::post('auth/logout', 'AuthController@logout');
-    Route::post('auth/refresh', 'AuthController@refresh');
-    Route::get('auth/me', 'AuthController@me');
-    Route::get('auth/status', 'AuthController@status');
+    Route::post('auth/register', 'AuthController@register')->name('auth.register');
+    Route::post('auth/login', 'AuthController@login')->name('auth.login');
+    Route::post('auth/logout', 'AuthController@logout')->name('auth.logout');
+    Route::post('auth/refresh', 'AuthController@refresh')->name('auth.refresh');
+    Route::get('auth/me', 'AuthController@me')->name('auth.me');
+    Route::get('auth/status', 'AuthController@status')->name('auth.status');
 
 
     //Absen

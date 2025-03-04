@@ -1,6 +1,6 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { jwtDecode, decode } from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import IUser from '@/interfaces/IUser';
 
 const API_URL = `${process.env.EXPO_PUBLIC_API_URL}/auth`;
