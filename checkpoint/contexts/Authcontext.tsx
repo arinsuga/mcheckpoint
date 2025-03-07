@@ -1,24 +1,31 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
+//Core Systems
 import {
     ReactNode,
     useState,
-    createContext,
     useContext,
+    createContext,
+    useEffect,
 } from 'react'
+
+//Packages
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+//Interfaces
 import IUser from '@/interfaces/IUser';
 
+//Services
 import { login, logout, getUsername, getToken, verifyToken } from '@/services/AuthService'
 
 
-interface IState {
+interface IAuthState {
     user?: IUser | null,
     token?: string | null;
     authenticated?: boolean | null;
 }
 
 interface IProvider {
-    authState?: IState | null;
+    authState?: IAuthState | null;
     Login?: (username?: string, password?: string) => Promise<any | null>;
     Logout?: () => Promise<any | null>;
     Register?: (email?: string, password?: string) => Promise<any | null>;
@@ -32,7 +39,7 @@ export const useAuth = () => {
 }
 
 const Authprovider = ({ children }: { children: ReactNode }) => {
-    const [authdata, setAuthdata] = useState<IState>({});
+    const [authdata, setAuthdata] = useState<IAuthState>({});
 
     const handleLogin = async (username?: string, password?: string) => {
         let result = false;
@@ -145,6 +152,15 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
         Register: handleRegister,
         Authenticate: handleAuthantication,
     };
+
+    useEffect(() => {
+
+        console.log('Inside Autcontext - useEffect...');
+
+    }, []);
+
+
+
 
     return (
         <Providercontext.Provider value={ value }>

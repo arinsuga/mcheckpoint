@@ -9,18 +9,26 @@ import { useAuth } from "@/contexts/Authcontext";
 import Login from "../login";
 
 export default function AppLayout() {
-  const { authState, Logout, Authenticate } = useAuth();
+  const { authState, Logout } = useAuth();
 
-
-  const toggleShowLogin = useCallback(() => {
+  // const { authState, Logout, Authenticate } = useAuth();
+  // const toggleShowLogin = useCallback(() => {
     
-    (Authenticate && Authenticate());
+  //   (Authenticate && Authenticate());
 
-  }, [authState?.authenticated]);
+  // }, [authState?.authenticated]);
+
+  // useLayoutEffect(() => {
+
+  //   toggleShowLogin();
+
+  // }, []);
+
 
   useLayoutEffect(() => {
 
-    toggleShowLogin();
+    console.log('inside _Layout - useLayoutEffect');
+    console.log(authState);
 
   }, []);
 

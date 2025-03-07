@@ -416,16 +416,6 @@ class AbsenController extends Controller
     //postHistoryByUserIdAndCheckpointDate
     public function postHistoryByUserIdAndCheckpointDate(Request $request)
     {
-        //test
-        try {
-
-            return response()->json(['testing auth...'], 200);
-
-        } catch (\Throwable $th) {
-
-            return response()->json(['error' => $th->getMessage()], 500);
-
-        }
 
         $selectedUsername = $request->input('username');
         $selectedUserId = User::where('email', $selectedUsername)->first()->id;

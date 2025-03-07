@@ -194,11 +194,24 @@ export const historyByUserIdCheckpointDate = async ({userName, checkpointDate, h
         },
       });
 
+      // console.log('historyByUserIdCheckpointdate - SUCCESS');
+      // console.log({
+      //   a4Response: response,
+      // });
+  
     return response;
 
-  } catch (error) {
+  } catch (error: any) {
 
-    return error;
+    // console.log('historyByUserIdCheckpointdate - ERROR');
+    // console.log({
+    //   a1Status: error.response?.status,
+    //   a2Message: error.response?.data.message,
+    //   a3Data: error.response?.data,
+    //   a4Response: error.response,
+    // });
+
+    return error.response;
 
   }
 

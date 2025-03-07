@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
     View,
     Text,
@@ -67,7 +67,7 @@ useEffect(() => {
 
     const showCaptured = () => setDisplaycamera(true);
 
-    const handleSave = async () => {
+    const handleSave = useCallback(async () => {
 
         try {
 
@@ -97,7 +97,7 @@ useEffect(() => {
             return false;
 
         }
-    }
+    }, []);
 
   return (
         <View style={{

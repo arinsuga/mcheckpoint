@@ -1,6 +1,7 @@
 import {
   useState,
   useEffect,
+  useCallback,
 } from 'react';
 import { SafeAreaView } from 'react-native';
 import { Camera } from 'react-native-vision-camera';
@@ -15,7 +16,7 @@ export default function Pinloc() {
   const [isWaiting, setIsWaiting] = useState(true);
 
   //Request Camera and Location
-  const handleAllPermission = async () => {
+  const handleAllPermission = useCallback(async () => {
     
     // const LocationPermissionStatus = await Camera.requestLocationPermission();
     const {status} = await Location.requestForegroundPermissionsAsync();
@@ -25,7 +26,7 @@ export default function Pinloc() {
     setAllowCamera(cameraPermissionStatus);
     setIsWaiting(false);
 
-  }
+  }, []);
 
   useEffect(() => {
 

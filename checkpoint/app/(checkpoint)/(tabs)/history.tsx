@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { SafeAreaView, Text, View } from "react-native";
 
 //Packages
@@ -21,6 +21,7 @@ import ICheckpointHistory from "@/interfaces/ICheckpointHistory";
 //Serivces
 import { getUsername } from "@/services/AuthService";
 import { historyByUserIdCheckpointDate } from '@/services/ChekpointService';
+import { AxiosError } from "axios";
 
 
 export default function History() {
@@ -80,32 +81,60 @@ export default function History() {
 
     const useDataList = async (date: moment.Moment): Promise<ITimeLine[]> => {
 
-      setDataList([]);
-      const response = await historyByUserIdCheckpointDate({
-        userName: await getUsername() as string,
-        checkpointDate: date,
-        history_media: 'view'
-      });
 
-      const data = fillDataLIst(response.data.data.attend_list);
-      setDataList(data);
-      setIsWaiting(false);
+      try {
 
-      return data;
+        setDataList([]);
+        const response = await historyByUserIdCheckpointDate({
+          userName: await getUsername() as string,
+          checkpointDate: date,
+          history_media: 'view'
+        });
+
+        console.log('history - before attend_list....');
+        console.log({ status: response.status, message: response.data.message });
+
+        if (response.status != 200) {
+
+          setIsWaiting(false);
+          return [];
+        }
+
+        const data = fillDataLIst(response.data.data.attend_list);
+        setDataList(data);
+        setIsWaiting(false);
+
+        console.log('history - SUCCESS');
+        console.log({status: response.status, data: response.data.data});
+
+        return data;
+
+      } catch (error: AxiosError) {
+
+        console.log('history - ERROR');
+        console.log({status: error.status, message: error.message});
+
+        setIsWaiting(false);
+        return []
+        
+      }
+
     }
 
-    const handleSelectedDate = async (date: moment.Moment) => {
+    const handleSelectedDate = useCallback(async (date: moment.Moment) => {
 
       setIsWaiting(true);
       const data = await useDataList(date);
         setSelectedDate(date);
         // setDataList(data);
-    }
+    }, []); 
 
 
     useEffect(() => {
+
       console.log('history-useEffect rendered.....');
       useDataList(selectedDate);      
+
     }, []);
 
     
