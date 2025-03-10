@@ -6,6 +6,9 @@ import moment from "moment";
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
+//Context
+import { useAuth } from "@/contexts/Authcontext";
+
 //Components
 import DateList from "@/components/DateList/DateList";
 import TimelineList from "@/components/TimelineList/TimelineList";
@@ -77,7 +80,6 @@ export default function History() {
   
         return data;
     }
-
 
     const useDataList = async (date: moment.Moment): Promise<ITimeLine[]> => {
 

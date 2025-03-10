@@ -1,52 +1,89 @@
 
 //Packages
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, interval } from 'rxjs';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { jwtDecode } from 'jwt-decode';
 
 //Interfaces
-import IUser from '@/interfaces/IUser';
+import IAuth, { IToken } from '@/interfaces/IAuth';
 
 const API_URL = `${process.env.EXPO_PUBLIC_API_URL}/auth`;
-const JWT_SCRET = process.env.EXPO_PUBLIC_JWT_SCRET;
 
-const authSubject = new BehaviorSubject<string | null>(null);
+export const authSubject = new BehaviorSubject<IAuth | null>(null);
 export const authObservable = () => authSubject.asObservable();
 
-const clearToken = async () => {
-  await AsyncStorage.removeItem('token');
-  await AsyncStorage.removeItem('refreshToken');
-  await AsyncStorage.removeItem('username');
+export const initAuth = async (): Promise<IAuth | null> => {
+  return {
+    authenticated: false
+  }
 }
 
+export const storeAuth = async (auth: IAuth) => {
 
-interface IAuthProps {
-  username: string | null;
-  token: string | null;
-  status: boolean;
-  message: string;
+  try {
+
+    await AsyncStorage.setItem('token', auth.token?.token as string);
+    await AsyncStorage.setItem('refreshToken', 'refreshToken');
+    await AsyncStorage.setItem('username', auth.user?.username as string);
+  
+  } catch(e) {
+
+    //throw error
+
+  }
+
 
 }
 
-export const initializeAuth = async (): Promise<IAuthProps> => {
+export const clearAuth = async () => {
 
-      const username = await getUsername();
-      const token = await getToken();
-      const authenticated = await verifyToken(token);
+  try {
 
-      return {
+    await AsyncStorage.removeItem('token');
+    await AsyncStorage.removeItem('refreshToken');
+    await AsyncStorage.removeItem('username');
+      
+  } catch(e) {
+
+    //throw error
+
+  }
+
+}
+
+export const getAuth = async (): Promise<IAuth | null> => {
+
+  try {
+
+    const username = await getUsername();
+    const token = await getToken();
+    const tokenInfo = await verifyToken(token);
+  
+    return {
+      user: {
         username,
-        token,
-        status: authenticated.status,
-        message: authenticated.message,
+        roles: ['admin_roles'],
+        email: '',
+      },
+      token: tokenInfo,
+      authenticated: tokenInfo.status,
       }
 
+    
+  } catch(e) {
+
+    return { authenticated: false }
+
+  }
+
+
+
 }
 
-export const login = async (username?: string, password?: string) => {
+export const login = async (username?: string, password?: string): Promise<IAuth | null> => {
 
-    await clearToken();
+    await clearAuth();
     authSubject.next(null);
 
     const response = await axios.post(`${API_URL}/login`, { email: username, password });
@@ -56,14 +93,33 @@ export const login = async (username?: string, password?: string) => {
       await AsyncStorage.setItem('token', token);
       await AsyncStorage.setItem('refreshToken', 'refreshToken');
       await AsyncStorage.setItem('username', username as string);
-      authSubject.next(token);
+
+      const auth = {
+        user: {
+          username,
+          roles: ['admin_roles'],
+          email: '',
+        },
+        token: {
+          token: token,
+          status: true,
+          message: 'Token valid',
+        },
+        authenticated: true
+      };
+
+      authSubject.next(auth);
+
+      return auth;
     }
 
+    return null;
 };
 
 export const logout = async () => {
-  await clearToken();
+  await clearAuth();
   authSubject.next(null);
+  return null;
 };
 
 export const getUsername = async () => {
@@ -94,27 +150,28 @@ export const verifyToken = (token: string | null) => {
   try {
 
     const decoded = jwtDecode(token as string);
-    const currentTime = Date.now() / 1000;
-    let result = {};
-  
+    const currentTime = Date.now() / 1000; //Convert ot milliseconds
 
     if (decoded.exp && decoded.exp < currentTime) {
 
       return {
+        token: token,
         status: false,
-        message: 'Token expired',
+        message: 'Token is expired',
       };
     }
 
     return {
+      token: token,
       status: true,
-      message: 'Token valid',
+      message: 'Token is valid',
     };
   } catch (error) {
 
     return {
+      token: token,
       status: false,
-      message: 'Token Invalid',
+      message: 'Token is Invalid',
     };
   }
 

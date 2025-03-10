@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   SafeAreaView,
   Text,
@@ -52,6 +52,14 @@ export default function Login({ authstate }: { authstate: boolean | null | undef
     setPassword(nextText);
 
   }
+
+
+  useEffect(() => {
+
+    console.log('Inside Login - useLayoutEffect');
+    console.log(`authstate : ${authstate}`);
+
+  }, [authstate]);
 
 
   return (

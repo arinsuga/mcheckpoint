@@ -9,23 +9,26 @@ import {
 } from 'react'
 
 //Packages
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { interval } from 'rxjs';
 
 //Interfaces
-import IUser from '@/interfaces/IUser';
+import IAuth, { IUser } from '@/interfaces/IAuth';
 
 //Services
-import { login, logout, getUsername, getToken, verifyToken } from '@/services/AuthService'
-
-
-interface IAuthState {
-    user?: IUser | null,
-    token?: string | null;
-    authenticated?: boolean | null;
-}
+import {
+    login,
+    logout,
+    getUsername,
+    getToken,
+    verifyToken,
+    authSubject,
+    storeAuth,
+    clearAuth,
+    getAuth
+} from '@/services/AuthService'
 
 interface IProvider {
-    authState?: IAuthState | null;
+    authState?: IAuth | null;
     Login?: (username?: string, password?: string) => Promise<any | null>;
     Logout?: () => Promise<any | null>;
     Register?: (email?: string, password?: string) => Promise<any | null>;
@@ -39,58 +42,18 @@ export const useAuth = () => {
 }
 
 const Authprovider = ({ children }: { children: ReactNode }) => {
-    const [authdata, setAuthdata] = useState<IAuthState>({});
+    const [authdata, setAuthdata] = useState<IAuth | null>({authenticated: false});
 
     const handleLogin = async (username?: string, password?: string) => {
         let result = false;
 
         try {
-            await login(username, password);
-            const token = await getToken();
-
+            const auth = await login(username, password);
+            setAuthdata(auth);
             result = true;
-            setAuthdata({
-                user: {
-                    username,
-                    roles: ['admin_roles'],
-                },
-                token: token,
-                authenticated: result,
-            });
 
         } catch (error) {
             console.log(error);
-        }
-
-        //User
-        if ((username?.toLocaleLowerCase() === 'user') && (password?.toLocaleLowerCase() === 'user')) {
-
-            result = true;
-            setAuthdata({
-                user: {
-                    username,
-                    roles: ['user_roles'],
-                },
-                token: 'User token authenticated',
-                authenticated: result,
-            });
-    
-        }
-
-        //Admin
-        if ((username?.toLocaleLowerCase() === 'admin') && (password?.toLocaleLowerCase() === 'admin')) {
-
-            result = true;
-            setAuthdata({
-                user: {
-                    username,
-                    roles: ['admin_roles'],
-                    email: 'admin@gmail.com',
-                },
-                token: 'Admin token authenticated',
-                authenticated: result,
-            });
-    
         }
 
         return result;
@@ -98,13 +61,9 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
 
     const handleLogout = async () => {
 
-        await logout();
+        const auth = await logout();
         
-        setAuthdata({
-            user: null,
-            token: null,
-            authenticated: false,
-        });
+        setAuthdata(auth);
 
         return true;
 
@@ -122,18 +81,18 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
 
             const username = await getUsername();
             const token = await getToken();
-            const authenticated = await verifyToken(token);
+            const tokenInfo = await verifyToken(token);
 
             setAuthdata({    
                 user: {
                     username,
                     roles: ['admin_roles'],
                 },
-                token,
-                authenticated: authenticated.status,
+                token: tokenInfo,
+                authenticated: tokenInfo.status,
             });
 
-            return authenticated.status;
+            return tokenInfo.status;
 
         } catch (error) {
 
@@ -144,7 +103,43 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
 
         
     }
+
+    const loadAuth = async () => {
+
+        const auth = await getAuth();
+        //setAuthdata(auth);
+        authSubject.next(auth);
+
+    }
+
+    useEffect(() => {
+
+        loadAuth();
+
+        // const authSubscription = authSubject.subscribe(setAuthdata);
+        // return () => authSubscription.unsubscribe();
+    }, []);
+
+    useEffect(() => {
+
+        const subscription = authSubject.subscribe((newAuth) => {
+
+            setAuthdata(newAuth);
+            newAuth ? storeAuth(newAuth) : clearAuth();
+
+        });
+
+        return () => authSubject.unsubscribe();
+
+    }, []);
     
+    useEffect(() => {
+
+
+
+    }, [authdata]);
+
+
     const value: IProvider = {
         authState: authdata,
         Login: handleLogin,
@@ -155,10 +150,17 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
 
     useEffect(() => {
 
-        console.log('Inside Autcontext - useEffect...');
+        if (authdata) {
 
-    }, []);
+            const authenticate = interval(5000)
+            .pipe()
+            .subscribe
 
+
+            return 
+        }
+
+    }, [authdata]);
 
 
 
