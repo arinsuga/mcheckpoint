@@ -112,9 +112,6 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
 
             const auth = await getAuth();
             authSubject.next(auth);
-
-            console.log('Inside Authcontext - useEffect 1');
-            console.log(auth);
     
         }
         loadAuth();
@@ -125,15 +122,8 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
 
         const subscription = authSubject.subscribe((newAuth) => {
 
-
             setAuthdata(newAuth);
             newAuth && storeAuth(newAuth);
-            // newAuth ? storeAuth(newAuth) : clearAuth();
-
-            console.log('Inside Authcontext - useEffect 2 - authSubject: newAuth');
-            console.log(newAuth);
-            console.log('Inside Authcontext - useEffect 2 - authSubject: authdata');
-            console.log(authdata);
 
         });
         return () => authSubject.unsubscribe();

@@ -9,6 +9,7 @@ export interface IToken {
     status?: boolean;
     message?: string;
 }
+
 export default interface IAuth {
     user?: IUser | null;
     token?: IToken | null;
