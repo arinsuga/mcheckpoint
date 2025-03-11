@@ -56,8 +56,8 @@ export default function Login({ authstate }: { authstate: boolean | null | undef
 
   useEffect(() => {
 
-    console.log('Inside Login - useLayoutEffect');
-    console.log(`authstate : ${authstate}`);
+    // console.log('Inside Login - useLayoutEffect');
+    // console.log(`authstate : ${authstate}`);
 
   }, [authstate]);
 

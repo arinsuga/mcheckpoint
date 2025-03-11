@@ -8,8 +8,10 @@ import { jwtDecode } from 'jwt-decode';
 //Interfaces
 import IAuth, { IToken } from '@/interfaces/IAuth';
 
-const API_URL = `${process.env.EXPO_PUBLIC_API_URL}/auth`;
+//Constants
+import Auths from '@/constants/Auths';
 
+const API_URL = `${process.env.EXPO_PUBLIC_API_URL}/auth`;
 export const authSubject = new BehaviorSubject<IAuth | null>(null);
 export const authObservable = () => authSubject.asObservable();
 
@@ -23,9 +25,9 @@ export const storeAuth = async (auth: IAuth) => {
 
   try {
 
-    await AsyncStorage.setItem('token', auth.token?.token as string);
-    await AsyncStorage.setItem('refreshToken', 'refreshToken');
-    await AsyncStorage.setItem('username', auth.user?.username as string);
+    await AsyncStorage.setItem(Auths.storageKey.token, auth.token?.token as string);
+    await AsyncStorage.setItem(Auths.storageKey.refreshToken, 'refreshToken_dummy');
+    await AsyncStorage.setItem(Auths.storageKey.userName, auth.user?.username as string);
   
   } catch(e) {
 
@@ -40,9 +42,11 @@ export const clearAuth = async () => {
 
   try {
 
-    await AsyncStorage.removeItem('token');
-    await AsyncStorage.removeItem('refreshToken');
-    await AsyncStorage.removeItem('username');
+    console.log('Run clearAuth....!!!');
+
+    await AsyncStorage.removeItem(Auths.storageKey.token);
+    await AsyncStorage.removeItem(Auths.storageKey.refreshToken);
+    await AsyncStorage.removeItem(Auths.storageKey.userName);
       
   } catch(e) {
 
@@ -77,8 +81,6 @@ export const getAuth = async (): Promise<IAuth | null> => {
 
   }
 
-
-
 }
 
 export const login = async (username?: string, password?: string): Promise<IAuth | null> => {
@@ -90,9 +92,9 @@ export const login = async (username?: string, password?: string): Promise<IAuth
     const { token }: any = response.data;
 
     if (token) {
-      await AsyncStorage.setItem('token', token);
-      await AsyncStorage.setItem('refreshToken', 'refreshToken');
-      await AsyncStorage.setItem('username', username as string);
+      await AsyncStorage.setItem(Auths.storageKey.token, token);
+      await AsyncStorage.setItem(Auths.storageKey.refreshToken, 'refreshToken');
+      await AsyncStorage.setItem(Auths.storageKey.userName, username as string);
 
       const auth = {
         user: {
@@ -123,17 +125,17 @@ export const logout = async () => {
 };
 
 export const getUsername = async () => {
-  const token = await AsyncStorage.getItem('username');
+  const token = await AsyncStorage.getItem(Auths.storageKey.userName);
   return token;
 };
 
 export const getToken = async () => {
-  const token = await AsyncStorage.getItem('token');
+  const token = await AsyncStorage.getItem(Auths.storageKey.token);
   return token;
 };
 
 export const getRefreshToken = async () => {
-  const refreshToken = await AsyncStorage.getItem('refreshToken');
+  const refreshToken = await AsyncStorage.getItem(Auths.storageKey.refreshToken);
   return refreshToken;
 };
 
@@ -141,7 +143,7 @@ export const refreshAuthToken = async () => {
   const refreshToken = await getRefreshToken();
   const response = await axios.post(`${API_URL}/refresh-token`, { refreshToken });
   const { token } = response.data as { token: string };
-  await AsyncStorage.setItem('token', token);
+  await AsyncStorage.setItem(Auths.storageKey.token, token);
   return token;
 };
 

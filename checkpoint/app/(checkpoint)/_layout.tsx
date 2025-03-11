@@ -27,8 +27,8 @@ export default function AppLayout() {
 
   useLayoutEffect(() => {
 
-    console.log('inside _Layout - useLayoutEffect');
-    console.log(authState);
+    // console.log('inside _Layout - useLayoutEffect');
+    // console.log(authState);
 
   }, []);
 

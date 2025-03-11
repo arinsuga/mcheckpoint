@@ -104,31 +104,38 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
         
     }
 
-    const loadAuth = async () => {
-
-        const auth = await getAuth();
-        //setAuthdata(auth);
-        authSubject.next(auth);
-
-    }
 
     useEffect(() => {
 
+
+        const loadAuth = async () => {
+
+            const auth = await getAuth();
+            authSubject.next(auth);
+
+            console.log('Inside Authcontext - useEffect 1');
+            console.log(auth);
+    
+        }
         loadAuth();
 
-        // const authSubscription = authSubject.subscribe(setAuthdata);
-        // return () => authSubscription.unsubscribe();
     }, []);
 
     useEffect(() => {
 
         const subscription = authSubject.subscribe((newAuth) => {
 
+
             setAuthdata(newAuth);
-            newAuth ? storeAuth(newAuth) : clearAuth();
+            newAuth && storeAuth(newAuth);
+            // newAuth ? storeAuth(newAuth) : clearAuth();
+
+            console.log('Inside Authcontext - useEffect 2 - authSubject: newAuth');
+            console.log(newAuth);
+            console.log('Inside Authcontext - useEffect 2 - authSubject: authdata');
+            console.log(authdata);
 
         });
-
         return () => authSubject.unsubscribe();
 
     }, []);
@@ -148,19 +155,19 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
         Authenticate: handleAuthantication,
     };
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        if (authdata) {
+    //     if (authdata) {
 
-            const authenticate = interval(5000)
-            .pipe()
-            .subscribe
+    //         const authenticate = interval(5000)
+    //         .pipe()
+    //         .subscribe
 
 
-            return 
-        }
+    //         return 
+    //     }
 
-    }, [authdata]);
+    // }, [authdata]);
 
 
 
