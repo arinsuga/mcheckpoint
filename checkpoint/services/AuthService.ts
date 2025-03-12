@@ -120,8 +120,8 @@ export const login = async (username?: string, password?: string): Promise<IAuth
 
 export const logout = async () => {
   await clearAuth();
-  authSubject.next(null);
-  return null;
+  authSubject.next({authenticated: false});
+  return {authenticated: false};
 };
 
 export const getUsername = async () => {
@@ -159,13 +159,16 @@ export const verifyToken = (token: string | null) => {
       return {
         token: token,
         status: false,
+        code: 402,
         message: 'Token is expired',
       };
+
     }
 
     return {
       token: token,
       status: true,
+      code: 200,
       message: 'Token is valid',
     };
   } catch (error) {
@@ -173,6 +176,7 @@ export const verifyToken = (token: string | null) => {
     return {
       token: token,
       status: false,
+      code: 401,
       message: 'Token is Invalid',
     };
   }

@@ -9,7 +9,7 @@ import {
 } from 'react'
 
 //Packages
-import { interval } from 'rxjs';
+import { interval, switchMap, from, takeWhile } from 'rxjs';
 
 //Interfaces
 import IAuth, { IUser } from '@/interfaces/IAuth';
@@ -62,6 +62,8 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
     const handleLogout = async () => {
 
         const auth = await logout();
+        console.log('Inside handleLogout');
+        console.log(auth);
         
         setAuthdata(auth);
 
@@ -131,6 +133,34 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
     }, []);
     
     useEffect(() => {
+
+        if (authdata) {
+
+            const validateAuth = interval(5000)
+            .pipe(
+                switchMap(async () => {
+
+                    console.log('Inside switchMap 1...');
+                    const auth = await getAuth();
+
+                    return auth;
+                }),
+                switchMap((result) => from(Promise.resolve(result))),
+                takeWhile((result, index) => !!result?.authenticated, true)
+            )
+            .subscribe((result) => {
+
+                const now = new Date().getTime();
+
+                console.log(`Inside subscribe ${!!result?.authenticated}... ( ${now} )`);
+                console.log(result);
+
+                result?.token?.code === 402 && handleLogout();
+
+            });
+            return () => validateAuth.unsubscribe();
+
+        }
 
 
 
