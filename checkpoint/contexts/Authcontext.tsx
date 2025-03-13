@@ -142,22 +142,22 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
 
                     console.log('Inside switchMap 1...');
                     const auth = await getAuth();
+                    console.log(auth);
 
                     return auth;
                 }),
-                switchMap((result) => from(Promise.resolve(result))),
-                takeWhile((result, index) => !!result?.authenticated, true)
+                takeWhile((result, index) => result?.authenticated as boolean, true)
             )
             .subscribe((result) => {
 
-                const now = new Date().getTime();
-
-                console.log(`Inside subscribe ${!!result?.authenticated}... ( ${now} )`);
+                const now = new Date();
+                console.log(`Inside subscribe... ( ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')} )`);
                 console.log(result);
 
                 result?.token?.code === 402 && handleLogout();
 
             });
+
             return () => validateAuth.unsubscribe();
 
         }
