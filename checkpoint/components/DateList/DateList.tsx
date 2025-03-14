@@ -12,7 +12,7 @@ import { Colors } from '@/constants/Colors';
 //Services
 import { checkinHistory } from '@/services/ChekpointService';
 
-const DateList = (
+const DateList = React.memo((
     {
         date,
         onSelectedDate
@@ -31,6 +31,12 @@ const DateList = (
         onSelectedDate(date);
         
     }
+
+    useEffect(() => {
+
+        console.log('Rendering DateList....');
+
+    });
 
     return (
         <View style={{ width: Dimensions.get('screen').width, minHeight: 57}}>
@@ -61,6 +67,6 @@ const DateList = (
             />
         </View>
     )
-}
+});
 
 export default DateList;

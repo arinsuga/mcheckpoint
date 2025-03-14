@@ -58,13 +58,14 @@ export const clearAuth = async () => {
 
 export const getAuth = async (): Promise<IAuth | null> => {
 
+  let result: IAuth = { authenticated: false };
+
   try {
 
     const username = await getUsername();
     const token = await getToken();
     const tokenInfo = await verifyToken(token);
-  
-    return {
+    result = {
       user: {
         username,
         roles: ['admin_roles'],
@@ -72,15 +73,15 @@ export const getAuth = async (): Promise<IAuth | null> => {
       },
       token: tokenInfo,
       authenticated: tokenInfo.status,
-      }
+      };
 
-    
   } catch(e) {
 
-    return { authenticated: false }
+    result = { authenticated: false };
 
   }
 
+  return result;
 }
 
 export const login = async (username?: string, password?: string): Promise<IAuth | null> => {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { SafeAreaView, Text, View } from "react-native";
+import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 
 //Packages
 import moment from "moment";
@@ -24,14 +24,13 @@ import ICheckpointHistory from "@/interfaces/ICheckpointHistory";
 //Serivces
 import { getUsername } from "@/services/AuthService";
 import { historyByUserIdCheckpointDate } from '@/services/ChekpointService';
-import { AxiosError } from "axios";
-
 
 export default function History() {
     const [currentDate, setCurrentDate] = useState(moment());
     const [selectedDate, setSelectedDate] = useState(currentDate.clone());
     const [dataList, setDataList] = useState<ITimeLine[]>([]);
     const [isWaiting, setIsWaiting] = useState(true);
+    const [authenticated, setAuthenticated] = useState(true);
 
     const fillDataLIst = (dataList: ICheckpointHistory[]): ITimeLine[] => {
         let data: ITimeLine[] = [];
@@ -93,11 +92,9 @@ export default function History() {
           history_media: 'view'
         });
 
-        console.log('history - before attend_list....');
-        console.log({ status: response.status, message: response.data.message });
-
         if (response.status != 200) {
 
+          setAuthenticated(false);
           setIsWaiting(false);
           return [];
         }
@@ -108,12 +105,16 @@ export default function History() {
 
         console.log('history - SUCCESS');
         console.log({status: response.status, data: response.data.data});
+        console.log(response);
 
         return data;
 
-      } catch (error: AxiosError) {
+      } catch (error: any) {
 
         console.log('history - ERROR');
+        console.log(error);
+
+        console.log('history - ERROR DETAIlS')
         console.log({status: error.status, message: error.message});
 
         setIsWaiting(false);
@@ -125,8 +126,9 @@ export default function History() {
 
     const handleSelectedDate = useCallback(async (date: moment.Moment) => {
 
-      setIsWaiting(true);
-      const data = await useDataList(date);
+        setIsWaiting(true);
+        const data = await useDataList(date);
+
         setSelectedDate(date);
         // setDataList(data);
     }, []); 
@@ -134,7 +136,7 @@ export default function History() {
 
     useEffect(() => {
 
-      console.log('history-useEffect rendered.....');
+      // console.log('history-useEffect rendered.....');
       useDataList(selectedDate);      
 
     }, []);
@@ -173,6 +175,12 @@ export default function History() {
         {/* DATA LIST */}
         <View style={{paddingHorizontal: 12}}>
           <TimelineList dataList={dataList} />
+          <View style={{
+            alignItems: 'center',
+            display: !authenticated && !isWaiting ? 'flex' : 'none'
+          }}>
+            <Text>You are not authorized!!</Text>
+          </View>
         </View>
       </SafeAreaView>
     );

@@ -23,7 +23,6 @@ import {
     verifyToken,
     authSubject,
     storeAuth,
-    clearAuth,
     getAuth
 } from '@/services/AuthService'
 
@@ -132,40 +131,39 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
 
     }, []);
     
-    useEffect(() => {
 
-        if (authdata) {
+    // Uncomment this code if you want to validate the authentication every 5 seconds (5000ms)
+    // useEffect(() => {
 
-            const validateAuth = interval(5000)
-            .pipe(
-                switchMap(async () => {
+    //     if (authdata) {
 
-                    console.log('Inside switchMap 1...');
-                    const auth = await getAuth();
-                    console.log(auth);
+    //         const validateAuth = interval(5000)
+    //         .pipe(
+    //             switchMap(async () => {
 
-                    return auth;
-                }),
-                takeWhile((result, index) => result?.authenticated as boolean, true)
-            )
-            .subscribe((result) => {
+    //                 console.log('Inside switchMap 1...');
+    //                 const auth = await getAuth();
+    //                 console.log(auth);
 
-                const now = new Date();
-                console.log(`Inside subscribe... ( ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')} )`);
-                console.log(result);
+    //                 return auth;
+    //             }),
+    //             takeWhile((result, index) => result?.authenticated as boolean, true)
+    //         )
+    //         .subscribe((result) => {
 
-                result?.token?.code === 402 && handleLogout();
+    //             const now = new Date();
+    //             console.log(`Inside subscribe... ( ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')} )`);
+    //             console.log(result);
 
-            });
+    //             result?.token?.code === 402 && handleLogout();
 
-            return () => validateAuth.unsubscribe();
+    //         });
 
-        }
+    //         return () => validateAuth.unsubscribe();
 
+    //     }
 
-
-    }, [authdata]);
-
+    // }, [authdata]);
 
     const value: IProvider = {
         authState: authdata,
@@ -174,22 +172,6 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
         Register: handleRegister,
         Authenticate: handleAuthantication,
     };
-
-    // useEffect(() => {
-
-    //     if (authdata) {
-
-    //         const authenticate = interval(5000)
-    //         .pipe()
-    //         .subscribe
-
-
-    //         return 
-    //     }
-
-    // }, [authdata]);
-
-
 
     return (
         <Providercontext.Provider value={ value }>
