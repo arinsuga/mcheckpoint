@@ -23,6 +23,7 @@ Route::group(['middleware' => 'api'], function ($router) {
     Route::post('auth/login', 'AuthController@login')->name('auth.login');
     Route::post('auth/logout', 'AuthController@logout')->name('auth.logout');
     Route::post('auth/refresh', 'AuthController@refresh')->name('auth.refresh');
+    Route::delete('auth/blacklist', 'AuthController@blacklist')->name('auth.blacklist');
     Route::get('auth/me', 'AuthController@me')->name('auth.me');
     Route::get('auth/status', 'AuthController@status')->name('auth.status');
 

@@ -67,6 +67,12 @@ class AuthController extends Controller
         return $this->respondWithToken(auth()->refresh());
     }
 
+    public function blacklist()
+    {
+        auth()->invalidate();
+        return response()->json(['message' => 'Token has been invalidated'], 200);
+    }
+
     protected function respondWithToken($token)
     {
         return response()->json([
