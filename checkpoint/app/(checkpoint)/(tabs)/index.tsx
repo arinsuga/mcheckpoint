@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import { Text, View } from "react-native";
 import Icon from "@/components/Icon/Icon";
 
@@ -14,8 +15,6 @@ export default function Home() {
 
         <Text>INDEX / HOME</Text>
         <Icon.Home />
-        <Icon.History />
-        <Icon.Location />
 
 
     </View>

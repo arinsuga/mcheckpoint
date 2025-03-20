@@ -32,12 +32,6 @@ const DateList = React.memo((
         
     }
 
-    useEffect(() => {
-
-        console.log('Rendering DateList....');
-
-    });
-
     return (
         <View style={{ width: Dimensions.get('screen').width, minHeight: 57}}>
            <CalendarStrip

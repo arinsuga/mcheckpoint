@@ -1,5 +1,11 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
+import {
+  SafeAreaView,
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet
+} from "react-native";
 
 //Packages
 import moment from "moment";
@@ -10,12 +16,14 @@ import { v4 as uuidv4 } from 'uuid';
 import { useAuth } from "@/contexts/Authcontext";
 
 //Components
+import Relogin from "@/components/Relogin/Relogin";
 import DateList from "@/components/DateList/DateList";
 import TimelineList from "@/components/TimelineList/TimelineList";
 import WaitingIndicator from "@/components/WaitingIndicator/WaitingIndicator";
 
 //Constants
 import { Colors } from "@/constants/Colors";
+import Styles from "@/constants/Styles";
 
 //Interfaces
 import ITimeLine from "@/interfaces/ITimeLine";
@@ -31,6 +39,7 @@ export default function History() {
     const [dataList, setDataList] = useState<ITimeLine[]>([]);
     const [isWaiting, setIsWaiting] = useState(true);
     const [authenticated, setAuthenticated] = useState(true);
+    const { Logout } = useAuth();
 
     const fillDataLIst = (dataList: ICheckpointHistory[]): ITimeLine[] => {
         let data: ITimeLine[] = [];
@@ -103,19 +112,19 @@ export default function History() {
         setDataList(data);
         setIsWaiting(false);
 
-        console.log('history - SUCCESS');
-        console.log({status: response.status, data: response.data.data});
-        console.log(response);
+        // console.log('history - SUCCESS');
+        // console.log({status: response.status, data: response.data.data});
+        // console.log(response);
 
         return data;
 
       } catch (error: any) {
 
-        console.log('history - ERROR');
-        console.log(error);
+        // console.log('history - ERROR');
+        // console.log(error);
 
-        console.log('history - ERROR DETAIlS')
-        console.log({status: error.status, message: error.message});
+        // console.log('history - ERROR DETAIlS')
+        // console.log({status: error.status, message: error.message});
 
         setIsWaiting(false);
         return []
@@ -174,15 +183,16 @@ export default function History() {
         
         {/* DATA LIST */}
         <View style={{paddingHorizontal: 12}}>
+
           <TimelineList dataList={dataList} />
-          <View style={{
-            alignItems: 'center',
-            display: !authenticated && !isWaiting ? 'flex' : 'none'
-          }}>
-            <Text>You are not authorized!!</Text>
-          </View>
+          <Relogin display={ !authenticated && !isWaiting } />
+
         </View>
       </SafeAreaView>
     );
 }
 
+
+const styles = StyleSheet.create({
+
+});

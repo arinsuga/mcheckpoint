@@ -1,20 +1,57 @@
-import React from "react";
-import { Text } from "react-native";
+import React, { useState, useCallback } from "react";
+
+//Packages
+import { useNavigationState } from "@react-navigation/native";
 import { useRouter, Tabs } from "expo-router";
-import { useRef } from "react";
-
 import Ionicons from '@expo/vector-icons/Ionicons';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 
-import { Colors } from "@/constants/Colors";
-import Icon from "@/components/Icon/Icon";
+//Contexts
 import { useAuth } from "@/contexts/Authcontext";
 
+//Constants
+import { Colors } from "@/constants/Colors";
+
+//Components
+import Icon from "@/components/Icon/Icon";
+
+//Services
+import { getAuth } from '@/services/AuthService';
+
 export default function AppLayout() {
-  const { Logout } = useAuth();
+  const [authenticated, setAuthenticated] = useState(true);
+
   const router = useRouter();
-  const viewRef = useRef(null);
+  let result: boolean = true;
+
+  const activeTabName = useNavigationState((state) => {
+
+    const tabName = state.routes[state.index].name;
+
+    //Check Authentication
+    const auth = getAuth();
+    if (auth) {
+
+      auth.then((result) => {
+
+
+        console.log('Call getAuth inside useNavigationState ...SUCCESS');
+        console.log(result);
+        result && setAuthenticated(result.authenticated as boolean);
+
+      })
+      .catch((err) => {
+
+        console.log('Call getAuth inside useNavigationState ...ERROR');
+        console.log(err);
+
+      })
+
+
+    }
+
+
+    return tabName;
+  });
 
   
 
