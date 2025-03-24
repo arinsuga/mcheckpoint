@@ -80,20 +80,17 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
 
         try {
 
-            const username = await getUsername();
-            const token = await getToken();
-            const tokenInfo = await verifyToken(token);
+            const auth = await getAuth();
 
-            setAuthdata({    
-                user: {
-                    username,
-                    roles: ['admin_roles'],
-                },
-                token: tokenInfo,
-                authenticated: tokenInfo.status,
-            });
+            if (auth) {
 
-            return tokenInfo.status;
+                if (!auth.authenticated) {
+                    setAuthdata(await logout());
+                }
+
+            }
+
+            return auth ? auth.token ? auth.token.status as boolean : false : false;
 
         } catch (error) {
 
@@ -105,7 +102,7 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
         
     }
 
-
+    //Authentication check 1
     useEffect(() => {
 
 
@@ -119,6 +116,7 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
 
     }, []);
 
+    //Authentication check 2
     useEffect(() => {
 
         const subscription = authSubject.subscribe((newAuth) => {

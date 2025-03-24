@@ -18,6 +18,7 @@ import Icon from "@/components/Icon/Icon";
 import { getAuth } from '@/services/AuthService';
 
 export default function AppLayout() {
+  const { Authenticate } = useAuth();
   const [authenticated, setAuthenticated] = useState(true);
 
   const router = useRouter();
@@ -28,27 +29,7 @@ export default function AppLayout() {
     const tabName = state.routes[state.index].name;
 
     //Check Authentication
-    const auth = getAuth();
-    if (auth) {
-
-      auth.then((result) => {
-
-
-        console.log('Call getAuth inside useNavigationState ...SUCCESS');
-        console.log(result);
-        result && setAuthenticated(result.authenticated as boolean);
-
-      })
-      .catch((err) => {
-
-        console.log('Call getAuth inside useNavigationState ...ERROR');
-        console.log(err);
-
-      })
-
-
-    }
-
+    Authenticate  && Authenticate();
 
     return tabName;
   });

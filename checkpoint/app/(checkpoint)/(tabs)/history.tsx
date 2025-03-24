@@ -39,7 +39,7 @@ export default function History() {
     const [dataList, setDataList] = useState<ITimeLine[]>([]);
     const [isWaiting, setIsWaiting] = useState(true);
     const [authenticated, setAuthenticated] = useState(true);
-    const { Logout } = useAuth();
+    const { Authenticate } = useAuth();
 
     const fillDataLIst = (dataList: ICheckpointHistory[]): ITimeLine[] => {
         let data: ITimeLine[] = [];
@@ -145,7 +145,6 @@ export default function History() {
 
     useEffect(() => {
 
-      // console.log('history-useEffect rendered.....');
       useDataList(selectedDate);      
 
     }, []);

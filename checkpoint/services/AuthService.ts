@@ -42,8 +42,6 @@ export const clearAuth = async () => {
 
   try {
 
-    console.log('Run clearAuth....!!!');
-
     await AsyncStorage.removeItem(Auths.storageKey.token);
     await AsyncStorage.removeItem(Auths.storageKey.refreshToken);
     await AsyncStorage.removeItem(Auths.storageKey.userName);
