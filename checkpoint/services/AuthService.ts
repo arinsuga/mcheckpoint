@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { jwtDecode } from 'jwt-decode';
 
 //Interfaces
-import IAuth, { IToken } from '@/interfaces/IAuth';
+import IAuth, { IUser } from '@/interfaces/IAuth';
 
 //Constants
 import Auths from '@/constants/Auths';
@@ -28,6 +28,7 @@ export const storeAuth = async (auth: IAuth) => {
     await AsyncStorage.setItem(Auths.storageKey.token, auth.token?.token as string);
     await AsyncStorage.setItem(Auths.storageKey.refreshToken, 'refreshToken_dummy');
     await AsyncStorage.setItem(Auths.storageKey.userName, auth.user?.username as string);
+    await AsyncStorage.setItem(Auths.storageKey.user, JSON.stringify(auth.user));
   
   } catch(e) {
 
@@ -45,6 +46,7 @@ export const clearAuth = async () => {
     await AsyncStorage.removeItem(Auths.storageKey.token);
     await AsyncStorage.removeItem(Auths.storageKey.refreshToken);
     await AsyncStorage.removeItem(Auths.storageKey.userName);
+    await AsyncStorage.removeItem(Auths.storageKey.user);
       
   } catch(e) {
 
@@ -63,6 +65,8 @@ export const getAuth = async (): Promise<IAuth | null> => {
     const username = await getUsername();
     const token = await getToken();
     const tokenInfo = await verifyToken(token);
+    const user = await getUser();
+    
     result = {
       user: {
         username,
@@ -91,9 +95,11 @@ export const login = async (username?: string, password?: string): Promise<IAuth
     const { token }: any = response.data;
 
     if (token) {
+      
       await AsyncStorage.setItem(Auths.storageKey.token, token);
       await AsyncStorage.setItem(Auths.storageKey.refreshToken, 'refreshToken');
       await AsyncStorage.setItem(Auths.storageKey.userName, username as string);
+      //Call storeAuth heare
 
       const auth = {
         user: {
@@ -126,6 +132,12 @@ export const logout = async () => {
 export const getUsername = async () => {
   const token = await AsyncStorage.getItem(Auths.storageKey.userName);
   return token;
+};
+
+export const getUser = async (): Promise<IUser> => {
+  const user = await AsyncStorage.getItem(Auths.storageKey.user) as string;
+
+  return JSON.parse(user);
 };
 
 export const getToken = async () => {

@@ -43,9 +43,33 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
+        $user = User::where('email', $credentials['email'])->first();
+
+        $userRoles = [];
+        foreach ($user->roles as $key => $item) {
+            # code...
+            array_push($userRoles, ["code" => $item->code, "name" => $item->name]); 
+        }
+
+        $claims = [];
+        if (isset($user)) {
+            $claims = [
+                "name" => $user["name"],
+                "email" => $user["email"],
+                "dept" => $user["dept"],
+                "noabsen" => $user["noabsen"],
+                "bo" => $user["bo"],
+                "roles" => $userRoles,
+            ];
+        }
+        
 
         try {
-            if (! $token = JWTAuth::attempt($credentials)) {
+
+            $token = JWTAuth::claims($claims)
+            ->attempt($credentials);
+
+            if (!$token) {
                 return response()->json(['error' => 'invalid_credentials'], 400);
             }
         } catch (JWTException $e) {
