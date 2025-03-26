@@ -81,6 +81,8 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
         try {
 
             const auth = await getAuth();
+            console.log('===== handleAuthentication =====');
+            console.log(auth);
 
             if (auth) {
 
