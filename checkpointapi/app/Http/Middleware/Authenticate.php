@@ -19,31 +19,13 @@ class Authenticate
      * @param  \Illuminate\Http\Request  $request
      * @return string
      */
-    // protected function redirectTo($request)
-    // {
-    //     if (! $request->expectsJson()) {
-
-    //         // return route('login');
-    //         return route('auth.status');
-
-    //     }
-    // }
-
-
-    public function handle(Request $request, Closure $next)
+    protected function redirectTo($request)
     {
-        try {
-            $user = JWTAuth::parseToken()->authenticate();
-        } catch (TokenExpiredException $e) {
-            return response()->json(['message' => 'Token has expired'], 401);
-        } catch (TokenInvalidException $e) {
-            return response()->json(['message' => 'Token is invalid'], 401);
-        } catch (JWTException $e) {
-            return response()->json(['message' => 'Token is not present'], 401);
+        if (! $request->expectsJson()) {
+
+            return route('login');
+
         }
-
-        return $next($request);
-    }    
-
+    }
     
 }
