@@ -14,7 +14,8 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register', 'status']]);
+        // $this->middleware('auth:api', ['except' => ['login', 'register', 'status']]);
+        $this->middleware('authjwt', ['except' => ['login', 'register', 'status']]);
     }
 
     public function register(Request $request)
@@ -54,12 +55,15 @@ class AuthController extends Controller
         $claims = [];
         if (isset($user)) {
             $claims = [
-                "name" => $user["name"],
-                "email" => $user["email"],
-                "dept" => $user["dept"],
-                "noabsen" => $user["noabsen"],
-                "bo" => $user["bo"],
+                "username" => $user["email"],
                 "roles" => $userRoles,
+                "bo" => $user["bo"],
+                "prv" => [
+                    "name" => $user["name"],
+                    "email" => $user["email"],
+                    "dept" => $user["dept"],
+                    "noabsen" => $user["noabsen"],
+                ],
             ];
         }
         

@@ -65,7 +65,7 @@ class Kernel extends HttpKernel
         'auth.admin' => \Arins\Bo\Http\Middleware\AuthenticateAdmin::class,
 
         // Other middleware
-        'jwt.auth' => \App\Http\Middleware\Authenticate::class,        
+        'authjwt' => \App\Http\Middleware\AuthenticateJWT::class,        
     ];
 
     /**

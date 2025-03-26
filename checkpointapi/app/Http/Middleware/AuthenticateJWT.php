@@ -11,7 +11,7 @@ use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
 // class Authenticate extends Middleware
-class Authenticate
+class AuthenticateJWT
 {
     /**
      * Get the path the user should be redirected to when they are not authenticated.
@@ -23,8 +23,7 @@ class Authenticate
     // {
     //     if (! $request->expectsJson()) {
 
-    //         // return route('login');
-    //         return route('auth.status');
+    //         return route('login');
 
     //     }
     // }

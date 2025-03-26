@@ -53,7 +53,8 @@ class AbsenController extends Controller
         $this->dataUsers = $parDataUsers;
         $this->oLocater = $poLocater;
         
-        $this->middleware('auth');
+        //$this->middleware('auth');
+        $this->middleware('authjwt');
 
         //#HCD: Set NULL for production
         $this->ip = null; //Production
