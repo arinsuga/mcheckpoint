@@ -1,10 +1,3 @@
-export interface IToken {
-    token?: string;
-    status?: boolean;
-    code?: number; // 200 valid / 401 invalid / 402 expired
-    message?: string;
-}
-
 export interface IRole {
     code?: string;
     name?: string;
@@ -39,6 +32,13 @@ export interface IUser {
     username?: string;
     roles?: IRole[];
     email?: string;
+}
+
+export interface IToken {
+    token?: string;
+    status?: boolean;
+    code?: number; // 200 valid / 401 invalid / 402 expired
+    message?: string;
 }
 
 export interface IJWT {

@@ -29,7 +29,7 @@ export default function AppLayout() {
     const tabName = state.routes[state.index].name;
 
     //Check Authentication
-    //Authenticate  && Authenticate();
+    Authenticate  && Authenticate();
 
     return tabName;
   });
