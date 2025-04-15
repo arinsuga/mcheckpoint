@@ -515,7 +515,7 @@ class AbsenController extends Controller
         //return dd($data->results[0]->address_components);
 
         //convert to JSON
-        if ($data) {
+        if ( ($data) && ($data->results) ) {
 
             //create temporary uploaded image
             $uploadTemp = Filex::uploadTemp($upload, $imageTemp, null, 'checkin');
@@ -610,8 +610,8 @@ class AbsenController extends Controller
 
             $host = $this->getFullURL($latitude, $longitude);
             $data = $this->oLocater->locate($host);
-            if ($data)
-            {
+
+            if ( ($data) && ($data->results) ) {
 
 
                 //create temporary uploaded image
