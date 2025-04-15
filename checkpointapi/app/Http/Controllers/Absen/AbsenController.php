@@ -552,8 +552,6 @@ class AbsenController extends Controller
                 'metadata' => json_encode($data)
             ];
     
-            // return redirect('/')->with('status', 'data absensi tersimpan');
-
             return response()->json($response);
     
         } //end if
@@ -563,8 +561,6 @@ class AbsenController extends Controller
             'result' => $data,
             'metadata' => json_encode($data)
         ];
-
-        // return redirect('/')->with('status', 'data absensi tersimpan');
 
         return response()->json($response);
     }
@@ -639,18 +635,25 @@ class AbsenController extends Controller
                 $attend->checkout_description = $request->input('checkout_description');
                 $attend->save();
 
+                $response = [
+                    'message' => 'data checkout absensi tersimpan',
+                    'result' => $data,
+                    'metadata' => json_encode($data)
+                ];
+        
+                return response()->json($response);
+    
             } //end if
 
         } //end if
 
-        // return redirect('/')->with('status', 'data absensi tersimpan');
-
         $response = [
-            'message' => 'data absensi tersimpan',
-            'result' => (array)$data,
-        ];        
+            'message' => 'data checkout absensi gagal tersimpan',
+            'result' => $data,
+            'metadata' => json_encode($data)
+        ];
 
-        return response()->json(Response::viewModel($attend));
+        return response()->json($response);
 
     } //end method
 
