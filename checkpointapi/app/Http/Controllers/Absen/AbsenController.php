@@ -547,7 +547,7 @@ class AbsenController extends Controller
             $attend->save();
 
             $response = [
-                'message' => 'data absensi tersimpan',
+                'message' => 'data checkin absensi tersimpan',
                 'result' => $data,
                 'metadata' => json_encode($data)
             ];
@@ -557,7 +557,7 @@ class AbsenController extends Controller
         } //end if
 
         $response = [
-            'message' => 'data absensi gagal tersimpan',
+            'message' => 'data checkin absensi gagal tersimpan',
             'result' => $data,
             'metadata' => json_encode($data)
         ];
