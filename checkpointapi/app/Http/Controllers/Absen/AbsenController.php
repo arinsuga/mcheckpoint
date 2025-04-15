@@ -559,7 +559,7 @@ class AbsenController extends Controller
         } //end if
 
         $response = [
-            'message' => 'data absensi tersimpan',
+            'message' => 'data absensi gagal tersimpan',
             'result' => $data,
             'metadata' => json_encode($data)
         ];
