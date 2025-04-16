@@ -5,13 +5,13 @@ import * as ImageManipulator from 'expo-image-manipulator';
 export const compressPhotoFileToJPEG = async (photo: PhotoFile | undefined, widthValue: number = 1024, compressPercent: number = 0.5):
     Promise<ImageManipulator.ImageResult | null> => {
 
-      console.log('Inside compressPhotoFileToJPEG...');
-      console.log({ widthValue, compressPercent });
+      // console.log('Inside compressPhotoFileToJPEG...');
+      // console.log({ widthValue, compressPercent });
         
     try {
 
-      console.log('Inside compressPhotoFileToJPEG...');
-      console.log(`file://${photo?.path}`);
+      // console.log('Inside compressPhotoFileToJPEG...');
+      // console.log(`file://${photo?.path}`);
 
       const result = await ImageManipulator.manipulateAsync(
         `file://${photo?.path}`,

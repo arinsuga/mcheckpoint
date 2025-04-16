@@ -61,7 +61,7 @@ class AbsenController extends Controller
 
         $this->baseURL = 'https://maps.googleapis.com/maps/api/geocode/json?';
         $this->latlng = null;
-        $this->key = '&key='.env('GEOCODING_APIKEY');
+        $this->key = '&key=' . env('GEOCODING_APIKEY');
 
     }
 
@@ -507,6 +507,7 @@ class AbsenController extends Controller
 
         $host = $this->getFullURL($latitude, $longitude);
         $data = $this->oLocater->locate($host);
+        return response()->json($host);
 
 
         // $data = $parData;

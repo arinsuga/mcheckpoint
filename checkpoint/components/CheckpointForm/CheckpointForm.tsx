@@ -61,25 +61,29 @@ useEffect(() => {
 
 }, []);
 
+
     const router = useRouter();
 
     const hideCaptured = () => setDisplaycamera(false);
 
     const showCaptured = () => setDisplaycamera(true);
 
-    const handleSave = useCallback(async () => {
+    const handleSave = useCallback(async (checkpointData: ICheckpoint) => {
 
         try {
 
           setIsWaiting(true);
           if (action == 'checkin') {
 
-            const result = await checkin(checkpoint);
+            console.log('===== INSIDE checkpointForm - handleSave =====');
+            console.log(checkpointData);
+        
+            const result = await checkin(checkpointData);
             alert('Checkin berhasil...');
 
           } else if (action == 'checkout') {
 
-            const result = await checkout(checkpoint);
+            const result = await checkout(checkpointData);
             alert('Checkout berhasil...');
 
           } else {
@@ -134,7 +138,7 @@ useEffect(() => {
   
             <TouchableOpacity
                 onPress={ async() => {
-                  const success = await handleSave();
+                  const success = await handleSave(checkpoint);
                   if (success) router.replace('/')
                 }}
                 style={{

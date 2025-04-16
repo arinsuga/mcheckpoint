@@ -18,10 +18,8 @@ import IAuth, { IUser } from '@/interfaces/IAuth';
 import {
     login,
     logout,
-    getUsername,
-    getToken,
-    verifyToken,
     authSubject,
+    initAuth,
     storeAuth,
     getAuth
 } from '@/services/AuthService'
@@ -36,12 +34,14 @@ interface IProvider {
 
 const Providercontext = createContext<IProvider>({});
 
+
 export const useAuth = () => {
     return useContext(Providercontext);
 }
 
 const Authprovider = ({ children }: { children: ReactNode }) => {
-    const [authdata, setAuthdata] = useState<IAuth | null>({authenticated: false});
+    const [authdata, setAuthdata] = useState<IAuth | null>(null);
+
 
     const handleLogin = async (username?: string, password?: string) => {
         let result = false;
@@ -110,6 +110,8 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
 
         const loadAuth = async () => {
 
+            setAuthdata(await initAuth());
+
             const auth = await getAuth();
             authSubject.next(auth);
     
@@ -124,8 +126,8 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
         const subscription = authSubject.subscribe((newAuth) => {
 
 
-            console.log('=============== Authentication check 2 Running ===============');
-            console.log(newAuth);
+            // console.log('=============== Authentication check 2 Running ===============');
+            // console.log(newAuth);
 
             setAuthdata(newAuth);
             newAuth && storeAuth(newAuth);

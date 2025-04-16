@@ -8,23 +8,22 @@ export interface IHeader {
     alg: string;
 }
 
-export interface IClaims {
+export interface IPayload {
     iss?: string;
-    iat?: number;
-    exp?: number;
-    nbf?: number;
+    iat?: number | null;
+    exp?: number | null;
+    nbf?: number | null;
     jti?: string;
-    sub?: number,
+    sub?: string,
     username?: string;
     roles?: IRole[];
-    bo?: 0;
+    bo?: 0 | 1;
     prv?: {
         name?: string;
         email?: string;
         dept?: string;
         noabsen?: string;
     };
-
 }
 
 export interface IUser {
@@ -37,13 +36,13 @@ export interface IUser {
 export interface IToken {
     token?: string;
     status?: boolean;
-    code?: number; // 200 valid / 401 invalid / 402 expired
+    code?: 0 | 200 | 401 | 402; // 200 valid / 401 invalid / 402 expired
     message?: string;
 }
 
 export interface IJWT {
     header?: IHeader;
-    payload?: IClaims;
+    payload?: IPayload;
 }
 
 export default interface IAuth {

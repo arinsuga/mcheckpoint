@@ -1,6 +1,6 @@
 
 import React, { useLayoutEffect, useCallback } from "react";
-import { View, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { Stack } from "expo-router";
 
 import { Colors } from "@/constants/Colors";

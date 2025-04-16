@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { jwtDecode } from 'jwt-decode';
 
 //Interfaces
-import IAuth, { IUser, IToken, IHeader, IClaims, IJWT, IRole } from '@/interfaces/IAuth';
+import IAuth, { IUser, IToken, IHeader, IPayload, IJWT } from '@/interfaces/IAuth';
 
 //Constants
 import StorageKey from '@/constants/StorageKeys';
@@ -17,6 +17,41 @@ export const authObservable = () => authSubject.asObservable();
 
 export const initAuth = async (): Promise<IAuth | null> => {
   return {
+    user: {
+      name: '',
+      username: '',
+      roles: [],
+      email: '',
+    },
+    token: {
+      token: '',
+      status: false,
+      code: 0, /** 0 undefined / 200 valid / 401 invalid / 402 expired */
+      message: '',
+    },
+    jwt: {
+      header: {
+        typ: '',
+        alg: '',
+      },
+      payload: {
+        iss: '',
+        iat: null,
+        exp: null,
+        nbf: null,
+        jti: '',
+        sub: '',
+        username: '',
+        roles: [],
+        bo: 0,
+        prv: {
+            name: '',
+            email: '',
+            dept: '',
+            noabsen: '',
+        },
+      },
+    },
     authenticated: false
   }
 }
@@ -52,12 +87,14 @@ export const clearAuth = async () => {
 
 export const getAuth = async (): Promise<IAuth | null> => {
 
-  let result: IAuth = { authenticated: false };
+  // let result: IAuth = { authenticated: false };
+  let result = await initAuth();
 
   try {
 
     const authString = await AsyncStorage.getItem(StorageKey.auth);
     const auth = JSON.parse(authString as string);
+
     const tokenInfo = await verifyToken(auth.token.token);
     
     result = { ...auth,  token: tokenInfo, authenticated: tokenInfo.status };
@@ -66,8 +103,7 @@ export const getAuth = async (): Promise<IAuth | null> => {
 
     console.log('===== ERROR getAuth =====');
     console.log(e);
-
-    result = { authenticated: false };
+    result = await initAuth();
 
   }
 
@@ -87,7 +123,7 @@ export const login = async (username?: string, password?: string): Promise<IAuth
       const tokenString = token;
       const tokenArray = tokenString.split('.');
       const tokenHeader: IHeader = JSON.parse(atob(tokenArray[0]));
-      const tokenPayload: IClaims = JSON.parse(atob(tokenArray[1]));
+      const tokenPayload: IPayload = JSON.parse(atob(tokenArray[1]));
       const jwt: IJWT = {
         header: tokenHeader,
         payload: tokenPayload,
@@ -122,8 +158,8 @@ export const login = async (username?: string, password?: string): Promise<IAuth
 
 export const logout = async () => {
   await clearAuth();
-  authSubject.next({authenticated: false});
-  return {authenticated: false};
+  authSubject.next(await initAuth());
+  return await initAuth();
 };
 
 export const getUsername = async () => {
