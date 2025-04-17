@@ -23,7 +23,6 @@ import WaitingIndicator from "@/components/WaitingIndicator/WaitingIndicator";
 
 //Constants
 import { Colors } from "@/constants/Colors";
-import Styles from "@/constants/Styles";
 
 //Interfaces
 import ITimeLine from "@/interfaces/ITimeLine";
@@ -130,6 +129,9 @@ export default function History() {
     }
 
     const handleSelectedDate = useCallback(async (date: moment.Moment) => {
+
+        //tescode
+        Authenticate && Authenticate();
 
         setIsWaiting(true);
         const data = await useDataList(date);
