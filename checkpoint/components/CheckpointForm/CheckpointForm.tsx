@@ -44,9 +44,6 @@ const CheckpointForm = ({action, actionButton, file, attendId}: IChekPointFormPr
 
 useEffect(() => {
 
-  // console.log('chekpointForm - checkpoint...');
-  // console.log(checkpoint);
-
   (async () => {
 
     const currentPosition = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.Highest});

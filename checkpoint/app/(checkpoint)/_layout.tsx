@@ -1,11 +1,13 @@
 
-import React, { useLayoutEffect, useCallback } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import React, { useEffect } from "react";
+import { View, TouchableOpacity } from "react-native";
 import { Stack } from "expo-router";
 
 import { Colors } from "@/constants/Colors";
 import Icon from "@/components/Icon/Icon";
 import { useAuth } from "@/contexts/Authcontext";
+
+// Components
 import Login from "../login";
 
 export default function AppLayout() {
@@ -25,13 +27,11 @@ export default function AppLayout() {
   // }, []);
 
 
-  useLayoutEffect(() => {
+  useEffect(() => {
 
-    // console.log('inside _Layout - useLayoutEffect');
-    // console.log(authState);
+    console.log('======= _layout - useEffect : CALLED =======');
 
-  }, []);
-
+  });
 
   return (
     <>

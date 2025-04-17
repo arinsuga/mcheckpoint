@@ -13,22 +13,19 @@ const Relogin = ({ display = false, message = 'You are not authorized!!' }:
     const { Logout } = useAuth();
 
     return (
-        <>
-            <View style={ {
-                        alignItems: 'center',
-                        display: display ? 'flex' : 'none'
-            } }>
+        <View style={ {
+                    alignItems: 'center',
+                    display: display ? 'flex' : 'none'
+        } }>
 
-                <Text>{ message }</Text>
-                <TouchableOpacity style={[ Styles.btn, Styles.btnLogin ]} onPress={() => Logout && Logout()}>
+            <Text>{ message }</Text>
+            <TouchableOpacity style={[ Styles.btn, Styles.btnLogin ]} onPress={() => Logout && Logout()}>
 
-                    <Text style={ Styles.btnText }>Re-Login</Text>
+                <Text style={ Styles.btnText }>Re-Login</Text>
 
-                </TouchableOpacity>
-                
-            </View>
-
-        </>
+            </TouchableOpacity>
+            
+        </View>
     );
 }
 

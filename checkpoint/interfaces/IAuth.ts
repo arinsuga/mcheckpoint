@@ -50,5 +50,6 @@ export default interface IAuth {
     token?: IToken;
     jwt?: IJWT;
     authenticated?: boolean;
+    firstLogin?: boolean;
 }
   

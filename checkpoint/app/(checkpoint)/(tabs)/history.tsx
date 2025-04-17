@@ -140,6 +140,7 @@ export default function History() {
 
         setSelectedDate(date);
         // setDataList(data);
+        
     }, []); 
 
 

@@ -4,7 +4,7 @@ import { View, Text, ActivityIndicator } from 'react-native';
 
 import { Colors } from '@/constants/Colors';
 
-const WaitingIndicator = ({isWaiting}: {isWaiting: boolean}) => {
+const WaitingIndicator = ({isWaiting, message = 'Memuat...'}: {isWaiting: boolean, message?: string}) => {
   return (
 
       <View style={{
@@ -19,7 +19,7 @@ const WaitingIndicator = ({isWaiting}: {isWaiting: boolean}) => {
         zIndex: 999,
       }}>
         <ActivityIndicator size={80} color={ Colors.orange } />
-        <Text>Memuat...</Text>
+        <Text>{ message }</Text>
       </View>
     
   )

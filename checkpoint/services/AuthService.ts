@@ -10,6 +10,7 @@ import IAuth, { IUser, IToken, IHeader, IPayload, IJWT } from '@/interfaces/IAut
 
 //Constants
 import StorageKey from '@/constants/StorageKeys';
+import Tokens from '@/constants/Tokens'
 
 const API_URL = `${process.env.EXPO_PUBLIC_API_URL}/auth`;
 export const authSubject = new BehaviorSubject<IAuth | null>(null);
@@ -26,7 +27,7 @@ export const initAuth = async (): Promise<IAuth | null> => {
     token: {
       token: '',
       status: false,
-      code: 0, /** 0 undefined / 200 valid / 401 invalid / 402 expired */
+      code: Tokens.status.undefined.code, /** 0 undefined / 200 valid / 401 invalid / 402 expired */
       message: '',
     },
     jwt: {
@@ -52,7 +53,8 @@ export const initAuth = async (): Promise<IAuth | null> => {
         },
       },
     },
-    authenticated: false
+    authenticated: false,
+    firstLogin: true,
   }
 }
 
@@ -93,11 +95,17 @@ export const getAuth = async (): Promise<IAuth | null> => {
   try {
 
     const authString = await AsyncStorage.getItem(StorageKey.auth);
-    const auth = JSON.parse(authString as string);
+    const auth: IAuth = JSON.parse(authString as string);
+    const token = auth.token ? auth.token.token as string : '';
 
-    const tokenInfo = await verifyToken(auth.token.token);
+    const tokenInfo = await verifyToken(token);
     
-    result = { ...auth,  token: tokenInfo, authenticated: tokenInfo.status };
+    result = {
+      ...auth,
+      token: tokenInfo,
+      authenticated: tokenInfo.status,
+      firstLogin: tokenInfo.code === Tokens.status.expired.code ? false : auth.firstLogin,
+    };
 
   } catch(e) {
 
@@ -142,7 +150,8 @@ export const login = async (username?: string, password?: string): Promise<IAuth
           message: 'Token is valid',
         },
         jwt: jwt,
-        authenticated: true
+        authenticated: true,
+        firstLogin: false,
       };
 
       //Call storeAuth heare
@@ -242,28 +251,31 @@ export const verifyToken = (token: string):IToken => {
     if (decoded.exp && decoded.exp < currentTime) {
 
 
+      //expired
       return {
         token: token,
         status: false,
-        code: 402,
-        message: 'Token is expired',
+        code: Tokens.status.expired.code,
+        message: Tokens.status.expired.message,
       };
 
     }
 
+    //valid
     return {
       token: token,
       status: true,
-      code: 200,
-      message: 'Token is valid',
+      code: Tokens.status.valid.code,
+      message: Tokens.status.valid.message,
     };
   } catch (error) {
 
+    //invalid
     return {
       token: token,
       status: false,
-      code: 401,
-      message: 'Token is Invalid',
+      code: Tokens.status.invalid.code,
+      message: Tokens.status.invalid.message,
     };
   }
 

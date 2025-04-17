@@ -61,8 +61,6 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
     const handleLogout = async () => {
 
         const auth = await logout();
-        console.log('Inside handleLogout');
-        console.log(auth);
         
         setAuthdata(auth);
 
