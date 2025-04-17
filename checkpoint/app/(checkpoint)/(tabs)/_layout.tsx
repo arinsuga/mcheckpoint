@@ -14,12 +14,8 @@ import { Colors } from "@/constants/Colors";
 //Components
 import Icon from "@/components/Icon/Icon";
 
-//Services
-import { getAuth } from '@/services/AuthService';
-
 export default function AppLayout() {
   const { Authenticate } = useAuth();
-  const [authenticated, setAuthenticated] = useState(true);
 
   const router = useRouter();
   let result: boolean = true;

@@ -13,20 +13,7 @@ import Login from "../login";
 export default function AppLayout() {
   const { authState, Logout } = useAuth();
 
-  // const { authState, Logout, Authenticate } = useAuth();
-  // const toggleShowLogin = useCallback(() => {
-    
-  //   (Authenticate && Authenticate());
-
-  // }, [authState?.authenticated]);
-
-  // useLayoutEffect(() => {
-
-  //   toggleShowLogin();
-
-  // }, []);
-
-
+  
   useEffect(() => {
 
     console.log('======= _layout - useEffect : CALLED =======');

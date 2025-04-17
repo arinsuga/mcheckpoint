@@ -112,10 +112,6 @@ export default function History() {
         setDataList(data);
         setIsWaiting(false);
 
-        // console.log('history - SUCCESS');
-        // console.log({status: response.status, data: response.data.data});
-        // console.log(response);
-
         return data;
 
       } catch (error: any) {
@@ -139,8 +135,7 @@ export default function History() {
         const data = await useDataList(date);
 
         setSelectedDate(date);
-        // setDataList(data);
-        
+
     }, []); 
 
 
