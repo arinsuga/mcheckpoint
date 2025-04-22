@@ -132,7 +132,7 @@ useEffect(() => {
                 width: Dimensions.get('window').width-50,
               }}
             />
-  
+
             <TouchableOpacity
                 onPress={ async() => {
                   const success = await handleSave(checkpoint);

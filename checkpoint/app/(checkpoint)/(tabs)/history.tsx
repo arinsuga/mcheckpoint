@@ -103,13 +103,13 @@ export default function History() {
         if (response.status != 200) {
 
           setAuthenticated(false);
-          setIsWaiting(false);
+          // setIsWaiting(false);
           return [];
         }
 
         const data = fillDataLIst(response.data.data.attend_list);
         setDataList(data);
-        setIsWaiting(false);
+        // setIsWaiting(false);
 
         return data;
 
@@ -121,7 +121,7 @@ export default function History() {
         // console.log('history - ERROR DETAIlS')
         // console.log({status: error.status, message: error.message});
 
-        setIsWaiting(false);
+        // setIsWaiting(false);
         return []
         
       }
@@ -135,6 +135,7 @@ export default function History() {
 
         setIsWaiting(true);
         const data = await useDataList(date);
+        setIsWaiting(false);
 
         setSelectedDate(date);
 
@@ -143,7 +144,15 @@ export default function History() {
 
     useEffect(() => {
 
-      useDataList(selectedDate);      
+      const getDataList = async () => {
+        
+        setIsWaiting(true);
+        const data = await useDataList(selectedDate);      
+        setIsWaiting(false);
+
+      }
+
+      getDataList();
 
     }, []);
 

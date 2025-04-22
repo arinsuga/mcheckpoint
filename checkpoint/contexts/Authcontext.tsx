@@ -80,12 +80,18 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
 
             const auth = await getAuth();
             // console.log('===== handleAuthentication =====');
-            // console.log(auth);
+            // console.log(`authenticated : ${auth?.authenticated} - firstLogin : ${auth?.firstLogin}`);
 
             if (auth) {
 
                 if (!auth.authenticated) {
-                    setAuthdata(await logout());
+                    let authTemp: IAuth | null = await logout();
+                    setAuthdata({
+                        ...authTemp,
+                        firstLogin: auth.firstLogin,
+                    });
+
+                    // setAuthdata(await logout());
                 }
 
             }
