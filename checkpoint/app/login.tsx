@@ -32,12 +32,6 @@ export default function Login({ authstate }: { authstate: IAuth | null | undefin
 
   const onLogin = async (username: string, password: string) => {
     
-    // console.log('Inside Login - onLogin')
-    // console.log({
-    //   username,
-    //   password
-    // });
-
     setIsWaiting(true);
     const result = await (Login && Login(username, password));
     
@@ -56,14 +50,6 @@ export default function Login({ authstate }: { authstate: IAuth | null | undefin
     setPassword(nextText);
 
   }
-
-
-  useEffect(() => {
-
-    // console.log('Inside Login - useLayoutEffect');
-    // console.log(`authstate : ${authstate}`);
-
-  }, [authstate]);
 
 
   return (

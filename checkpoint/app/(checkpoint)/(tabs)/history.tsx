@@ -115,13 +115,6 @@ export default function History() {
 
       } catch (error: any) {
 
-        // console.log('history - ERROR');
-        // console.log(error);
-
-        // console.log('history - ERROR DETAIlS')
-        // console.log({status: error.status, message: error.message});
-
-        // setIsWaiting(false);
         return []
         
       }

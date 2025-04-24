@@ -203,9 +203,6 @@ export const refreshAuthToken = async () => {
   const auth = await getAuth();
   const tokenString = auth ? auth.token ? auth.token.token : '' : '';
 
-  console.log('======= refreshAuthToken =======');
-  console.log(auth);
-
   try {
 
     const formData = new FormData();
@@ -218,9 +215,6 @@ export const refreshAuthToken = async () => {
   
     });
   
-    console.log('======= response =======');
-    console.log(response.data);
-
     const { token } = response.data as { token: string };
     const tokenCurrent = { ...auth && auth.token, token };
   

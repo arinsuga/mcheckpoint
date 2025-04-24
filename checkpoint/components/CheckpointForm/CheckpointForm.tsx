@@ -72,8 +72,6 @@ useEffect(() => {
           setIsWaiting(true);
           if (action == 'checkin') {
 
-            console.log('===== INSIDE checkpointForm - handleSave =====');
-            console.log(checkpointData);
         
             const result = await checkin(checkpointData);
             alert('Checkin berhasil...');

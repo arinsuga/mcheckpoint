@@ -79,8 +79,6 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
         try {
 
             const auth = await getAuth();
-            // console.log('===== handleAuthentication =====');
-            // console.log(`authenticated : ${auth?.authenticated} - firstLogin : ${auth?.firstLogin}`);
 
             if (auth) {
 
@@ -128,10 +126,6 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
 
         const subscription = authSubject.subscribe((newAuth) => {
-
-
-            // console.log('=============== Authentication check 2 Running ===============');
-            // console.log(newAuth);
 
             setAuthdata(newAuth);
             newAuth && storeAuth(newAuth);

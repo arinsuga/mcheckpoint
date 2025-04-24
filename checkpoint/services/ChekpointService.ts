@@ -74,9 +74,6 @@ export const checkin = async (checkinData: ICheckpoint): Promise<any> => {
         },
       });
 
-      // console.log('Checkin SUCCESS mas bro...');  
-      // console.log(checkinData);
-
     return response;
 
   } catch (error) {
