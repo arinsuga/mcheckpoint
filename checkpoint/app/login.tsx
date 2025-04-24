@@ -71,7 +71,7 @@ export default function Login({ authstate }: { authstate: IAuth | null | undefin
 
     (authstate?.authenticated === undefined) ?
     <SafeAreaView style={ [ Styles.activityContainer, { backgroundColor: Colors.whiteLight } ] }>
-      <WaitingIndicator isWaiting={true} message="Inside login..." />
+      <WaitingIndicator isWaiting={true} />
     </SafeAreaView> :
     <SafeAreaView style={ [ Styles.loginContainer, { backgroundColor: Colors.whiteLight } ] } >
 

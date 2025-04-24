@@ -50,7 +50,7 @@ export default function AppLayout() {
 
        ((authState?.authenticated === undefined) || (authState?.firstLogin === undefined)) ? 
 
-        <WaitingIndicator isWaiting={true} message="Outside login...." /> :
+        <WaitingIndicator isWaiting={true} /> :
 
        (authState?.authenticated === false) ?
         
