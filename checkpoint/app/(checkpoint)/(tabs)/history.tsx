@@ -4,13 +4,16 @@ import {
   View,
   Text,
   TouchableOpacity,
-  StyleSheet
+  StyleSheet,
+  Alert
 } from "react-native";
 
 //Packages
 import moment from "moment";
 import 'react-native-get-random-values';
-import { v4 as uuidv4 } from 'uuid';
+import * as Print from 'expo-print'
+import { shareAsync } from "expo-sharing";
+import * as FileSystem from 'expo-file-system';
 
 //Context
 import { useAuth } from "@/contexts/Authcontext";
@@ -20,9 +23,15 @@ import Relogin from "@/components/Relogin/Relogin";
 import DateList from "@/components/DateList/DateList";
 import TimelineList from "@/components/TimelineList/TimelineList";
 import WaitingIndicator from "@/components/WaitingIndicator/WaitingIndicator";
+import DialogDatePeriod from "@/components/DialogDatePeriod/DialogDatePeriod";
+
+//Templates
+import AttendHistory from "@/templates/attends/AttendHistory";
 
 //Constants
+import Styles from "@/constants/Styles";
 import { Colors } from "@/constants/Colors";
+import Dates from "@/constants/Dates";
 
 //Interfaces
 import ITimeLine from "@/interfaces/ITimeLine";
@@ -30,131 +39,147 @@ import ICheckpointHistory from "@/interfaces/ICheckpointHistory";
 
 //Serivces
 import { getUsername } from "@/services/AuthService";
-import { historyByUserIdCheckpointDate } from '@/services/ChekpointService';
+import TimeLineService from "@/services/TimeLineService";
+import { historyByUserIdCheckpointDate, historyByUserIdCheckpointPeriod } from '@/services/CheckpointService';
+
+//Utils
+import { useFilePath, useFileName } from "@/utils/Fileutils";
 
 export default function History() {
     const [currentDate, setCurrentDate] = useState(moment());
     const [selectedDate, setSelectedDate] = useState(currentDate.clone());
-    const [dataList, setDataList] = useState<ITimeLine[]>([]);
     const [isWaiting, setIsWaiting] = useState(true);
     const [authenticated, setAuthenticated] = useState(true);
-    const { Authenticate } = useAuth();
+    const [timeLineList, setTimeLineList] = useState<ITimeLine[]>([]);
+    const [showPeriod, setShowPeriod] = useState(false);
+    const { Authenticate, authState } = useAuth();
 
-    const fillDataLIst = (dataList: ICheckpointHistory[]): ITimeLine[] => {
-        let data: ITimeLine[] = [];
+    const handleSelectedDate = useCallback(async (date: moment.Moment) => {
 
-        if ((dataList) && (dataList.length > 0)) {
-            dataList.map((item) => {
-                data.push({
-                    id: uuidv4(),
-                    type: 'Checkin',
-                    date: item.checkin_date,
-                    time: item.checkin_time,
-                    datetime: item.checkin_datetime,
-                    latitude: item.checkin_latitude,
-                    longitude: item.checkin_longitude,
-                    milliseconds: item.checkin_milliseconds,
-                    title: item.checkin_title,
-                    subtitle: item.checkin_subtitle,
-                    address: item.checkin_address,
-                    description: item.checkin_description,
-                    image: item.checkin_image,
-                });
+        //check Authentication
+        Authenticate && Authenticate();
+
+        setIsWaiting(true);
+        setTimeLineList([]);
+
+        const userName = await getUsername() as string
+        const data = await getTimelineByDate(userName, date);
         
-                if (item.checkout_time) {
+        setIsWaiting(false);
+        setTimeLineList(data);
+        setSelectedDate(date);
 
-                    data.push({
-                        id: uuidv4(),
-                        type: 'Checkout',
-                        date: item.checkout_date,
-                        time: item.checkout_time,
-                        datetime: item.checkout_datetime,
-                        latitude: item.checkout_latitude,
-                        longitude: item.checkout_longitude,
-                        milliseconds: item.checkout_milliseconds,
-                        title: item.checkout_title,
-                        subtitle: item.checkout_subtitle,
-                        address: item.checkout_address,
-                        description: item.checkout_description,
-                        image: item.checkout_image,
-                    });
+    }, []);
 
-                }
-        
-            });
-
-        }
-  
-        return data;
-    }
-
-    const useDataList = async (date: moment.Moment): Promise<ITimeLine[]> => {
+    const getTimelineByDate = async (userName: string, date: moment.Moment): Promise<ITimeLine[]> => {
 
 
       try {
 
-        setDataList([]);
-        const response = await historyByUserIdCheckpointDate({
-          userName: await getUsername() as string,
-          checkpointDate: date,
-          history_media: 'view'
-        });
+        const dataHistory: ICheckpointHistory[] = await historyByUserIdCheckpointDate(userName, date, 'view');
+        const data = TimeLineService.fillTimeLine(dataHistory);
 
-        if (response.status != 200) {
-
-          setAuthenticated(false);
-          // setIsWaiting(false);
-          return [];
-        }
-
-        const data = fillDataLIst(response.data.data.attend_list);
-        setDataList(data);
-        // setIsWaiting(false);
-
-        return data;
-
+        return data
       } catch (error: any) {
 
-        // console.log('history - ERROR');
-        // console.log(error);
-
-        // console.log('history - ERROR DETAIlS')
-        // console.log({status: error.status, message: error.message});
-
-        // setIsWaiting(false);
-        return []
+        console.error("Error fetching checkpoint history:", error);
+        return [];
         
       }
 
     }
 
-    const handleSelectedDate = useCallback(async (date: moment.Moment) => {
+    const createPDF = async (data: ICheckpointHistory[]): Promise<boolean> => {
 
-        //tescode
-        Authenticate && Authenticate();
+        try {
 
-        setIsWaiting(true);
-        const data = await useDataList(date);
-        setIsWaiting(false);
+          const htmlContent = await AttendHistory(data);
+          const { uri } = await Print.printToFileAsync({ html: htmlContent });
 
-        setSelectedDate(date);
+          const filePath = useFilePath(uri);
+          const fileName = useFileName(filePath);
 
-    }, []); 
+          const newFileName = authState?.user?.name  + '_' + moment().format("YYYYMMDD_HHmmss") + '.pdf';
+          const newFileUri = uri.replace(fileName, newFileName.replace(' ', '_'));
+
+          console.log('======= newFileUri =======');
+          console.log(newFileUri);
+
+          // Move the file to the new location
+          await FileSystem.moveAsync({
+            from: uri,
+            to: newFileUri,
+          });
+          
+          //Share the file
+          await shareAsync(newFileUri, { UTI: '.pdf', mimeType: 'application/pdf' });
+
+          return true
+        } catch(error) {
+
+          console.error("Error creating PDF:", error);
+          return false;
+        }
 
 
-    useEffect(() => {
+    }
 
-      const getDataList = async () => {
+    const handleCreatePDF = async () => {
+
+      let data: ICheckpointHistory[] = [];
+      setShowPeriod(true);
+
+    }
+
+    const handleCreatePDFOk = async (dateFrom: string, dateTo: string) => {
+
+      setShowPeriod(false);
+
+      
+      const userName = await getUsername() as string
+      const data = await getHistoryByPeriod(userName, dateFrom, dateTo);
+      const result = await createPDF(data);
+
+    }
+
+    const handleCreatePDFCancel = async () => {
+
+      setShowPeriod(false);
+
+    }
+
+    const getHistoryByPeriod = async (userName: string, startdt: string, enddt: string): Promise<ICheckpointHistory[]> => {
+
+
+      try {
+
+        const data: ICheckpointHistory[] = await historyByUserIdCheckpointPeriod(userName, startdt, enddt, 'view');
+
+        return data
+      } catch (error: any) {
+
+        console.error("Error fetching checkpoint history:", error);
+        return [];
         
-        setIsWaiting(true);
-        const data = await useDataList(selectedDate);      
-        setIsWaiting(false);
-
       }
 
-      getDataList();
+    }
 
-    }, []);
+    useEffect(() => {
+      const fetchData = async () => {
+
+        setTimeLineList([]);
+        setIsWaiting(true);
+
+        const userName = await getUsername() as string
+        const data = await getTimelineByDate(userName, selectedDate);
+
+        setTimeLineList(data);
+        setIsWaiting(false);
+      };
+
+      fetchData();
+    }, []);    
 
     
     return (
@@ -170,15 +195,18 @@ export default function History() {
         {/* SECTION HEADER */}
         <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 12}}>
           <View style={{flexDirection: 'row', alignItems: 'center', columnGap: 8}}>
-            <Text style={{fontSize: 36, fontWeight: 'bold'}}>{ selectedDate.format('DD') }</Text>
+            <Text style={{fontSize: 36, fontWeight: 'bold'}}>{ selectedDate ? selectedDate.format('DD') : 'N/A' }</Text>
             <View style={{flexDirection:'column'}}>
-              <Text style={{color: Colors.grey, fontWeight: 'bold'}}>{ selectedDate.format('dddd') }</Text>
+              <Text style={{color: Colors.grey, fontWeight: 'bold'}}>{ selectedDate.format('dddd') } - { currentDate.format('YYYY-MM-DD') === selectedDate.format('YYYY-MM-DD') ? 'Today' : '' }</Text>
               <Text style={{color: Colors.grey, fontWeight: 'bold'}}>{ selectedDate.format('MMM') } { selectedDate.format('YYYY') }</Text>
             </View>
           </View>
-          <Text style={{fontWeight: 'bold', color: Colors.orange, fontSize: 16}}>
-            { currentDate.format('YYYY-MM-DD') === selectedDate.format('YYYY-MM-DD') ? 'Today' : '' }
-          </Text>
+          <TouchableOpacity style={ [Styles.btn, { backgroundColor: Colors.danger }] } onPress={ () => handleCreatePDF() }>
+
+            <Text style={ Styles.btnText }>PDF</Text>
+
+          </TouchableOpacity>
+
         </View>
 
         {/* DATE LIST FILTER */}
@@ -190,10 +218,11 @@ export default function History() {
         {/* DATA LIST */}
         <View style={{paddingHorizontal: 12}}>
 
-          <TimelineList dataList={dataList} />
+          <TimelineList data={timeLineList} />
           <Relogin display={ !authenticated && !isWaiting } />
-
         </View>
+
+        <DialogDatePeriod visible={showPeriod} actionOk={handleCreatePDFOk} actionCancel={handleCreatePDFCancel} />
       </SafeAreaView>
     );
 }

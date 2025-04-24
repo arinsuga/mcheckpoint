@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { Text, View, TouchableOpacity } from "react-native";
+
+//Components
+import Logo from "@/components/Logo/Logo";
 import Icon from "@/components/Icon/Icon";
+
+//Services
 import { refreshAuthToken } from "@/services/AuthService";
 import { Colors } from "@/constants/Colors";
 
@@ -17,20 +22,18 @@ export default function Home() {
   }
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
 
-        <Text>INDEX / HOME</Text>
-        <Text>{token}</Text>
-        <Icon.Home />
-        <TouchableOpacity style={ { backgroundColor: Colors.orange, paddingHorizontal: 10 } } onPress={ handleRefreshToken }>
-          <Text style={{ color: Colors.white }}>Get Refresh Token for Testing</Text>
-        </TouchableOpacity>
+        <Logo size="m" />
+        </View>
+        <Text style={{ marginBottom: 40 }}>0.0.1 - Beta version!</Text>
 
 
     </View>

@@ -18,7 +18,6 @@ export default function AppLayout() {
   const { Authenticate } = useAuth();
 
   const router = useRouter();
-  let result: boolean = true;
 
   const activeTabName = useNavigationState((state) => {
 

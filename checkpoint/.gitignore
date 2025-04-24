@@ -18,3 +18,11 @@ web-build/
 
 expo-env.d.ts
 # @end expo-cli
+
+# assets
+assets/images/adaptive-icon.png
+assets/images/favicon.png
+assets/images/icon.png
+assets/images/logo.png
+assets/images/logo_icon.png
+assets/images/splash.png

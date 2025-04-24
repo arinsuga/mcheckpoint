@@ -9,7 +9,7 @@ import CheckpointForm from '@/components/CheckpointForm/CheckpointForm';
 import CheckpointCamera from '@/components/CheckpointCamera/CheckpointCamera';
 
 //services
-import { check } from '@/services/ChekpointService';
+import { check } from '@/services/CheckpointService';
 import { getUsername } from '@/services/AuthService';
 
 const TakePhoto = () => {
@@ -38,12 +38,6 @@ const TakePhoto = () => {
         const fetchData = async () => {
             const username = await getUsername();
             const checkResult = await check(username as string); 
-
-            const input = {
-              action: checkResult.data.action,
-              action_button: checkResult.data.action_button,
-              attendId: checkResult.data.user.attend_id,
-            };
 
             setAction(checkResult.data.action);
             setActionButton(checkResult.data.action_button);

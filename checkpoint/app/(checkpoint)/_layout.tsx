@@ -14,35 +14,13 @@ import WaitingIndicator from "@/components/WaitingIndicator/WaitingIndicator";
 export default function AppLayout() {
   const { authState, Logout } = useAuth();
 
-  // const { authState, Logout, Authenticate } = useAuth();
-  // const toggleShowLogin = useCallback(() => {
-    
-  //   (Authenticate && Authenticate());
-
-  // }, [authState?.authenticated]);
-
-  // useLayoutEffect(() => {
-
-  //   toggleShowLogin();
-
-  // }, []);
-
-
-  //fortesting only, do not use for production
   // useEffect(() => {
 
-  //   console.log('======= _layout - useEffect - authstate =======');
-  //   console.log(`firstLogin: ${authState?.firstLogin}`);
+  //   // console.log('======= _layout - useEffect - authstate =======');
+  //   // console.log(`authetincated: ${authState?.authenticated}`);
+  //   // console.log(`firstLogin: ${authState?.firstLogin}`);
 
-  // });
-
-  useEffect(() => {
-
-    console.log('======= _layout - useEffect - authstate =======');
-    console.log(`authetincated: ${authState?.authenticated}`);
-    console.log(`firstLogin: ${authState?.firstLogin}`);
-
-  }, []);
+  // }, []);
 
   return (
     <>
@@ -50,7 +28,7 @@ export default function AppLayout() {
 
        ((authState?.authenticated === undefined) || (authState?.firstLogin === undefined)) ? 
 
-        <WaitingIndicator isWaiting={true} message="Outside login...." /> :
+        <WaitingIndicator isWaiting={true} /> :
 
        (authState?.authenticated === false) ?
         

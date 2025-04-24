@@ -109,7 +109,7 @@ export const getAuth = async (): Promise<IAuth | null> => {
 
   } catch(e) {
 
-    console.log('===== ERROR getAuth =====');
+    console.log('===== ERROR: AuthService - getAuth =====');
     console.log(e);
     result = await initAuth();
 
@@ -139,6 +139,7 @@ export const login = async (username?: string, password?: string): Promise<IAuth
 
       const auth: IAuth = {
         user: {
+          name: jwt.payload?.prv ? jwt.payload?.prv.name : '',
           username,
           roles: jwt.payload?.roles ? jwt.payload?.roles : [],
           email: jwt.payload?.prv ? jwt.payload?.prv.email : '',
@@ -203,9 +204,6 @@ export const refreshAuthToken = async () => {
   const auth = await getAuth();
   const tokenString = auth ? auth.token ? auth.token.token : '' : '';
 
-  console.log('======= refreshAuthToken =======');
-  console.log(auth);
-
   try {
 
     const formData = new FormData();
@@ -218,9 +216,6 @@ export const refreshAuthToken = async () => {
   
     });
   
-    console.log('======= response =======');
-    console.log(response.data);
-
     const { token } = response.data as { token: string };
     const tokenCurrent = { ...auth && auth.token, token };
   

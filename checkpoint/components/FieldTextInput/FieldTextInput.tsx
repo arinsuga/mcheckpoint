@@ -2,14 +2,9 @@ import { ComponentProps } from "react";
 import {
     View,
     TextInput,
-    StyleSheet,
-    StyleProp,
-    ViewStyle
 } from "react-native";
 
 import FormStyles from '@/constants/FormStyles';
-import { Colors } from "@/constants/Colors";
-import Icon from "../Icon/Icon";
 
 import FieldTextInputProps from "@/props/FieldTextInputProps";
 
