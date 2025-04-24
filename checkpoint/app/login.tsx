@@ -30,6 +30,13 @@ export default function Login({ authstate }: { authstate: IAuth | null | undefin
   const [ password, setPassword ] = useState('hadiprana'); //fortest
   const [ isWaiting, setIsWaiting ] = useState(false);
 
+  useEffect(() => {
+
+    // console.log('======== authstate inside login JSX =========');
+    // console.log(authstate);
+
+  });
+
   const onLogin = async (username: string, password: string) => {
     
     setIsWaiting(true);

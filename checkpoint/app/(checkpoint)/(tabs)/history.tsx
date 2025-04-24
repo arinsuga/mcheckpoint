@@ -100,18 +100,19 @@ export default function History() {
           history_media: 'view'
         });
 
-        if (response.status != 200) {
+        if (response.status == 200) {
 
-          setAuthenticated(false);
-          // setIsWaiting(false);
+          const data = fillDataLIst(response.data.data.attend_list);
+          setDataList(data);
+  
+          return data;
+
+        } else {
+
           return [];
+          
         }
 
-        const data = fillDataLIst(response.data.data.attend_list);
-        setDataList(data);
-        // setIsWaiting(false);
-
-        return data;
 
       } catch (error: any) {
 
@@ -123,7 +124,7 @@ export default function History() {
 
     const handleSelectedDate = useCallback(async (date: moment.Moment) => {
 
-        //tescode
+        //check Authentication
         Authenticate && Authenticate();
 
         setIsWaiting(true);

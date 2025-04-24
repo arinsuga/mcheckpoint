@@ -7,6 +7,7 @@ import {
     createContext,
     useEffect,
 } from 'react'
+import { Text } from 'react-native';
 
 //Packages
 import { interval, switchMap, from, takeWhile } from 'rxjs';
@@ -80,6 +81,10 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
 
             const auth = await getAuth();
 
+            // console.log('');
+            // console.log('======= handleAuthentication - authstate =======');
+            // console.log(auth);
+
             if (auth) {
 
                 if (!auth.authenticated) {
@@ -106,37 +111,39 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
         
     }
 
+    const loadAuth = async () => {
+
+        setAuthdata(await initAuth());
+
+        const auth = await getAuth();
+        setAuthdata(auth);
+        authSubject.next(auth);
+
+    }
+
+
     //Authentication check 1
     useEffect(() => {
 
-
-        const loadAuth = async () => {
-
-            setAuthdata(await initAuth());
-
-            const auth = await getAuth();
-            authSubject.next(auth);
-    
-        }
         loadAuth();
 
     }, []);
 
-    //Authentication check 2
-    useEffect(() => {
+    // STEP 2 - Uncomment this code if you want to validate the authentication every 5 seconds (5000ms)
+    // useEffect(() => {
 
-        const subscription = authSubject.subscribe((newAuth) => {
+    //     const subscription = authSubject.subscribe((newAuth) => {
 
-            setAuthdata(newAuth);
-            newAuth && storeAuth(newAuth);
+    //         setAuthdata(newAuth);
+    //         newAuth && storeAuth(newAuth);
 
-        });
-        return () => authSubject.unsubscribe();
+    //     });
+    //     return () => authSubject.unsubscribe();
 
-    }, []);
+    // }, []);
     
 
-    // Uncomment this code if you want to validate the authentication every 5 seconds (5000ms)
+    // STEP 2 - Uncomment this code if you want to validate the authentication every 5 seconds (5000ms)
     // useEffect(() => {
 
     //     if (authdata) {

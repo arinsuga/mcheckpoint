@@ -109,7 +109,7 @@ export const getAuth = async (): Promise<IAuth | null> => {
 
   } catch(e) {
 
-    console.log('===== ERROR getAuth =====');
+    console.log('===== ERROR: AuthService - getAuth =====');
     console.log(e);
     result = await initAuth();
 
