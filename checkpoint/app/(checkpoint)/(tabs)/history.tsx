@@ -23,6 +23,9 @@ import DateList from "@/components/DateList/DateList";
 import TimelineList from "@/components/TimelineList/TimelineList";
 import WaitingIndicator from "@/components/WaitingIndicator/WaitingIndicator";
 
+//Templates
+import AttendHistory from "@/templates/attends/AttendHistory";
+
 //Constants
 import Styles from "@/constants/Styles";
 import { Colors } from "@/constants/Colors";
@@ -141,20 +144,22 @@ export default function History() {
 
     const handleCreatePDF = async (data: ITimeLine[]) => {
 
-      const htmlContent = `
-      <html>
-        <body>
-          <h1>My PDF Document</h1>
-          <p>This is a sample PDF generated in Expo.</p>
-        </body>
-      </html>
-    `;
-    
-    const { uri } = await Print.printToFileAsync({ html: htmlContent });
-    console.log('PDF saved at:', uri);
-    await shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf' });
+        // const htmlContent = `
+        //   <html>
+        //     <body>
+        //       <h1>My PDF Document</h1>
+        //       <p>This is a sample PDF generated in Expo.</p>
+        //     </body>
+        //   </html>
+        // `;
+
+        const htmlContent = await AttendHistory(data);
+
         
-      alert('Save data to PDF...');
+        const { uri } = await Print.printToFileAsync({ html: htmlContent });
+        console.log('PDF saved at:', uri);
+        await shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf' });
+        alert('Save data to PDF...');
 
     }
 
