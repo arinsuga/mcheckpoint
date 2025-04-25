@@ -11,6 +11,8 @@ import {
 import moment from "moment";
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
+import * as Print from 'expo-print'
+import { shareAsync } from "expo-sharing";
 
 //Context
 import { useAuth } from "@/contexts/Authcontext";
@@ -22,6 +24,7 @@ import TimelineList from "@/components/TimelineList/TimelineList";
 import WaitingIndicator from "@/components/WaitingIndicator/WaitingIndicator";
 
 //Constants
+import Styles from "@/constants/Styles";
 import { Colors } from "@/constants/Colors";
 
 //Interfaces
@@ -110,7 +113,7 @@ export default function History() {
         } else {
 
           return [];
-          
+
         }
 
 
@@ -135,6 +138,25 @@ export default function History() {
 
     }, []); 
 
+
+    const handleCreatePDF = async (data: ITimeLine[]) => {
+
+      const htmlContent = `
+      <html>
+        <body>
+          <h1>My PDF Document</h1>
+          <p>This is a sample PDF generated in Expo.</p>
+        </body>
+      </html>
+    `;
+    
+    const { uri } = await Print.printToFileAsync({ html: htmlContent });
+    console.log('PDF saved at:', uri);
+    await shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf' });
+        
+      alert('Save data to PDF...');
+
+    }
 
     useEffect(() => {
 
@@ -166,13 +188,16 @@ export default function History() {
           <View style={{flexDirection: 'row', alignItems: 'center', columnGap: 8}}>
             <Text style={{fontSize: 36, fontWeight: 'bold'}}>{ selectedDate.format('DD') }</Text>
             <View style={{flexDirection:'column'}}>
-              <Text style={{color: Colors.grey, fontWeight: 'bold'}}>{ selectedDate.format('dddd') }</Text>
+              <Text style={{color: Colors.grey, fontWeight: 'bold'}}>{ selectedDate.format('dddd') } - { currentDate.format('YYYY-MM-DD') === selectedDate.format('YYYY-MM-DD') ? 'Today' : '' }</Text>
               <Text style={{color: Colors.grey, fontWeight: 'bold'}}>{ selectedDate.format('MMM') } { selectedDate.format('YYYY') }</Text>
             </View>
           </View>
-          <Text style={{fontWeight: 'bold', color: Colors.orange, fontSize: 16}}>
-            { currentDate.format('YYYY-MM-DD') === selectedDate.format('YYYY-MM-DD') ? 'Today' : '' }
-          </Text>
+          <TouchableOpacity style={ [Styles.btn, { backgroundColor: Colors.danger }] } onPress={ () => { handleCreatePDF(dataList) } }>
+
+            <Text style={ Styles.btnText }>PDF</Text>
+
+          </TouchableOpacity>
+
         </View>
 
         {/* DATE LIST FILTER */}
@@ -186,7 +211,6 @@ export default function History() {
 
           <TimelineList dataList={dataList} />
           <Relogin display={ !authenticated && !isWaiting } />
-
         </View>
       </SafeAreaView>
     );

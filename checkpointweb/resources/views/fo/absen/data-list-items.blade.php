@@ -4,7 +4,7 @@
         @if (isset($viewModel->data->user))
         <tr style="border: none;">
             <td colspan="4">
-            <strong>Nama : {{ $viewModel->data->user->name }}</strong>
+            <strong>Nama : {{ $viewModel->data->user->name }}XXXX</strong>
             </td>
         </tr>
         @endif
