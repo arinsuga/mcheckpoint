@@ -26,11 +26,8 @@ export default function Home() {
     >
 
         <Text>INDEX / HOME</Text>
-        <Text>{token}</Text>
+        <Text>Beta version</Text>
         <Icon.Home />
-        <TouchableOpacity style={ { backgroundColor: Colors.orange, paddingHorizontal: 10 } } onPress={ handleRefreshToken }>
-          <Text style={{ color: Colors.white }}>Get Refresh Token for Testing</Text>
-        </TouchableOpacity>
 
 
     </View>
