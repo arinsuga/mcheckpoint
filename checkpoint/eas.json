@@ -16,10 +16,7 @@
         "buildType": "apk"
       }
     },
-    "review2":{
-      "android": {
-        "buildType": "apk"
-      },
+    "review_ios":{
       "ios": {
         "simulator": false
       }
