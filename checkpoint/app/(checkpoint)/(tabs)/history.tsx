@@ -41,10 +41,34 @@ import { historyByUserIdCheckpointDate } from '@/services/ChekpointService';
 export default function History() {
     const [currentDate, setCurrentDate] = useState(moment());
     const [selectedDate, setSelectedDate] = useState(currentDate.clone());
-    const [dataList, setDataList] = useState<ITimeLine[]>([]);
     const [isWaiting, setIsWaiting] = useState(true);
     const [authenticated, setAuthenticated] = useState(true);
+    const [dataList, setDataList] = useState<ITimeLine[]>([]);
+    const [checkpointHistory, setCheckpointHistory] = useState<ICheckpointHistory[]>([]);
     const { Authenticate } = useAuth();
+
+    const useDataList = async (date: moment.Moment): Promise<boolean> => {
+
+
+      try {
+
+        setDataList([]);
+        setCheckpointHistory([]);
+
+        const dataHistory = await useCheckpointHistory(date);
+        const data = fillDataLIst(dataHistory);
+
+        setCheckpointHistory(dataHistory);
+        setDataList(data);
+
+        return true
+      } catch (error: any) {
+
+        return false;
+        
+      }
+
+    }
 
     const fillDataLIst = (dataList: ICheckpointHistory[]): ITimeLine[] => {
         let data: ITimeLine[] = [];
@@ -94,12 +118,11 @@ export default function History() {
         return data;
     }
 
-    const useDataList = async (date: moment.Moment): Promise<ITimeLine[]> => {
+    const useCheckpointHistory = async (date: moment.Moment): Promise<ICheckpointHistory[]> => {
 
 
       try {
 
-        setDataList([]);
         const response = await historyByUserIdCheckpointDate({
           userName: await getUsername() as string,
           checkpointDate: date,
@@ -108,10 +131,11 @@ export default function History() {
 
         if (response.status == 200) {
 
-          const data = fillDataLIst(response.data.data.attend_list);
-          setDataList(data);
-  
-          return data;
+          if (response.data.data.attend_list) {
+            return response.data.data.attend_list;
+          } else {
+            return [];
+          }
 
         } else {
 
@@ -134,24 +158,16 @@ export default function History() {
         Authenticate && Authenticate();
 
         setIsWaiting(true);
-        const data = await useDataList(date);
-        setIsWaiting(false);
 
+        const success = await useDataList(date);
+        
+        setIsWaiting(false);
         setSelectedDate(date);
 
     }, []); 
 
 
-    const handleCreatePDF = async (data: ITimeLine[]) => {
-
-        // const htmlContent = `
-        //   <html>
-        //     <body>
-        //       <h1>My PDF Document</h1>
-        //       <p>This is a sample PDF generated in Expo.</p>
-        //     </body>
-        //   </html>
-        // `;
+    const handleCreatePDF = async (data: ICheckpointHistory[]) => {
 
         const htmlContent = await AttendHistory(data);
 
@@ -159,7 +175,6 @@ export default function History() {
         const { uri } = await Print.printToFileAsync({ html: htmlContent });
         console.log('PDF saved at:', uri);
         await shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf' });
-        alert('Save data to PDF...');
 
     }
 
@@ -197,7 +212,7 @@ export default function History() {
               <Text style={{color: Colors.grey, fontWeight: 'bold'}}>{ selectedDate.format('MMM') } { selectedDate.format('YYYY') }</Text>
             </View>
           </View>
-          <TouchableOpacity style={ [Styles.btn, { backgroundColor: Colors.danger }] } onPress={ () => { handleCreatePDF(dataList) } }>
+          <TouchableOpacity style={ [Styles.btn, { backgroundColor: Colors.danger }] } onPress={ () => { handleCreatePDF(checkpointHistory) } }>
 
             <Text style={ Styles.btnText }>PDF</Text>
 

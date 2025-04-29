@@ -13,4 +13,3 @@ export default interface ITimeLine {
     description: string;
     image: string;
 }
-
