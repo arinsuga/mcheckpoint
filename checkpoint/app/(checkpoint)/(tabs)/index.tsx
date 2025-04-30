@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { Text, View, TouchableOpacity } from "react-native";
+
+//Components
+import Logo from "@/components/Logo/Logo";
 import Icon from "@/components/Icon/Icon";
+
+//Services
 import { refreshAuthToken } from "@/services/AuthService";
 import { Colors } from "@/constants/Colors";
 
@@ -17,17 +22,18 @@ export default function Home() {
   }
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
 
-        <Text>INDEX / HOME</Text>
-        <Text>Beta version</Text>
-        <Icon.Home />
+        <Logo size="s" />
+        </View>
+        <Text style={{ marginBottom: 40 }}>Beta version!</Text>
 
 
     </View>

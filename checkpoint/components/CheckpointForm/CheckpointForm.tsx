@@ -8,9 +8,12 @@ import {
     Dimensions,
     StatusBar,
     TouchableOpacity,
+    StyleSheet,
+    ActivityIndicator
 } from 'react-native';
-import { useRouter } from 'expo-router';
 
+//Packages
+import { useRouter } from 'expo-router';
 import {PhotoFile} from 'react-native-vision-camera';
 import * as Location from 'expo-location';
 
@@ -19,7 +22,7 @@ import FieldMultilineTextInput from '../FieldMultilineTextInput/FieldMultilineTe
 import { Colors } from '@/constants/Colors';
 import ICheckpoint from '@/interfaces/ICheckpoint';
 import { checkin, checkout } from '@/services/ChekpointService';
-import WaitingIndicator from '../WaitingIndicator/WaitingIndicator';
+import WaitingIndicator from '@/components/WaitingIndicator/WaitingIndicator';
 
 interface IChekPointFormProps {
   action: 'checkin' | 'checkout'; 
@@ -43,6 +46,9 @@ const CheckpointForm = ({action, actionButton, file, attendId}: IChekPointFormPr
 
 
 useEffect(() => {
+
+  console.log('======= CheckpointForm - useEffect - actionButton =======');
+  console.log(actionButton);
 
   (async () => {
 
@@ -136,17 +142,26 @@ useEffect(() => {
                   const success = await handleSave(checkpoint);
                   if (success) router.replace('/')
                 }}
-                style={{
-                  flex: 0.3,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginTop: 50,
-                  width: Dimensions.get('window').width-100,
-                  backgroundColor: Colors.primary,
-                }}
+                style={[
+                  styles.checkButton,
+                  {display: actionButton == 'Checkin' || actionButton == 'Checkout' ? 'flex' : 'none'}
+                ]}
             >
               <Text style={{color: Colors.white}}>{actionButton}</Text>
             </TouchableOpacity>
+
+            <View
+                style={[
+                  styles.checkButton,
+                  {
+                    display: actionButton != 'Checkin' && actionButton != 'Checkout' ? 'flex' : 'none',
+                    paddingTop: 5,
+                    paddingBottom: 5,
+                  }
+                ]}
+            >
+              <ActivityIndicator  size={30} color={ Colors.white } />
+            </View>
 
             <WaitingIndicator isWaiting={isWaiting} />
 
@@ -155,3 +170,14 @@ useEffect(() => {
 }
 
 export default CheckpointForm
+
+const styles = StyleSheet.create({
+  checkButton: {
+    flex: 0.3,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 50,
+    width: Dimensions.get('window').width-100,
+    backgroundColor: Colors.primary,
+  }
+});
