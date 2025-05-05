@@ -14,14 +14,25 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.arinsuga.checkpoint"
+      "bundleIdentifier": "com.arinsuga.checkpoint",
+      "infoPlist": {
+        "NSCameraUsageDescription": "$(PRODUCT_NAME) needs access to your Camera.",
+        "NSMicrophoneUsageDescription": "$(PRODUCT_NAME) needs access to your Microphone.",
+        "NSLocationWhenInUseUsageDescription": "[checkpoint] needs your location."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/checkpoint/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.arinsuga.checkpoint"
+      "package": "com.arinsuga.checkpoint",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -60,8 +71,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "257f6bf0-a102-49c0-809a-0c37eb5fce0a"
+        "projectId": "fff0bdc0-6d92-4e3c-8ea5-f492742d6db5"
       }
-    }
+    },
+    "owner": "sugaprivate"
   }
 }

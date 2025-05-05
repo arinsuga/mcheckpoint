@@ -39,12 +39,6 @@ const TakePhoto = () => {
             const username = await getUsername();
             const checkResult = await check(username as string); 
 
-            const input = {
-              action: checkResult.data.action,
-              action_button: checkResult.data.action_button,
-              attendId: checkResult.data.user.attend_id,
-            };
-
             setAction(checkResult.data.action);
             setActionButton(checkResult.data.action_button);
             setAttendId(checkResult.data.user.attend_id);

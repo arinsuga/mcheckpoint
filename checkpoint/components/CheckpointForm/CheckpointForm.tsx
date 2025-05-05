@@ -47,6 +47,10 @@ const CheckpointForm = ({action, actionButton, file, attendId}: IChekPointFormPr
 
 useEffect(() => {
 
+  console.log('======= CheckpointForm - useEffect - checkpoint =======');
+  console.log(checkpoint);
+  console.log('');
+  console.log('');
   console.log('======= CheckpointForm - useEffect - actionButton =======');
   console.log(actionButton);
 
@@ -76,13 +80,13 @@ useEffect(() => {
         try {
 
           setIsWaiting(true);
-          if (action == 'checkin') {
+          if (checkpointData.checkType == 'checkin') {
 
         
             const result = await checkin(checkpointData);
             alert('Checkin berhasil...');
 
-          } else if (action == 'checkout') {
+          } else if (checkpointData.checkType == 'checkout') {
 
             const result = await checkout(checkpointData);
             alert('Checkout berhasil...');
@@ -137,31 +141,33 @@ useEffect(() => {
               }}
             />
 
-            <TouchableOpacity
-                onPress={ async() => {
-                  const success = await handleSave(checkpoint);
-                  if (success) router.replace('/')
-                }}
-                style={[
-                  styles.checkButton,
-                  {display: actionButton == 'Checkin' || actionButton == 'Checkout' ? 'flex' : 'none'}
-                ]}
-            >
-              <Text style={{color: Colors.white}}>{actionButton}</Text>
-            </TouchableOpacity>
+            {
 
-            <View
-                style={[
-                  styles.checkButton,
-                  {
-                    display: actionButton != 'Checkin' && actionButton != 'Checkout' ? 'flex' : 'none',
-                    paddingTop: 5,
-                    paddingBottom: 5,
-                  }
-                ]}
-            >
-              <ActivityIndicator  size={30} color={ Colors.white } />
-            </View>
+              checkpoint.checkType == 'checkin' || checkpoint.checkType == 'checkout' ?
+              <TouchableOpacity
+                  onPress={ async() => {
+                    const success = await handleSave(checkpoint);
+                    if (success) router.replace('/')
+                  }}
+                  style={styles.checkButton}
+              >
+                <Text style={{color: Colors.white}}>{ checkpoint.checkType == 'checkin' ? 'Checkin' : 'Checkout' }</Text>
+              </TouchableOpacity> :
+              <View
+                  style={[
+                    styles.checkButton,
+                    {
+                      paddingTop: 5,
+                      paddingBottom: 5,
+                    }
+                  ]}
+              >
+                <ActivityIndicator  size={30} color={ Colors.white } />
+              </View>
+
+            }
+
+
 
             <WaitingIndicator isWaiting={isWaiting} />
 
