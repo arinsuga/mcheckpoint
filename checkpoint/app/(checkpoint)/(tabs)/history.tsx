@@ -4,7 +4,8 @@ import {
   View,
   Text,
   TouchableOpacity,
-  StyleSheet
+  StyleSheet,
+  Alert
 } from "react-native";
 
 //Packages
@@ -13,6 +14,7 @@ import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 import * as Print from 'expo-print'
 import { shareAsync } from "expo-sharing";
+import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 
 //Context
 import { useAuth } from "@/contexts/Authcontext";
@@ -22,6 +24,7 @@ import Relogin from "@/components/Relogin/Relogin";
 import DateList from "@/components/DateList/DateList";
 import TimelineList from "@/components/TimelineList/TimelineList";
 import WaitingIndicator from "@/components/WaitingIndicator/WaitingIndicator";
+import DialogDatePeriod from "@/components/DialogDatePeriod/DialogDatePeriod";
 
 //Templates
 import AttendHistory from "@/templates/attends/AttendHistory";
@@ -45,6 +48,7 @@ export default function History() {
     const [authenticated, setAuthenticated] = useState(true);
     const [dataList, setDataList] = useState<ITimeLine[]>([]);
     const [checkpointHistory, setCheckpointHistory] = useState<ICheckpointHistory[]>([]);
+    const [showPeriod, setShowPeriod] = useState(false);
     const { Authenticate } = useAuth();
 
     const useDataList = async (date: moment.Moment): Promise<boolean> => {
@@ -164,10 +168,9 @@ export default function History() {
         setIsWaiting(false);
         setSelectedDate(date);
 
-    }, []); 
+    }, []);
 
-
-    const handleCreatePDF = async (data: ICheckpointHistory[]) => {
+    const CreatePDF = async (data: ICheckpointHistory[]) => {
 
         const htmlContent = await AttendHistory(data);
 
@@ -177,6 +180,27 @@ export default function History() {
         await shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf' });
 
     }
+
+    const handleDialogOk = async (dateFrom: moment.Moment, dateTo: moment.Moment) => {
+
+      console.log(dateFrom.toDate(), dateTo.toDate());
+
+      setShowPeriod(false);
+
+    }
+
+    const handleDialogCancel = async () => {
+
+      setShowPeriod(false);
+
+    }
+
+    const handleCreatePDF = async () => {
+
+      let data: ICheckpointHistory[] = [];
+      setShowPeriod(true);
+
+  }
 
     useEffect(() => {
 
@@ -212,7 +236,7 @@ export default function History() {
               <Text style={{color: Colors.grey, fontWeight: 'bold'}}>{ selectedDate.format('MMM') } { selectedDate.format('YYYY') }</Text>
             </View>
           </View>
-          <TouchableOpacity style={ [Styles.btn, { backgroundColor: Colors.danger }] } onPress={ () => { handleCreatePDF(checkpointHistory) } }>
+          <TouchableOpacity style={ [Styles.btn, { backgroundColor: Colors.danger }] } onPress={ () => handleCreatePDF() }>
 
             <Text style={ Styles.btnText }>PDF</Text>
 
@@ -232,6 +256,8 @@ export default function History() {
           <TimelineList dataList={dataList} />
           <Relogin display={ !authenticated && !isWaiting } />
         </View>
+
+        { showPeriod && <DialogDatePeriod actionOk={handleDialogOk} actionCancel={handleDialogCancel} /> }
       </SafeAreaView>
     );
 }
