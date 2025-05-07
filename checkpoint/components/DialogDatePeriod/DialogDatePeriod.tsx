@@ -6,7 +6,7 @@ import {
     Modal,
     Text,
     TouchableOpacity,
-    Platform,
+    StyleSheet,
     Dimensions
 } from 'react-native';
 
@@ -28,10 +28,10 @@ interface IDialogProps {
 }
 
 const DialogDatePeriod = ({ visible = false, actionOk, actionCancel }: IDialogProps) => {
-    const [dateFrom, setDateFrom] = useState(moment());
-    const [dateTo, setDateTo] = useState(moment());
+    const [dateFrom, setDateFrom] = useState<string>(moment().format('DD/MM/YYYY'));
+    const [dateTo, setDateTo] = useState(moment().format('DD/MM/YYYY'));
     const dlgBoxWidth = Dimensions.get('screen').width * 0.9;
-    const dlgBoxHeight = Dimensions.get('screen').height * 0.4;
+    const dlgBoxHeight = Dimensions.get('screen').height * 0.35;
     const dlgBoxHeaderHeight = dlgBoxHeight * 0.2;
     const dlgBoxBodyHeight = (dlgBoxHeight * 0.5);
     const dlgBoxFooterHeight = dlgBoxHeight * 0.3;
@@ -46,6 +46,7 @@ const DialogDatePeriod = ({ visible = false, actionOk, actionCancel }: IDialogPr
             onRequestClose={() => console.log('Modal has been closed.')}
         >
 
+            { /** Dialog Box Overlay */ }
             <View style={{
                 flex: 1,
                 justifyContent: 'center',
@@ -53,6 +54,7 @@ const DialogDatePeriod = ({ visible = false, actionOk, actionCancel }: IDialogPr
                 backgroundColor: Colors.bgBlueTransparent,
             }}>
 
+                { /** Dialog Box Container */ }
                 <View style={{
                     flex: 0,
                     justifyContent: 'center',
@@ -63,6 +65,7 @@ const DialogDatePeriod = ({ visible = false, actionOk, actionCancel }: IDialogPr
                     borderRadius: 10
                 }}>
 
+                    { /** Dialog Box Header */ }
                     <View style={{
                         flex: 0,
                         justifyContent: 'center',
@@ -78,6 +81,7 @@ const DialogDatePeriod = ({ visible = false, actionOk, actionCancel }: IDialogPr
 
                     </View>
 
+                    { /** Dialog Box Body */ }
                     <View style={{
                         justifyContent: 'flex-start',
                         alignItems: 'center',
@@ -90,13 +94,35 @@ const DialogDatePeriod = ({ visible = false, actionOk, actionCancel }: IDialogPr
 
                     </View>
 
+                    { /** Dialog Box Footer */ }
                     <View style={{
-                        flex: 0,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        width: dlgBoxWidth,
-                        height: dlgBoxFooterHeight,
-                    }}>
+                            flex: 0,
+                            flexDirection: 'row',
+                            justifyContent: 'space-evenly',
+                            alignItems: 'center',
+                            width: dlgBoxWidth,
+                            height: dlgBoxFooterHeight,
+                            borderBottomLeftRadius: 10,
+                            borderBottomRightRadius: 10
+                        }}>
+
+                        <TouchableOpacity
+                            onPress={actionCancel}
+                            style={[
+                                Styles.btn, styles.DialogButton
+                            ]}
+                        >
+                            <Text style={Styles.btnText}>Cancel</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            onPress={() => actionOk(dateFrom, dateTo)}
+                            style={[
+                                Styles.btn, styles.DialogButton
+                            ]}
+                        >
+                            <Text style={Styles.btnText}>Ok</Text>
+                        </TouchableOpacity>
 
                     </View>
 
@@ -113,3 +139,11 @@ const DialogDatePeriod = ({ visible = false, actionOk, actionCancel }: IDialogPr
 };
 
 export default DialogDatePeriod;
+
+const styles = StyleSheet.create({
+    DialogButton: {
+        width: '30%',
+        backgroundColor: Colors.orange,
+    }
+
+});

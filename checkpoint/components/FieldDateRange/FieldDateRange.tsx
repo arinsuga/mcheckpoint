@@ -4,22 +4,28 @@ import {
     StyleSheet,
 } from "react-native";
 
+//Packages
+import moment from "moment";
+
+//Constants
 import { Colors } from "@/constants/Colors";
 import Icon from "../Icon/Icon";
 
 type FieldProps = {
+    value?: string,
     onChangeText?: (nexttext: string) => void;
 }
 
-export const FieldDateRange = ({onChangeText}: FieldProps) => {
+export const FieldDateRange = ({value = moment().format('DD/MM/YYYY'), onChangeText}: FieldProps) => {
 
     return (
         <View style={ [ styles.textInputGroup, { marginBottom: 5 } ] }>
 
           <TextInput
+            value={value}
             placeholderTextColor={ Colors.grey }
             secureTextEntry={ false }
-            placeholder="Select Date"
+            placeholder="DD/MM/YYYY"
             style={ styles.textInput }
             onChangeText={ (nextText) => onChangeText && onChangeText(nextText) }
           ></TextInput>

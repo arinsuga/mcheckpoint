@@ -183,7 +183,7 @@ export default function History() {
 
     const handleDialogOk = async (dateFrom: moment.Moment, dateTo: moment.Moment) => {
 
-      console.log(dateFrom.toDate(), dateTo.toDate());
+      console.log(dateFrom, dateTo);
 
       setShowPeriod(false);
 
