@@ -6,7 +6,9 @@ import {
     MaterialIcons,
     Foundation,
     AntDesign,
+    Fontisto,
 } from '@expo/vector-icons';
+
 
 import { Text, StyleProp, ViewStyle } from 'react-native';
 import { Colors } from '@/constants/Colors';
@@ -74,6 +76,14 @@ export const IconKey = ({size = defaultSize, color=defaultColor, style}: IconPro
     return <Ionicons name="key" size={size} color={color} style={style} />
 }
 
+export const IconDateRange = ({size = defaultSize, color=defaultColor, style}: IconProps) => {
+    return <MaterialIcons name="date-range" size={size} color={color} style={style} />
+}
+
+export const IconDate = ({ size = defaultSize, color = defaultColor, style }: IconProps) => {
+    return <Fontisto name="date" size={size} color={color} style={style} />
+}
+
 const Icon = {
     Home: IconHome,
     History: IconHistory,
@@ -88,6 +98,8 @@ const Icon = {
     Image: IconImage,
     User: IconUser,
     Key: IconKey,
+    DateRange: IconDateRange,
+    Date: IconDate,
 }
 
 export default Icon

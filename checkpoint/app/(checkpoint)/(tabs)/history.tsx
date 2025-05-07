@@ -257,7 +257,7 @@ export default function History() {
           <Relogin display={ !authenticated && !isWaiting } />
         </View>
 
-        { showPeriod && <DialogDatePeriod actionOk={handleDialogOk} actionCancel={handleDialogCancel} /> }
+        <DialogDatePeriod visible={showPeriod} actionOk={handleDialogOk} actionCancel={handleDialogCancel} />
       </SafeAreaView>
     );
 }

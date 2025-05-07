@@ -3,13 +3,18 @@ import React, {
 } from 'react';
 import {
     View,
+    Modal,
     Text,
     TouchableOpacity,
+    Platform,
     Dimensions
 } from 'react-native';
 
 //Packages
 import moment from 'moment';
+
+//Components
+import FieldDateRange from '@/components/FieldDateRange/FieldDateRange';
 
 //Constants
 import { Colors } from '@/constants/Colors';
@@ -17,69 +22,92 @@ import FormStyles from '@/constants/FormStyles';
 import Styles from '@/constants/Styles';
 
 interface IDialogProps {
+    visible?: boolean;
     actionOk: (dateFrom: moment.Moment, dateTo: moment.Moment) => Promise<void>;
     actionCancel: () => Promise<void>;
 }
 
-const DialogDatePeriod = ({ actionOk, actionCancel }: IDialogProps) => {
+const DialogDatePeriod = ({ visible = false, actionOk, actionCancel }: IDialogProps) => {
     const [dateFrom, setDateFrom] = useState(moment());
     const [dateTo, setDateTo] = useState(moment());
-    const dialogBoxWidth = Dimensions.get('screen').width * 0.9;
+    const dlgBoxWidth = Dimensions.get('screen').width * 0.9;
+    const dlgBoxHeight = Dimensions.get('screen').height * 0.4;
+    const dlgBoxHeaderHeight = dlgBoxHeight * 0.2;
+    const dlgBoxBodyHeight = (dlgBoxHeight * 0.5);
+    const dlgBoxFooterHeight = dlgBoxHeight * 0.3;
 
 
     return (
-        <View style={{
-            position: 'absolute',
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            top: 0,
-            left: 0,
-            height: Dimensions.get('window').height,
-            width: Dimensions.get('window').width,
-        }}>
+
+        <Modal
+            animationType='slide'
+            transparent={true}
+            visible={visible}
+            onRequestClose={() => console.log('Modal has been closed.')}
+        >
 
             <View style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                height: Dimensions.get('window').height,
-                width: Dimensions.get('window').width,
-                backgroundColor: Colors.blue,
-                opacity: 0.5,
-            }} />
-
-            <View style={{
-                width: dialogBoxWidth,
-                height: Dimensions.get('screen').height * 0.25,
-                backgroundColor: Colors.white,
-                borderRadius: 10,
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: Colors.bgBlueTransparent,
             }}>
-            
 
                 <View style={{
-                    width: dialogBoxWidth,
-                    backgroundColor: Colors.orange,
-                    borderTopLeftRadius: 10,
-                    borderTopRightRadius: 10,
-                    padding: 10
-                }}>
-                    <Text style={{ color: Colors.white }}>Pilih Periode : </Text>
-                </View>
-
-                <View style={{
-                    width: dialogBoxWidth,
-                    backgroundColor: Colors.blue
+                    flex: 0,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: dlgBoxWidth,
+                    height: dlgBoxHeight,
+                    backgroundColor: Colors.white,
+                    borderRadius: 10
                 }}>
 
-                </View>
+                    <View style={{
+                        flex: 0,
+                        justifyContent: 'center',
+                        width: dlgBoxWidth,
+                        height: dlgBoxHeaderHeight,
+                        backgroundColor: Colors.orange,
+                        borderTopLeftRadius: 10,
+                        borderTopRightRadius: 10,
+                        paddingLeft: 20,
+                    }}>
 
+                        <Text style={{ color: Colors.white }}>Select Period</Text>
+
+                    </View>
+
+                    <View style={{
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        width: dlgBoxWidth,
+                        height: dlgBoxBodyHeight,
+                    }}>
+
+                        <FieldDateRange />
+                        <FieldDateRange />
+
+                    </View>
+
+                    <View style={{
+                        flex: 0,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        width: dlgBoxWidth,
+                        height: dlgBoxFooterHeight,
+                    }}>
+
+                    </View>
+
+
+
+                </View>
 
             </View>
 
 
-
-        </View>
+        </Modal>
 
     );
 };
