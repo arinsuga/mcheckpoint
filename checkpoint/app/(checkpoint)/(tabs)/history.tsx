@@ -59,7 +59,7 @@ export default function History() {
         setDataList([]);
         setCheckpointHistory([]);
 
-        const dataHistory = await useCheckpointHistory(date);
+        const dataHistory = await useCheckpointHistoryByDate(date);
         const data = fillDataLIst(dataHistory);
 
         setCheckpointHistory(dataHistory);
@@ -122,7 +122,7 @@ export default function History() {
         return data;
     }
 
-    const useCheckpointHistory = async (date: moment.Moment): Promise<ICheckpointHistory[]> => {
+    const useCheckpointHistoryByDate = async (date: moment.Moment): Promise<ICheckpointHistory[]> => {
 
 
       try {
@@ -181,7 +181,37 @@ export default function History() {
 
     }
 
-    const handleDialogOk = async (dateFrom: moment.Moment, dateTo: moment.Moment) => {
+    // const useDataListPDF = async (username: string, dateFrom: string, dateTo: string): Promise<boolean> => {
+
+
+    //   try {
+
+    //     setDataList([]);
+    //     setCheckpointHistory([]);
+
+    //     const dataHistory = await useCheckpointHistoryByPeriod(username, dateFrom, dateTo);
+    //     const data = fillDataLIst(dataHistory);
+
+    //     setCheckpointHistory(dataHistory);
+    //     setDataList(data);
+
+    //     return true
+    //   } catch (error: any) {
+
+    //     return false;
+        
+    //   }
+
+    // }
+
+    const handleCreatePDF = async () => {
+
+      let data: ICheckpointHistory[] = [];
+      setShowPeriod(true);
+
+    }
+
+    const handleDialogOk = async (dateFrom: string, dateTo: string) => {
 
       console.log(dateFrom, dateTo);
 
@@ -194,13 +224,6 @@ export default function History() {
       setShowPeriod(false);
 
     }
-
-    const handleCreatePDF = async () => {
-
-      let data: ICheckpointHistory[] = [];
-      setShowPeriod(true);
-
-  }
 
     useEffect(() => {
 

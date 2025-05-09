@@ -20,22 +20,23 @@ import FieldDateRange from '@/components/FieldDateRange/FieldDateRange';
 import { Colors } from '@/constants/Colors';
 import FormStyles from '@/constants/FormStyles';
 import Styles from '@/constants/Styles';
+import Dates from '@/constants/Dates';
 
 interface IDialogProps {
     visible?: boolean;
-    actionOk: (dateFrom: moment.Moment, dateTo: moment.Moment) => Promise<void>;
+    actionOk: (dateFrom: string, dateTo: string) => Promise<void>;
     actionCancel: () => Promise<void>;
 }
 
 const DialogDatePeriod = ({ visible = false, actionOk, actionCancel }: IDialogProps) => {
-    const [dateFrom, setDateFrom] = useState<string>(moment().format('DD/MM/YYYY'));
-    const [dateTo, setDateTo] = useState(moment().format('DD/MM/YYYY'));
+    const [dateFrom, setDateFrom] = useState<string>(moment().format(Dates.format.date));
+    const [dateTo, setDateTo] = useState(moment().format(Dates.format.date));
+    
     const dlgBoxWidth = Dimensions.get('screen').width * 0.9;
     const dlgBoxHeight = Dimensions.get('screen').height * 0.35;
     const dlgBoxHeaderHeight = dlgBoxHeight * 0.2;
     const dlgBoxBodyHeight = (dlgBoxHeight * 0.5);
     const dlgBoxFooterHeight = dlgBoxHeight * 0.3;
-
 
     return (
 
@@ -77,20 +78,21 @@ const DialogDatePeriod = ({ visible = false, actionOk, actionCancel }: IDialogPr
                         paddingLeft: 20,
                     }}>
 
-                        <Text style={{ color: Colors.white }}>Select Period</Text>
+                        <Text style={{ color: Colors.white }}>Pilih Periode</Text>
 
                     </View>
 
                     { /** Dialog Box Body */ }
                     <View style={{
-                        justifyContent: 'flex-start',
+                        justifyContent: 'center',
                         alignItems: 'center',
                         width: dlgBoxWidth,
                         height: dlgBoxBodyHeight,
+                        padding: 15,
                     }}>
 
-                        <FieldDateRange />
-                        <FieldDateRange />
+                        <FieldDateRange label="From" currentValue={ dateFrom } onChangeText={(nextText: string) =>setDateFrom(nextText)} />
+                        <FieldDateRange label="To" currentValue={ dateTo } onChangeText={(nextText: string) => setDateTo(nextText)} />
 
                     </View>
 
@@ -107,7 +109,11 @@ const DialogDatePeriod = ({ visible = false, actionOk, actionCancel }: IDialogPr
                         }}>
 
                         <TouchableOpacity
-                            onPress={actionCancel}
+                            onPress={() => {
+                                setDateFrom(moment().format('DD/MM/YYYY'));
+                                setDateTo(moment().format('DD/MM/YYYY'));
+                                actionCancel();
+                            }}
                             style={[
                                 Styles.btn, styles.DialogButton
                             ]}
