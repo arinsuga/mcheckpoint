@@ -4,6 +4,7 @@ import moment from 'moment';
 
 //Interfaces
 import ICheckpoint from '../interfaces/ICheckpoint';
+import ICheckpointHistory from '@/interfaces/ICheckpointHistory';
 
 //Providers
 import CheckpointProvider from '@/providers/CheckpointProvider';
@@ -73,17 +74,33 @@ export const historyByUserIdCheckpointPeriod = async (
   startdt: moment.Moment,
   enddt: moment.Moment,
   history_media: string,
-): Promise<any> => {
+): Promise<ICheckpointHistory[]> => {
 
   try {    
 
     const response = await CheckpointProvider.historyByUserIdCheckpointPeriod(userName, startdt, enddt, history_media);
 
-    return response;
+    if (response.status == 200) {
+
+      if (response.data.data.attend_list) {
+
+        return response.data.data.attend_list;
+
+      }
+
+    } else {
+
+      return [];
+
+    }
+
+    
+    return [];
 
   } catch (error) {
 
-    return error;
+    console.error("Error fetching checkpoint history by period:", error);
+    return [];
 
   }
 
@@ -91,18 +108,31 @@ export const historyByUserIdCheckpointPeriod = async (
 
 export const historyByUserIdCheckpointDate = async (
   userName: string, checkpointDate: moment.Moment, history_media: string
-):Promise<any> => {
+):Promise<ICheckpointHistory[]> => {
 
   try {    
 
     const response = await CheckpointProvider.historyByUserIdCheckpointDate(userName, checkpointDate, history_media);
+    if (response.status == 200) {
 
-    return response;
+      if (response.data.data.attend_list) {
+
+        return response.data.data.attend_list;
+
+      }
+
+    } else {
+
+      return [];
+
+    }
+
+    return [];
 
   } catch (error: any) {
 
     console.error("Error fetching checkpoint history:", error);
-    return error.response;
+    return [];
 
   }
 

@@ -39,7 +39,8 @@ import ICheckpointHistory from "@/interfaces/ICheckpointHistory";
 //Serivces
 import { getUsername } from "@/services/AuthService";
 import TimeLineService from "@/services/TimeLineService";
-import { historyByUserIdCheckpointDate } from '@/services/CheckpointService';
+import { historyByUserIdCheckpointDate, historyByUserIdCheckpointPeriod } from '@/services/CheckpointService';
+import { create } from "axios";
 
 export default function History() {
     const [currentDate, setCurrentDate] = useState(moment());
@@ -47,7 +48,6 @@ export default function History() {
     const [isWaiting, setIsWaiting] = useState(true);
     const [authenticated, setAuthenticated] = useState(true);
     const [timeLineList, setTimeLineList] = useState<ITimeLine[]>([]);
-    const [checkpointHistory, setCheckpointHistory] = useState<ICheckpointHistory[]>([]);
     const [showPeriod, setShowPeriod] = useState(false);
     const { Authenticate } = useAuth();
 
@@ -57,61 +57,52 @@ export default function History() {
         Authenticate && Authenticate();
 
         setIsWaiting(true);
+        setTimeLineList([]);
 
         const userName = await getUsername() as string
-        const success = await getHistoryByDate(userName, date);
+        const data = await getTimelineByDate(userName, date);
         
         setIsWaiting(false);
+        setTimeLineList(data);
         setSelectedDate(date);
 
     }, []);
 
-    const getHistoryByDate = async (userName: string, date: moment.Moment): Promise<boolean> => {
+    const getTimelineByDate = async (userName: string, date: moment.Moment): Promise<ITimeLine[]> => {
 
 
       try {
 
-        setTimeLineList([]);
-        setCheckpointHistory([]);
-
-        let dataHistory: ICheckpointHistory[] = [];
-        const response = await historyByUserIdCheckpointDate(userName, date, 'view');
-
-        if (response.status == 200) {
-
-          if (response.data.data.attend_list) {
-            dataHistory =  response.data.data.attend_list;
-          }
-
-        } else {
-
-          dataHistory = [];
-
-        }
-
+        const dataHistory: ICheckpointHistory[] = await historyByUserIdCheckpointDate(userName, date, 'view');;
         const data = TimeLineService.fillTimeLine(dataHistory);
 
-        setCheckpointHistory(dataHistory);
-        setTimeLineList(data);
 
-        return true
+        return data
       } catch (error: any) {
 
         console.error("Error fetching checkpoint history:", error);
-        return false;
+        return [];
         
       }
 
     }
 
-    const CreatePDF = async (data: ICheckpointHistory[]) => {
+    const createPDF = async (data: ICheckpointHistory[]): Promise<boolean> => {
 
-        const htmlContent = await AttendHistory(data);
+        try {
 
-        
-        const { uri } = await Print.printToFileAsync({ html: htmlContent });
-        console.log('PDF saved at:', uri);
-        await shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf' });
+          const htmlContent = await AttendHistory(data);
+          const { uri } = await Print.printToFileAsync({ html: htmlContent });
+          console.log('PDF saved at:', uri);
+          await shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf' });
+
+          return true
+        } catch(error) {
+
+          console.error("Error creating PDF:", error);
+          return false;
+        }
+
 
     }
 
@@ -124,25 +115,47 @@ export default function History() {
 
     const handleCreatePDFOk = async (dateFrom: string, dateTo: string) => {
 
-      console.log(dateFrom, dateTo);
+      setShowPeriod(false);
+      
+      const userName = await getUsername() as string
+      const data = await getHistoryByPeriod(userName, moment(dateFrom), moment(dateTo));
+      const result = await createPDF(data);
+
+    }
+
+    const handleCreatePDFCancel = async () => {
 
       setShowPeriod(false);
 
     }
 
-    const handleDialogCancel = async () => {
+    const getHistoryByPeriod = async (userName: string, startdt: moment.Moment, enddt: moment.Moment): Promise<ICheckpointHistory[]> => {
 
-      setShowPeriod(false);
+
+      try {
+
+        const data: ICheckpointHistory[] = await historyByUserIdCheckpointPeriod(userName, startdt, enddt, 'view');
+
+        return data
+      } catch (error: any) {
+
+        console.error("Error fetching checkpoint history:", error);
+        return [];
+        
+      }
 
     }
 
     useEffect(() => {
       const fetchData = async () => {
+
+        setTimeLineList([]);
         setIsWaiting(true);
 
         const userName = await getUsername() as string
-        await getHistoryByDate(userName, selectedDate);
+        const data = await getTimelineByDate(userName, selectedDate);
 
+        setTimeLineList(data);
         setIsWaiting(false);
       };
 
@@ -190,7 +203,7 @@ export default function History() {
           <Relogin display={ !authenticated && !isWaiting } />
         </View>
 
-        <DialogDatePeriod visible={showPeriod} actionOk={handleCreatePDFOk} actionCancel={handleDialogCancel} />
+        <DialogDatePeriod visible={showPeriod} actionOk={handleCreatePDFOk} actionCancel={handleCreatePDFCancel} />
       </SafeAreaView>
     );
 }
