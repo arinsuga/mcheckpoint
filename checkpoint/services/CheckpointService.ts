@@ -68,16 +68,16 @@ export const checkout = async (checkoutData: ICheckpoint): Promise<any> => {
 
 };
 
-export const checkinHistory = async ({userName, startdt, enddt, history_media}: {
+export const historyByUserIdCheckpointPeriod = async (
   userName: string,
   startdt: moment.Moment,
   enddt: moment.Moment,
   history_media: string,
-}): Promise<any> => {
+): Promise<any> => {
 
   try {    
 
-    const response = await CheckpointProvider.checkinHistory({userName, startdt, enddt, history_media});
+    const response = await CheckpointProvider.historyByUserIdCheckpointPeriod(userName, startdt, enddt, history_media);
 
     return response;
 
@@ -89,15 +89,13 @@ export const checkinHistory = async ({userName, startdt, enddt, history_media}: 
 
 };
 
-export const historyByUserIdCheckpointDate = async ({userName, checkpointDate, history_media}: {
-  userName: string,
-  checkpointDate: moment.Moment,
-  history_media: string,
-}): Promise<any> => {
+export const historyByUserIdCheckpointDate = async (
+  userName: string, checkpointDate: moment.Moment, history_media: string
+):Promise<any> => {
 
   try {    
 
-    const response = await CheckpointProvider.historyByUserIdCheckpointDate({userName, checkpointDate, history_media});
+    const response = await CheckpointProvider.historyByUserIdCheckpointDate(userName, checkpointDate, history_media);
 
     return response;
 

@@ -132,12 +132,12 @@ export const checkout = async (checkoutData: ICheckpoint): Promise<any> => {
 
 };
 
-export const checkinHistory = async ({userName, startdt, enddt, history_media}: {
+export const historyByUserIdCheckpointPeriod = async (
   userName: string,
   startdt: moment.Moment,
   enddt: moment.Moment,
   history_media: string,
-}): Promise<any> => {
+): Promise<any> => {
 
   const token = await getToken();
   try {    
@@ -167,12 +167,11 @@ export const checkinHistory = async ({userName, startdt, enddt, history_media}: 
 
 };
 
-//historyByUserIdCheckpointdate
-export const historyByUserIdCheckpointDate = async ({userName, checkpointDate, history_media}: {
+export const historyByUserIdCheckpointDate = async (
   userName: string,
   checkpointDate: moment.Moment,
   history_media: string,
-}): Promise<any> => {
+): Promise<any> => {
 
   const token = await getToken();
   try {    
@@ -202,5 +201,5 @@ export const historyByUserIdCheckpointDate = async ({userName, checkpointDate, h
 
 };
 
-const CheckpointProvider = { check, checkin, checkout, checkinHistory, historyByUserIdCheckpointDate };
+const CheckpointProvider = { check, checkin, checkout, historyByUserIdCheckpointPeriod, historyByUserIdCheckpointDate };
 export default CheckpointProvider;

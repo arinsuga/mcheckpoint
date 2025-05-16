@@ -75,11 +75,7 @@ export default function History() {
         setCheckpointHistory([]);
 
         let dataHistory: ICheckpointHistory[] = [];
-        const response = await historyByUserIdCheckpointDate({
-          userName,
-          checkpointDate: date,
-          history_media: 'view'
-        });
+        const response = await historyByUserIdCheckpointDate(userName, date, 'view');
 
         if (response.status == 200) {
 
