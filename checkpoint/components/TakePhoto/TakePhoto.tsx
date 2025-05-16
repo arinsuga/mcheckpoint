@@ -9,7 +9,7 @@ import CheckpointForm from '@/components/CheckpointForm/CheckpointForm';
 import CheckpointCamera from '@/components/CheckpointCamera/CheckpointCamera';
 
 //services
-import { check } from '@/services/ChekpointService';
+import { check } from '@/services/CheckpointService';
 import { getUsername } from '@/services/AuthService';
 
 const TakePhoto = () => {

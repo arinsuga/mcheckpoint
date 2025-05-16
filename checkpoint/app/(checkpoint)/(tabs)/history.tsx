@@ -39,7 +39,7 @@ import ICheckpointHistory from "@/interfaces/ICheckpointHistory";
 
 //Serivces
 import { getUsername } from "@/services/AuthService";
-import { historyByUserIdCheckpointDate } from '@/services/ChekpointService';
+import { historyByUserIdCheckpointDate } from '@/services/CheckpointService';
 
 export default function History() {
     const [currentDate, setCurrentDate] = useState(moment());
@@ -79,7 +79,7 @@ export default function History() {
 
         if ((dataList) && (dataList.length > 0)) {
             dataList.map((item) => {
-                data.push({
+                data.push({ 
                     id: uuidv4(),
                     type: 'Checkin',
                     date: item.checkin_date,
@@ -150,6 +150,7 @@ export default function History() {
 
       } catch (error: any) {
 
+        console.error("Error fetching checkpoint history:", error);
         return []
         
       }
@@ -239,6 +240,16 @@ export default function History() {
 
     }, []);
 
+    useEffect(() => {
+      const fetchData = async () => {
+        setIsWaiting(true);
+        await useDataList(selectedDate);
+        setIsWaiting(false);
+      };
+
+      fetchData();
+    }, []);    
+
     
     return (
       <SafeAreaView
@@ -253,7 +264,7 @@ export default function History() {
         {/* SECTION HEADER */}
         <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 12}}>
           <View style={{flexDirection: 'row', alignItems: 'center', columnGap: 8}}>
-            <Text style={{fontSize: 36, fontWeight: 'bold'}}>{ selectedDate.format('DD') }</Text>
+            <Text style={{fontSize: 36, fontWeight: 'bold'}}>{ selectedDate ? selectedDate.format('DD') : 'N/A' }</Text>
             <View style={{flexDirection:'column'}}>
               <Text style={{color: Colors.grey, fontWeight: 'bold'}}>{ selectedDate.format('dddd') } - { currentDate.format('YYYY-MM-DD') === selectedDate.format('YYYY-MM-DD') ? 'Today' : '' }</Text>
               <Text style={{color: Colors.grey, fontWeight: 'bold'}}>{ selectedDate.format('MMM') } { selectedDate.format('YYYY') }</Text>

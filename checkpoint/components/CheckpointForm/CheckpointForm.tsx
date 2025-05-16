@@ -21,7 +21,7 @@ import FieldTextInput from '../FieldTextInput/FieldTextInput';
 import FieldMultilineTextInput from '../FieldMultilineTextInput/FieldMultilineTextInput';
 import { Colors } from '@/constants/Colors';
 import ICheckpoint from '@/interfaces/ICheckpoint';
-import { checkin, checkout } from '@/services/ChekpointService';
+import { checkin, checkout } from '@/services/CheckpointService';
 import WaitingIndicator from '@/components/WaitingIndicator/WaitingIndicator';
 
 interface IChekPointFormProps {
