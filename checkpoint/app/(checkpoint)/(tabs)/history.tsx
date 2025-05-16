@@ -46,39 +46,73 @@ export default function History() {
     const [selectedDate, setSelectedDate] = useState(currentDate.clone());
     const [isWaiting, setIsWaiting] = useState(true);
     const [authenticated, setAuthenticated] = useState(true);
-    const [dataList, setDataList] = useState<ITimeLine[]>([]);
+    const [timeLineList, setTimeLineList] = useState<ITimeLine[]>([]);
     const [checkpointHistory, setCheckpointHistory] = useState<ICheckpointHistory[]>([]);
     const [showPeriod, setShowPeriod] = useState(false);
     const { Authenticate } = useAuth();
 
-    const useDataList = async (date: moment.Moment): Promise<boolean> => {
+    const handleSelectedDate = useCallback(async (date: moment.Moment) => {
+
+        //check Authentication
+        Authenticate && Authenticate();
+
+        setIsWaiting(true);
+
+        const userName = await getUsername() as string
+        const success = await getHistoryByDate(userName, date);
+        
+        setIsWaiting(false);
+        setSelectedDate(date);
+
+    }, []);
+
+    const getHistoryByDate = async (userName: string, date: moment.Moment): Promise<boolean> => {
 
 
       try {
 
-        setDataList([]);
+        setTimeLineList([]);
         setCheckpointHistory([]);
 
-        const dataHistory = await useCheckpointHistoryByDate(date);
-        const data = fillDataLIst(dataHistory);
+        let dataHistory: ICheckpointHistory[] = [];
+        const response = await historyByUserIdCheckpointDate({
+          userName,
+          checkpointDate: date,
+          history_media: 'view'
+        });
+
+        if (response.status == 200) {
+
+          if (response.data.data.attend_list) {
+            dataHistory =  response.data.data.attend_list;
+          }
+
+        } else {
+
+          dataHistory = [];
+
+        }
+
+        const data = fillTimeLine(dataHistory);
 
         setCheckpointHistory(dataHistory);
-        setDataList(data);
+        setTimeLineList(data);
 
         return true
       } catch (error: any) {
 
+        console.error("Error fetching checkpoint history:", error);
         return false;
         
       }
 
     }
 
-    const fillDataLIst = (dataList: ICheckpointHistory[]): ITimeLine[] => {
+    const fillTimeLine = (timeLineList: ICheckpointHistory[]): ITimeLine[] => {
         let data: ITimeLine[] = [];
 
-        if ((dataList) && (dataList.length > 0)) {
-            dataList.map((item) => {
+        if ((timeLineList) && (timeLineList.length > 0)) {
+            timeLineList.map((item) => {
                 data.push({ 
                     id: uuidv4(),
                     type: 'Checkin',
@@ -122,55 +156,6 @@ export default function History() {
         return data;
     }
 
-    const useCheckpointHistoryByDate = async (date: moment.Moment): Promise<ICheckpointHistory[]> => {
-
-
-      try {
-
-        const response = await historyByUserIdCheckpointDate({
-          userName: await getUsername() as string,
-          checkpointDate: date,
-          history_media: 'view'
-        });
-
-        if (response.status == 200) {
-
-          if (response.data.data.attend_list) {
-            return response.data.data.attend_list;
-          } else {
-            return [];
-          }
-
-        } else {
-
-          return [];
-
-        }
-
-
-      } catch (error: any) {
-
-        console.error("Error fetching checkpoint history:", error);
-        return []
-        
-      }
-
-    }
-
-    const handleSelectedDate = useCallback(async (date: moment.Moment) => {
-
-        //check Authentication
-        Authenticate && Authenticate();
-
-        setIsWaiting(true);
-
-        const success = await useDataList(date);
-        
-        setIsWaiting(false);
-        setSelectedDate(date);
-
-    }, []);
-
     const CreatePDF = async (data: ICheckpointHistory[]) => {
 
         const htmlContent = await AttendHistory(data);
@@ -187,14 +172,14 @@ export default function History() {
 
     //   try {
 
-    //     setDataList([]);
+    //     setTimeLineList([]);
     //     setCheckpointHistory([]);
 
     //     const dataHistory = await useCheckpointHistoryByPeriod(username, dateFrom, dateTo);
-    //     const data = fillDataLIst(dataHistory);
+    //     const data = fillTimeLine(dataHistory);
 
     //     setCheckpointHistory(dataHistory);
-    //     setDataList(data);
+    //     setTimeLineList(data);
 
     //     return true
     //   } catch (error: any) {
@@ -212,7 +197,7 @@ export default function History() {
 
     }
 
-    const handleDialogOk = async (dateFrom: string, dateTo: string) => {
+    const handleCreatePDFOk = async (dateFrom: string, dateTo: string) => {
 
       console.log(dateFrom, dateTo);
 
@@ -227,23 +212,12 @@ export default function History() {
     }
 
     useEffect(() => {
-
-      const getDataList = async () => {
-        
-        setIsWaiting(true);
-        const data = await useDataList(selectedDate);      
-        setIsWaiting(false);
-
-      }
-
-      getDataList();
-
-    }, []);
-
-    useEffect(() => {
       const fetchData = async () => {
         setIsWaiting(true);
-        await useDataList(selectedDate);
+
+        const userName = await getUsername() as string
+        await getHistoryByDate(userName, selectedDate);
+
         setIsWaiting(false);
       };
 
@@ -287,11 +261,11 @@ export default function History() {
         {/* DATA LIST */}
         <View style={{paddingHorizontal: 12}}>
 
-          <TimelineList dataList={dataList} />
+          <TimelineList data={timeLineList} />
           <Relogin display={ !authenticated && !isWaiting } />
         </View>
 
-        <DialogDatePeriod visible={showPeriod} actionOk={handleDialogOk} actionCancel={handleDialogCancel} />
+        <DialogDatePeriod visible={showPeriod} actionOk={handleCreatePDFOk} actionCancel={handleDialogCancel} />
       </SafeAreaView>
     );
 }

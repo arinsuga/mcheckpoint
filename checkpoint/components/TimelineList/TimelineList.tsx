@@ -12,18 +12,18 @@ import TimelineHeader from './TimelineHeader';
 import TimelineItem from './TimelineItem';
 
 interface IDataListProps {
-    dataList: ITimeLine[];
+    data: ITimeLine[];
 }
 
-const TimelineList = ({ dataList }: IDataListProps) => {
+const TimelineList = ({ data }: IDataListProps) => {
 
     return (
         <View>
             {
-                dataList &&
+                data &&
                 <FlatList
                     ListHeaderComponent={TimelineHeader}
-                    data={dataList}
+                    data={data}
                     renderItem={({ item }) => <TimelineItem item={item} />}
                     contentContainerStyle={{paddingBottom: 150}}
                     showsVerticalScrollIndicator={false}
