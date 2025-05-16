@@ -11,7 +11,6 @@ import {
 //Packages
 import moment from "moment";
 import 'react-native-get-random-values';
-import { v4 as uuidv4 } from 'uuid';
 import * as Print from 'expo-print'
 import { shareAsync } from "expo-sharing";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
@@ -39,6 +38,7 @@ import ICheckpointHistory from "@/interfaces/ICheckpointHistory";
 
 //Serivces
 import { getUsername } from "@/services/AuthService";
+import TimeLineService from "@/services/TimeLineService";
 import { historyByUserIdCheckpointDate } from '@/services/CheckpointService';
 
 export default function History() {
@@ -93,7 +93,7 @@ export default function History() {
 
         }
 
-        const data = fillTimeLine(dataHistory);
+        const data = TimeLineService.fillTimeLine(dataHistory);
 
         setCheckpointHistory(dataHistory);
         setTimeLineList(data);
@@ -108,54 +108,6 @@ export default function History() {
 
     }
 
-    const fillTimeLine = (timeLineList: ICheckpointHistory[]): ITimeLine[] => {
-        let data: ITimeLine[] = [];
-
-        if ((timeLineList) && (timeLineList.length > 0)) {
-            timeLineList.map((item) => {
-                data.push({ 
-                    id: uuidv4(),
-                    type: 'Checkin',
-                    date: item.checkin_date,
-                    time: item.checkin_time,
-                    datetime: item.checkin_datetime,
-                    latitude: item.checkin_latitude,
-                    longitude: item.checkin_longitude,
-                    milliseconds: item.checkin_milliseconds,
-                    title: item.checkin_title,
-                    subtitle: item.checkin_subtitle,
-                    address: item.checkin_address,
-                    description: item.checkin_description,
-                    image: item.checkin_image,
-                });
-        
-                if (item.checkout_time) {
-
-                    data.push({
-                        id: uuidv4(),
-                        type: 'Checkout',
-                        date: item.checkout_date,
-                        time: item.checkout_time,
-                        datetime: item.checkout_datetime,
-                        latitude: item.checkout_latitude,
-                        longitude: item.checkout_longitude,
-                        milliseconds: item.checkout_milliseconds,
-                        title: item.checkout_title,
-                        subtitle: item.checkout_subtitle,
-                        address: item.checkout_address,
-                        description: item.checkout_description,
-                        image: item.checkout_image,
-                    });
-
-                }
-        
-            });
-
-        }
-  
-        return data;
-    }
-
     const CreatePDF = async (data: ICheckpointHistory[]) => {
 
         const htmlContent = await AttendHistory(data);
@@ -166,29 +118,6 @@ export default function History() {
         await shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf' });
 
     }
-
-    // const useDataListPDF = async (username: string, dateFrom: string, dateTo: string): Promise<boolean> => {
-
-
-    //   try {
-
-    //     setTimeLineList([]);
-    //     setCheckpointHistory([]);
-
-    //     const dataHistory = await useCheckpointHistoryByPeriod(username, dateFrom, dateTo);
-    //     const data = fillTimeLine(dataHistory);
-
-    //     setCheckpointHistory(dataHistory);
-    //     setTimeLineList(data);
-
-    //     return true
-    //   } catch (error: any) {
-
-    //     return false;
-        
-    //   }
-
-    // }
 
     const handleCreatePDF = async () => {
 
