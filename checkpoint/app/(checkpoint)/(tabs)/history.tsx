@@ -31,6 +31,7 @@ import AttendHistory from "@/templates/attends/AttendHistory";
 //Constants
 import Styles from "@/constants/Styles";
 import { Colors } from "@/constants/Colors";
+import Dates from "@/constants/Dates";
 
 //Interfaces
 import ITimeLine from "@/interfaces/ITimeLine";
@@ -118,7 +119,7 @@ export default function History() {
       setShowPeriod(false);
       
       const userName = await getUsername() as string
-      const data = await getHistoryByPeriod(userName, moment(dateFrom), moment(dateTo));
+      const data = await getHistoryByPeriod(userName, moment(dateFrom, Dates.format.date), moment(dateTo, Dates.format.date));
       const result = await createPDF(data);
 
     }

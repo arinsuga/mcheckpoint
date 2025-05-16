@@ -110,8 +110,8 @@ const DialogDatePeriod = ({ visible = false, actionOk, actionCancel }: IDialogPr
 
                         <TouchableOpacity
                             onPress={() => {
-                                setDateFrom(moment().format('DD/MM/YYYY'));
-                                setDateTo(moment().format('DD/MM/YYYY'));
+                                setDateFrom(moment().format(Dates.format.date));
+                                setDateTo(moment().format(Dates.format.date));
                                 actionCancel();
                             }}
                             style={[
