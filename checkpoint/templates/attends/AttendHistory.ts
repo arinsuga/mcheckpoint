@@ -9,11 +9,15 @@ const AttendHistory = async (data: ICheckpointHistory[]) => {
     let templateItems = ``;
     let name = '';
 
-    if (data.length > 0) {
-        name = data[0].name;
+    if (!data) {
+        return templateResult;
     }
 
+    if (data.length <= 0) {
+        return templateResult;
+    }
 
+    name = data[0].name;
     data.map((item) => {
         templateItems += `
             <tr>

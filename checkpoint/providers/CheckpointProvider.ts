@@ -134,8 +134,8 @@ export const checkout = async (checkoutData: ICheckpoint): Promise<any> => {
 
 export const historyByUserIdCheckpointPeriod = async (
   userName: string,
-  startdt: moment.Moment,
-  enddt: moment.Moment,
+  startdt: string,
+  enddt: string,
   history_media: string,
 ): Promise<any> => {
 
@@ -144,8 +144,8 @@ export const historyByUserIdCheckpointPeriod = async (
 
     const formData = new FormData();
     formData.append('username', userName);
-    formData.append('startdt', startdt.format(Dates.format.date));
-    formData.append('enddt', enddt.format(Dates.format.date));
+    formData.append('startdt', startdt);
+    formData.append('enddt', enddt);
     formData.append('history_media', history_media);
 
     const response = await axios.post(`${API_URL}/check-history-post`, formData,

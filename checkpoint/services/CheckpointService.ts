@@ -71,8 +71,8 @@ export const checkout = async (checkoutData: ICheckpoint): Promise<any> => {
 
 export const historyByUserIdCheckpointPeriod = async (
   userName: string,
-  startdt: moment.Moment,
-  enddt: moment.Moment,
+  startdt: string,
+  enddt: string,
   history_media: string,
 ): Promise<ICheckpointHistory[]> => {
 
