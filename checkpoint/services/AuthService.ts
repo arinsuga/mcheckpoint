@@ -139,6 +139,7 @@ export const login = async (username?: string, password?: string): Promise<IAuth
 
       const auth: IAuth = {
         user: {
+          name: jwt.payload?.prv ? jwt.payload?.prv.name : '',
           username,
           roles: jwt.payload?.roles ? jwt.payload?.roles : [],
           email: jwt.payload?.prv ? jwt.payload?.prv.email : '',

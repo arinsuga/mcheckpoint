@@ -13,7 +13,7 @@ import moment from "moment";
 import 'react-native-get-random-values';
 import * as Print from 'expo-print'
 import { shareAsync } from "expo-sharing";
-import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
+import * as FileSystem from 'expo-file-system';
 
 //Context
 import { useAuth } from "@/contexts/Authcontext";
@@ -41,7 +41,9 @@ import ICheckpointHistory from "@/interfaces/ICheckpointHistory";
 import { getUsername } from "@/services/AuthService";
 import TimeLineService from "@/services/TimeLineService";
 import { historyByUserIdCheckpointDate, historyByUserIdCheckpointPeriod } from '@/services/CheckpointService';
-import { create } from "axios";
+
+//Utils
+import { useFilePath, useFileName } from "@/utils/Fileutils";
 
 export default function History() {
     const [currentDate, setCurrentDate] = useState(moment());
@@ -50,7 +52,7 @@ export default function History() {
     const [authenticated, setAuthenticated] = useState(true);
     const [timeLineList, setTimeLineList] = useState<ITimeLine[]>([]);
     const [showPeriod, setShowPeriod] = useState(false);
-    const { Authenticate } = useAuth();
+    const { Authenticate, authState } = useAuth();
 
     const handleSelectedDate = useCallback(async (date: moment.Moment) => {
 
@@ -93,7 +95,21 @@ export default function History() {
 
           const htmlContent = await AttendHistory(data);
           const { uri } = await Print.printToFileAsync({ html: htmlContent });
-          await shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf' });
+
+          const filePath = useFilePath(uri);
+          const fileName = useFileName(filePath);
+
+          const newFileName = authState?.user?.name + '_' + moment().format("YYYYMMDD_HHmmss") + '.pdf';
+          const newFileUri = uri.replace(fileName, newFileName.replace(' ', '_'));
+
+          // Move the file to the new location
+          await FileSystem.moveAsync({
+            from: uri,
+            to: newFileUri,
+          });
+          
+          //Share the file
+          await shareAsync(newFileUri, { UTI: '.pdf', mimeType: 'application/pdf' });
 
           return true
         } catch(error) {
