@@ -77,9 +77,6 @@ export default function History() {
         const dataHistory: ICheckpointHistory[] = await historyByUserIdCheckpointDate(userName, date, 'view');
         const data = TimeLineService.fillTimeLine(dataHistory);
 
-        console.log('===== inside getTimelineByDate =====');
-        console.log(dataHistory);  
-
         return data
       } catch (error: any) {
 
@@ -96,7 +93,6 @@ export default function History() {
 
           const htmlContent = await AttendHistory(data);
           const { uri } = await Print.printToFileAsync({ html: htmlContent });
-          console.log('PDF saved at:', uri);
           await shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf' });
 
           return true
@@ -139,9 +135,6 @@ export default function History() {
       try {
 
         const data: ICheckpointHistory[] = await historyByUserIdCheckpointPeriod(userName, startdt, enddt, 'view');
-
-        // console.log('===== inside getHistoryByPeriod =====');
-        // console.log(data);  
 
         return data
       } catch (error: any) {
