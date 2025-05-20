@@ -84,7 +84,7 @@ export const historyByUserIdCheckpointPeriod = async (
 
       if (response.data.data.attend_list) {
 
-        return response.data.data.attend_list;
+        return Object.values(response.data.data.attend_list);
 
       }
 
@@ -117,7 +117,7 @@ export const historyByUserIdCheckpointDate = async (
 
       if (response.data.data.attend_list) {
 
-        return response.data.data.attend_list;
+        return Object.values(response.data.data.attend_list);
 
       }
 
