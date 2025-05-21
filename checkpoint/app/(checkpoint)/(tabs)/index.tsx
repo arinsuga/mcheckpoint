@@ -31,7 +31,7 @@ export default function Home() {
           }}
         >
 
-        <Logo size="s" />
+        <Logo size="m" />
         </View>
         <Text style={{ marginBottom: 40 }}>0.0.1 - Beta version!</Text>
 
