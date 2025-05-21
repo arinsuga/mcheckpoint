@@ -99,8 +99,11 @@ export default function History() {
           const filePath = useFilePath(uri);
           const fileName = useFileName(filePath);
 
-          const newFileName = authState?.user?.name + '_' + moment().format("YYYYMMDD_HHmmss") + '.pdf';
+          const newFileName = authState?.user?.name  + '_' + moment().format("YYYYMMDD_HHmmss") + '.pdf';
           const newFileUri = uri.replace(fileName, newFileName.replace(' ', '_'));
+
+          console.log('======= newFileUri =======');
+          console.log(newFileUri);
 
           // Move the file to the new location
           await FileSystem.moveAsync({

@@ -12,13 +12,13 @@ type typeSize = {
 
 };
 
-const Logo = ({ size }: propType) => {
+const LogoIcon = ({ size }: propType) => {
 
     return (
 
         <Image
         style={ styles[size] }
-        source={require('../../assets/images/logo.png')}
+        source={require('../../assets/images/logo_icon.png')}
         />
 
     )
@@ -50,4 +50,4 @@ const styles: { [key: string]: typeSize } = StyleSheet.create({
 
 
 
-export default Logo
+export default LogoIcon
