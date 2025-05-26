@@ -36,12 +36,26 @@ const TakePhoto = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const username = await getUsername();
-            const checkResult = await check(username as string); 
 
-            setAction(checkResult.data.action);
-            setActionButton(checkResult.data.action_button);
-            setAttendId(checkResult.data.user.attend_id);
+            try {
+
+              const username = await getUsername();
+              const checkResult = await check(username as string); 
+
+              if (checkResult) {
+
+                setAction(checkResult.action);
+                setActionButton(checkResult.action_button);
+                setAttendId(checkResult.user.attend_id);
+
+              }
+
+            } catch (error) {
+
+              console.error(error);
+
+            }
+
 
         }
         fetchData();

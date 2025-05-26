@@ -47,13 +47,6 @@ const CheckpointForm = ({action, actionButton, file, attendId}: IChekPointFormPr
 
 useEffect(() => {
 
-  console.log('======= CheckpointForm - useEffect - checkpoint =======');
-  console.log(checkpoint);
-  console.log('');
-  console.log('');
-  console.log('======= CheckpointForm - useEffect - actionButton =======');
-  console.log(actionButton);
-
   (async () => {
 
     const currentPosition = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.Highest});
@@ -128,6 +121,14 @@ useEffect(() => {
               placeholder='Title'
               onFocus={hideCaptured}
               onChangeText={(nextText) => setCheckpoint({ ...checkpoint, title: nextText })}
+              style={{
+                width: Dimensions.get('window').width-50,
+              }}
+            />
+            <FieldTextInput
+              placeholder='Sub Title'
+              onFocus={hideCaptured}
+              onChangeText={(nextText) => setCheckpoint({ ...checkpoint, subtitle: nextText })}
               style={{
                 width: Dimensions.get('window').width-50,
               }}
