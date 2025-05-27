@@ -81,10 +81,6 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
 
             const auth = await getAuth();
 
-            // console.log('');
-            // console.log('======= handleAuthentication - authstate =======');
-            // console.log(auth);
-
             if (auth) {
 
                 if (!auth.authenticated) {
@@ -113,7 +109,8 @@ const Authprovider = ({ children }: { children: ReactNode }) => {
 
     const loadAuth = async () => {
 
-        setAuthdata(await initAuth());
+//        setAuthdata(await initAuth());
+
 
         const auth = await getAuth();
         setAuthdata(auth);

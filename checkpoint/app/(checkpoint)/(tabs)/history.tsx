@@ -99,7 +99,7 @@ export default function History() {
           const filePath = useFilePath(uri);
           const fileName = useFileName(filePath);
 
-          const newFileName = authState?.user?.name  + '_' + moment().format("YYYYMMDD_HHmmss") + '.pdf';
+          const newFileName = authState?.user?.fullname  + '_' + moment().format("YYYYMMDD_HHmmss") + '.pdf';
           const newFileUri = uri.replace(fileName, newFileName.replace(' ', '_'));
 
           // Move the file to the new location
@@ -163,6 +163,9 @@ export default function History() {
     }
 
     useEffect(() => {
+      console.log('======= History - useEffect [authState] =======');
+      console.log(authState?.jwt?.payload?.prv);
+
       const fetchData = async () => {
 
         setTimeLineList([]);
@@ -174,8 +177,8 @@ export default function History() {
         setTimeLineList(data);
         setIsWaiting(false);
       };
-
       fetchData();
+
     }, []);    
 
     

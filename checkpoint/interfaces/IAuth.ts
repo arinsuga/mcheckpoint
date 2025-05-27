@@ -27,7 +27,7 @@ export interface IPayload {
 }
 
 export interface IUser {
-    name?: string;
+    fullname?: string;
     username?: string;
     roles?: IRole[];
     email?: string;

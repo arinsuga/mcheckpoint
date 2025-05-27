@@ -7,6 +7,7 @@ import { jwtDecode } from 'jwt-decode';
 
 //Interfaces
 import IAuth, { IUser, IToken, IHeader, IPayload, IJWT } from '@/interfaces/IAuth';
+import { IRole } from '@/interfaces/IAuth';
 
 //Constants
 import StorageKey from '@/constants/StorageKeys';
@@ -19,7 +20,7 @@ export const authObservable = () => authSubject.asObservable();
 export const initAuth = async (): Promise<IAuth | null> => {
   return {
     user: {
-      name: '',
+      fullname: '',
       username: '',
       roles: [],
       email: '',
@@ -60,9 +61,11 @@ export const initAuth = async (): Promise<IAuth | null> => {
 
 export const storeAuth = async (auth: IAuth) => {
 
+  const authString = JSON.stringify(auth);
+
   try {
 
-    await AsyncStorage.setItem(StorageKey.auth, JSON.stringify(auth));
+    await AsyncStorage.setItem(StorageKey.auth, authString);
   
   } catch(e) {
 
@@ -89,23 +92,31 @@ export const clearAuth = async () => {
 
 export const getAuth = async (): Promise<IAuth | null> => {
 
-  // let result: IAuth = { authenticated: false };
-  let result = await initAuth();
+  let result: IAuth | null = await initAuth();
 
   try {
 
     const authString = await AsyncStorage.getItem(StorageKey.auth);
     const auth: IAuth = JSON.parse(authString as string);
     const token = auth.token ? auth.token.token as string : '';
-
     const tokenInfo = await verifyToken(token);
-    
+
+
     result = {
       ...auth,
+      user: {
+          fullname: auth?.jwt?.payload?.prv?.name || '', // Ensure fullname is properly assigned
+          username: auth?.user?.username || '',
+          roles: auth?.user?.roles || [],
+          email: auth?.user?.email || '',
+      },      
       token: tokenInfo,
       authenticated: tokenInfo.status,
       firstLogin: tokenInfo.code === Tokens.status.expired.code ? false : auth.firstLogin,
     };
+
+    console.log('===== inside getAuth - result =====');
+    console.log(result);
 
   } catch(e) {
 
@@ -137,12 +148,15 @@ export const login = async (username?: string, password?: string): Promise<IAuth
         payload: tokenPayload,
       }
 
+      const fullName: string = jwt.payload?.prv ? jwt.payload?.prv.name as string : '';
+      const userRoles: IRole[] = jwt.payload?.roles ? jwt.payload?.roles : [];
+      const userEmail: string = jwt.payload?.prv ? jwt.payload?.prv.email as string : '';
       const auth: IAuth = {
         user: {
-          name: jwt.payload?.prv ? jwt.payload?.prv.name : '',
-          username,
-          roles: jwt.payload?.roles ? jwt.payload?.roles : [],
-          email: jwt.payload?.prv ? jwt.payload?.prv.email : '',
+          fullname: fullName,
+          username: username,
+          roles: userRoles,
+          email: userEmail,
         },
         token: {
           token: tokenString,
@@ -155,9 +169,11 @@ export const login = async (username?: string, password?: string): Promise<IAuth
         firstLogin: false,
       };
 
+      console.log('===== inside login - auth =====');
+      console.log(auth);
+
       //Call storeAuth heare
       storeAuth(auth);
-
       authSubject.next(auth);
 
       return auth;
@@ -168,8 +184,9 @@ export const login = async (username?: string, password?: string): Promise<IAuth
 
 export const logout = async () => {
   await clearAuth();
-  authSubject.next(await initAuth());
-  return await initAuth();
+  const result: IAuth | null = await initAuth();
+  authSubject.next(result);
+  return result;
 };
 
 export const getUsername = async () => {
