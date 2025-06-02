@@ -2,7 +2,6 @@ import React, { useState, memo } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, LayoutChangeEvent } from "react-native";
 
 //Packages
-import CachedImage from "expo-cached-image";
 import FastImage from "react-native-fast-image";
 
 //Components

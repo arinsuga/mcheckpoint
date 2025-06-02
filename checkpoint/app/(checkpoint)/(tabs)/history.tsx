@@ -163,8 +163,6 @@ export default function History() {
     }
 
     useEffect(() => {
-      console.log('======= History - useEffect [authState] =======');
-      console.log(authState?.jwt?.payload?.prv);
 
       const fetchData = async () => {
 

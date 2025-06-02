@@ -9,9 +9,6 @@ import 'moment/locale/id';
 //Constants
 import { Colors } from '@/constants/Colors';
 
-//Services
-import { checkinHistory } from '@/services/CheckpointService';
-
 const DateList = React.memo((
     {
         date,

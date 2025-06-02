@@ -7,17 +7,9 @@ import moment from 'moment';
 
 //Constants
 import { Colors } from '@/constants/Colors';
-import Dates from '@/constants/Dates';
 
 const DateListStrip = () => {
     const [selectedDate, setSelectedDate] = useState(moment());
-
-
-    useEffect(() => {
-
-        console.log(selectedDate.format(Dates.format.isoDate));
-
-    }, [selectedDate])
 
     return (
         <View style={{ width: Dimensions.get('screen').width, minHeight: 57}}>

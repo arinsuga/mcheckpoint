@@ -18,7 +18,6 @@ import FieldDateRange from '@/components/FieldDateRange/FieldDateRange';
 
 //Constants
 import { Colors } from '@/constants/Colors';
-import FormStyles from '@/constants/FormStyles';
 import Styles from '@/constants/Styles';
 import Dates from '@/constants/Dates';
 
@@ -44,7 +43,6 @@ const DialogDatePeriod = ({ visible = false, actionOk, actionCancel }: IDialogPr
             animationType='slide'
             transparent={true}
             visible={visible}
-            onRequestClose={() => console.log('Modal has been closed.')}
         >
 
             { /** Dialog Box Overlay */ }

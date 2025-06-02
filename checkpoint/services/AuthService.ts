@@ -115,9 +115,6 @@ export const getAuth = async (): Promise<IAuth | null> => {
       firstLogin: tokenInfo.code === Tokens.status.expired.code ? false : auth.firstLogin,
     };
 
-    console.log('===== inside getAuth - result =====');
-    console.log(result);
-
   } catch(e) {
 
     console.log('===== ERROR: AuthService - getAuth =====');
@@ -168,9 +165,6 @@ export const login = async (username?: string, password?: string): Promise<IAuth
         authenticated: true,
         firstLogin: false,
       };
-
-      console.log('===== inside login - auth =====');
-      console.log(auth);
 
       //Call storeAuth heare
       storeAuth(auth);

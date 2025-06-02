@@ -26,21 +26,15 @@ import { useRouter } from "expo-router";
 export default function Login({ authstate }: { authstate: IAuth | null | undefined }) {
     const { Login } = useAuth();
     const router = useRouter();
-    const [ username, setUsername ] = useState('imam@hadiprana.co.id'); //fortest
-    const [ password, setPassword ] = useState('hadiprana'); //fortest
+    const [ username, setUsername ] = useState(''); //fortest
+    const [ password, setPassword ] = useState(''); //fortest
     const [ isWaiting, setIsWaiting ] = useState(false);
   
-    useEffect(() => {
-
-      // console.log('======== authstate inside login JSX =========');
-      // console.log(authstate);
-
-    });
-
     const onLogin = async (username: string, password: string) => {
       
       setIsWaiting(true);
       const result = await (Login && Login(username, password));
+      setIsWaiting(false);
       
       result ? router.replace('/') : alert('Invalid username or password');
 
