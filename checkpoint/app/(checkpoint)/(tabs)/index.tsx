@@ -33,8 +33,7 @@ export default function Home() {
 
         <Logo size="s" />
         </View>
-        <Text style={{ marginBottom: 40 }}>1.0.0 - Beta!</Text>
-
+        <Text style={{ marginBottom: 40 }}>1.1.0</Text>
 
     </View>
   );

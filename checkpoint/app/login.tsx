@@ -7,6 +7,7 @@ import {
   View,
   StatusBar,
   Dimensions,
+  Keyboard,
 } from "react-native";
 
 import Styles from "@/constants/Styles";
@@ -26,9 +27,10 @@ import { useRouter } from "expo-router";
 export default function Login({ authstate }: { authstate: IAuth | null | undefined }) {
     const { Login } = useAuth();
     const router = useRouter();
-    const [ username, setUsername ] = useState(''); //fortest
-    const [ password, setPassword ] = useState(''); //fortest
+    const [ username, setUsername ] = useState('');
+    const [ password, setPassword ] = useState('');
     const [ isWaiting, setIsWaiting ] = useState(false);
+    const [ displayLogo, setDisplayLogo ] = useState(true);
   
     const onLogin = async (username: string, password: string) => {
       
@@ -53,6 +55,23 @@ export default function Login({ authstate }: { authstate: IAuth | null | undefin
     }
 
 
+    useEffect(() => {
+
+        const keyboardShowListener = Keyboard.addListener("keyboardDidShow", () => {
+          setDisplayLogo(false);
+        });
+        const keyboardHideListener = Keyboard.addListener("keyboardDidHide", () => {
+          setDisplayLogo(true);
+        }); 
+
+        return () => {
+          keyboardShowListener.remove();
+          keyboardHideListener.remove();
+        }
+
+
+    }, []);
+
     return (
 
       (authstate?.authenticated === undefined) ?
@@ -70,7 +89,7 @@ export default function Login({ authstate }: { authstate: IAuth | null | undefin
           alignSelf: "center",
           width: '100%'
         }}>
-          <LogoIcon size="s" />
+          { displayLogo ? <LogoIcon size="s" /> : null }
         </View> 
 
         <View style={{
