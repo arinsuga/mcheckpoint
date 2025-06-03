@@ -44,15 +44,15 @@ const CheckpointCamera = (props: CheckpointCameraProps) => {
                 photoQualityBalance='speed'
             />
 
-            <View style={Styles.buttonContainer}>
-
-                <TouchableOpacity onPress={props.viewCapturedImage}>
-                  <Icon.Image color={Colors.whiteDark} />
-                </TouchableOpacity>
+            <View style={Styles.buttonCameraContainer}>
 
                 <TouchableOpacity onPress={props.capturePhoto}>
                   <Icon.Capture color={Colors.whiteDark} size={98} />
                 </TouchableOpacity>
+
+            </View>
+
+            <View style={[Styles.buttonCameraContainer, { justifyContent: 'flex-end', paddingRight: 50 }]}>
 
                 <TouchableOpacity onPress={props.toggleCameraFacing}>
                   <Icon.CameraRotate color={Colors.whiteDark} />
