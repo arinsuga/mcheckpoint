@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react'
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useState, useRef } from 'react'
+import { FlatList, RefreshControl, StyleSheet, View } from 'react-native'
+import moment from 'moment';
 
 //Constats
 import { Colors } from '@/constants/Colors';
@@ -13,21 +14,39 @@ import TimelineItem from './TimelineItem';
 
 interface IDataListProps {
     data: ITimeLine[];
+    date: moment.Moment;
+    isRefreshing: boolean;
+    onRefresh: (data: moment.Moment) => Promise<void>;
 }
 
-const TimelineList = ({ data }: IDataListProps) => {
+const TimelineList = ({ data, date, isRefreshing = false, onRefresh }: IDataListProps) => {
+    // const [isRefreshing, setIsRefreshing] = React.useState(false);
+    const flatRefresh = React.useRef<RefreshControl>(null);
+
+    const handleFlatRefresh = () => {
+        
+        onRefresh(date);
+
+    }
 
     return (
         <View>
             {
                 data &&
                 <FlatList
-                    ListHeaderComponent={TimelineHeader}
+                    // ListHeaderComponent={TimelineHeader}
                     data={data}
                     renderItem={({ item }) => <TimelineItem item={item} />}
                     contentContainerStyle={{paddingBottom: 150}}
                     showsVerticalScrollIndicator={false}
                     keyExtractor={item => item.id}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={isRefreshing}
+                            onRefresh={handleFlatRefresh}
+                            colors={[Colors.orange]}
+                        />
+                    }
                 />
             }
         </View>

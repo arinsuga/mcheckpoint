@@ -1,4 +1,5 @@
-import { StyleProp, ViewStyle } from "react-native";
+import React from "react";
+import { StyleProp, ViewStyle, TextInput } from "react-native";
 
 type FieldTextInputProps =  {
     placeholder?: string,
@@ -8,6 +9,7 @@ type FieldTextInputProps =  {
     onFocus?: () => void,
     onBlur?: () => void,
     style?: StyleProp<ViewStyle>,
+    inputRef?: React.RefObject<TextInput>
 }
 
 export default FieldTextInputProps;

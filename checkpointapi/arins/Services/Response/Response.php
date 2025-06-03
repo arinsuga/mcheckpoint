@@ -13,7 +13,7 @@ class Response extends ResponseAbstract
         return $this->toObject(
             config('response.status.ok', true),
             config('response.code.ok.number', 200), 
-            config('respnse.code.ok.message', 'OK'),
+            config('response.code.ok.message', 'OK'),
             null,
             $parData,
             $parFormAction
@@ -25,7 +25,7 @@ class Response extends ResponseAbstract
         return $this->toJson(
             config('response.status.ok', true),
             config('response.code.ok.number', 200), 
-            config('respnse.code.ok.message', 'OK'),
+            config('response.code.ok.message', 'OK'),
             null,
             $parData,
             $parFormAction
@@ -37,11 +37,44 @@ class Response extends ResponseAbstract
         return $this->toArray(
             config('response.status.ok', true),
             config('response.code.ok.number', 200), 
-            config('respnse.code.ok.message', 'OK'),
+            config('response.code.ok.message', 'OK'),
             null,
             $parData,
             $parFormAction
         );
     }
+
+/** ========================= */
+
+    public function viewModelError500($parMessage = 'Internal Server Error')
+    {
+        return $this->toObject(
+            config('response.status.internalservererror', false),
+            config('response.code.internalservererror.number', 500), 
+            config('response.code.internalservererror.message', 'Internal Server Error'),
+            $parMessage
+        );
+    }
+
+    public function viewJsonError500($parMessage = 'Internal Server Error')
+    {
+        return $this->toJson(
+            config('response.status.internalservererror', false),
+            config('response.code.internalservererror.number', 500), 
+            config('response.code.internalservererror.message', 'Internal Server Error'),
+            $parMessage
+        );
+    }
+
+    public function viewArrayError500($parMessage = 'Internal Server Error')
+    {
+        return $this->toArray(
+            config('response.status.internalservererror', false),
+            config('response.code.internalservererror.number', 500), 
+            config('response.code.internalservererror.message', 'Internal Server Error'),
+            $parMessage
+        );
+    }
+
 
 }

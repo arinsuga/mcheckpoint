@@ -12,17 +12,15 @@ return [
     */
 
     'company' => [
-        'version' => '3.1.0',
-        'name' => env('APP_COMPANY_NAME', 'Company Name'),
-        'appname' => env('APP_NAME', 'Demo App'),
-        'website' => 'http://demo.com/',
+        'version' => '3.0',
+        'name' => 'hadiprana',
+        'website' => 'http://hadipranadesign.com/',
         'address' => [
-            'street1' => env('APP_COMPANY_ADDRESS1', 'Jl. Utama'),
-            'street2' => env('APP_COMPANY_ADDRESS1', 'Jl. Raya'),
-            'city' => env('APP_COMPANY_CITY', 'Jakarta Selatan'),
-            'country' => env('APP_COMPANY_COUNTRY', 'Indonesia'),
+            'street1' => 'Jl. Pangeran Antasari No. 12',
+            'street2' => 'Cipete Selatan',
+            'city' => 'Jakarta Selatan'
         ],
-        'copyright' => '&copy; 2025 Company Name',
+        'copyright' => '2020 - 2021',
         'dateformat' => 'd-m-Y'
     ],
 
@@ -62,11 +60,6 @@ return [
     'datejs' => [
         'timezone' => 'Asia/Jakarta',
         'locale' => 'id',
-        'timzoneinfo' => [
-            '7' => ['short' => 'WIB', 'long' => 'Waktu Indonesia Barat', 'offset' => 'GMT+07:00'],
-            '8' => ['short' => 'WITA', 'long' => 'Waktu Indonesia Tengah', 'offset' => 'GMT+08:00'],
-            '9' => ['short' => 'WIT', 'long' => 'Waktu Indonesia Timur', 'offset' => 'GMT+09:00'],
-        ],
 
         'time' => 'H:i:S',
         'timeampm' => 'G:i:S K',
@@ -104,11 +97,6 @@ return [
     'date' => [
         'timezone' => 'Asia/Jakarta',
         'locale' => 'id_ID',
-        'timezoneinfo' => [
-            '7' => ['short' => 'WIB', 'long' => 'Waktu Indonesia Barat', 'offset' => 'GMT+07:00'],
-            '8' => ['short' => 'WITA', 'long' => 'Waktu Indonesia Tengah', 'offset' => 'GMT+08:00'],
-            '9' => ['short' => 'WIT', 'long' => 'Waktu Indonesia Timur', 'offset' => 'GMT+09:00'],
-        ],
 
         'time' => 'HH:mm:ss',
         'timeampm' => 'hh:mm:ss A',
@@ -210,7 +198,7 @@ return [
         'logo' => env('LOGO', 'demo_logo.png'),
         'logo_landscape' => env('LOGO_LANDSCAPE', 'demo_logo_landscape.png'),
         'logo_icon' => env('LOGO_ICON', 'demo_logo_icon.png'),
-        'favicon' => env('FAVICON', 'demo_favicon.png'),
+        'favicon' => env('FAVICON', 'demo_favicon-32x32.png'),
     ],
 
 ];

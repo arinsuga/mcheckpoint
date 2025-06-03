@@ -62,6 +62,7 @@ export const checkout = async (checkoutData: ICheckpoint): Promise<any> => {
   } catch (error) {
 
     console.error(error);
+    console.log('Checkin ERROR mas bro...');  
 
     return error;
 

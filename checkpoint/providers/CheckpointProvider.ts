@@ -1,8 +1,8 @@
 
 //Packages
-import moment from 'moment';
 import axios from 'axios';
 import Fileutils from '../utils/Fileutils';
+import moment from 'moment';
 
 //Interfaces
 import ICheckpoint from '../interfaces/ICheckpoint';
@@ -48,6 +48,7 @@ export const check = async (username: string): Promise<any> => {
 export const checkin = async (checkinData: ICheckpoint): Promise<any> => {
 
   const token = await getToken();
+  let errorData = null;
   try {    
 
     const filePhoto = await Compressutils.photoFileToJPEG(checkinData.file, compressWidth, compressPercent);
@@ -62,13 +63,14 @@ export const checkin = async (checkinData: ICheckpoint): Promise<any> => {
     formData.append('longitude', checkinData.longitude as string);
     formData.append('imageTemp', checkinData.imageTemp as string);
 
+    formData.append('utc_tz', checkinData.utc_tz as string);
+    formData.append('utc_millis', checkinData.utc_millis as string);
+    formData.append('utc_offset', checkinData.utc_offset as string);
+
     formData.append('checkin_title', checkinData.title as string);
     formData.append('checkin_subtitle', checkinData.subtitle as string);
     formData.append('checkin_description', checkinData.description as string);
 
-    // formData.append('checkin_title', 'HPTEST - ' + checkinData.title as string);
-    // formData.append('checkin_subtitle', 'HPTEST - ' + checkinData.subtitle as string);
-    // formData.append('checkin_description', 'HPTEST - ' + checkinData.description as string);
 
     const response = await axios.post(`${API_URL}/checkin`, formData,
       {
@@ -77,7 +79,28 @@ export const checkin = async (checkinData: ICheckpoint): Promise<any> => {
           'Accept': 'application/json',
           'Content-Type': 'multipart/form-data',
         },
+      })
+      .catch(error => {
+        console.log('===== error from axios =====');
+        console.log(`status : ${error.response.status}`);
+        console.log(`data: ${error.response.data}`);
+        console.log(`message status_faield: ${error.response.data.status_failed}`);
+        console.log(`message checkin_description: ${error.response.data.checkin_description}`);
+
+        errorData = {
+          status: error.response.status,
+          data: {
+            message: error.response.data.status_failed,
+            result: '',
+            metadata: '',
+          }
+        };
       });
+
+    if (errorData) return errorData;
+
+    // console.log(response.data);  
+      console.log('Checkin SUCCESS mas bro...');  
 
     return response;
 
@@ -86,7 +109,7 @@ export const checkin = async (checkinData: ICheckpoint): Promise<any> => {
     console.log(error);  
     console.log('Checkin ERROR mas bro...');  
 
-    return error;
+    return errorData;
 
   }
 
@@ -95,6 +118,7 @@ export const checkin = async (checkinData: ICheckpoint): Promise<any> => {
 export const checkout = async (checkoutData: ICheckpoint): Promise<any> => {
 
   const token = await getToken();
+  let errorData = null;
   try {    
 
     const filePhoto = await Compressutils.photoFileToJPEG(checkoutData.file, compressWidth, compressPercent);
@@ -108,6 +132,11 @@ export const checkout = async (checkoutData: ICheckpoint): Promise<any> => {
     formData.append('attend_id', checkoutData.attend_id as string);
     formData.append('latitude', checkoutData.latitude as string);
     formData.append('longitude', checkoutData.longitude as string);
+
+    formData.append('utc_tz', checkoutData.utc_tz as string);
+    formData.append('utc_millis', checkoutData.utc_millis as string);
+    formData.append('utc_offset', checkoutData.utc_offset as string);
+    
     formData.append('imageTemp', checkoutData.imageTemp as string);
     formData.append('checkout_title', checkoutData.title as string);
     formData.append('checkout_subtitle', checkoutData.subtitle as string);
@@ -124,10 +153,30 @@ export const checkout = async (checkoutData: ICheckpoint): Promise<any> => {
           'Accept': 'application/json',
           'Content-Type': 'multipart/form-data',
         },
+      })
+      .catch(error => {
+        console.log('===== error from axios =====');
+        console.log(`status : ${error.response.status}`);
+        console.log(`data: ${error.response.data}`);
+        console.log(`message status_faield: ${error.response.data.status_failed}`);
+        console.log(`message checkout_description: ${error.response.data.checkout_description}`);
+
+        errorData = {
+          status: error.response.status,
+          data: {
+            message: error.response.data.status_failed,
+            result: '',
+            metadata: '',
+          }
+        };
       });
 
-      // console.log(response.data);  
+    if (errorData) return errorData;
+
+
+    // console.log(response.data);  
       console.log('Checkout SUCCESS mas bro...');  
+
       return response;
 
   } catch (error) {

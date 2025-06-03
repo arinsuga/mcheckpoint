@@ -48,11 +48,21 @@ const Styles = StyleSheet.create({
       bottom: 60,
     },
 
+    buttonCameraContainer: {
+      flex: 1,
+      flexDirection: 'row',
+      position: 'absolute',
+      justifyContent: 'center',
+      alignItems: 'flex-end',
+      backgroundColor: 'transparent',
+      width: Dimensions.get('window').width,
+      bottom: 60,
+    },
+
     btn: {
       alignItems: 'center',
       padding: 15,
       color: Colors.white,
-      borderRadius: 5,
   
     },
   

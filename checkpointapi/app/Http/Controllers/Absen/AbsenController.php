@@ -30,7 +30,6 @@ class AbsenController extends Controller
     protected $viewModel;
     protected $uploadDirectory;
 
-
     /**
      * Create a new controller instance.
      *
@@ -268,14 +267,22 @@ class AbsenController extends Controller
                     'id' => $value->id,
                     'user_id' => $value->user->id,
                     'name' => $value->user->name,
-                    'attend_dt' => Formater::dateMonth($value->attend_dt),
-            
+
+                    'attend_dt' => (!isset($value->attend_utctz)) ? '' :
+                    Formater::dateMonth(ConvertDate::DatetimeByTimezone($value->attend_dt, $value->attend_utctz)),
+             
                     'checkin_latitude' => $value->checkin_latitude,
                     'checkin_longitude' => $value->checkin_longitude,
                     'checkin_milliseconds' => (isset($value->checkin_time)) ? $value->checkin_time->timestamp*1000 : $value->checkin_time,
-                    'checkin_datetime' => $value->checkin_time,
-                    'checkin_date' => Formater::date($value->checkin_time),
-                    'checkin_time' => Formater::time($value->checkin_time),
+                    'checkin_datetime' => $value->checkin_time .
+                    " ( " . ConvertDate::millisOffsetDesc($value->checkin_utcoffset) . " ) ",
+
+                    'checkin_date' => (!isset($value->checkin_utctz)) ? '' :
+                    Formater::date(ConvertDate::DatetimeByTimezone($value->checkin_time, $value->checkin_utctz)),
+                    'checkin_time' => (!isset($value->checkin_utctz)) ? '' :
+                    Formater::time(ConvertDate::DatetimeByTimezone($value->checkin_time, $value->checkin_utctz)) .
+                    " ( " . ConvertDate::millisOffsetDesc($value->checkin_utcoffset) . " ) ",
+
                     'checkin_title' => $value->checkin_title,
                     'checkin_subtitle' => $value->checkin_subtitle,
                     'checkin_address' => $value->checkin_address,
@@ -285,9 +292,15 @@ class AbsenController extends Controller
                     'checkout_latitude' => $value->checkout_latitude,
                     'checkout_longitude' => $value->checkout_longitude,
                     'checkout_milliseconds' => (isset($value->checkout_time)) ? $value->checkout_time->timestamp*1000 : $value->checkout_time,
-                    'checkout_datetime' => $value->checkout_time,
-                    'checkout_date' => Formater::date($value->checkout_time),
-                    'checkout_time' => Formater::time($value->checkout_time),
+                    'checkout_datetime' => $value->checkout_time .
+                    " ( " . ConvertDate::millisOffsetDesc($value->checkout_utcoffset) . " ) ",
+
+                    'checkout_date' => (!isset($value->checkout_utctz)) ? '' :
+                    Formater::date(ConvertDate::DatetimeByTimezone($value->checkout_time, $value->checkout_utctz)),
+                    'checkout_time' => (!isset($value->checkout_utctz)) ? '' :
+                    Formater::time(ConvertDate::DatetimeByTimezone($value->checkout_time, $value->checkout_utctz)) .
+                    " ( " . ConvertDate::millisOffsetDesc($value->checkout_utcoffset) . " ) ",
+
                     'checkout_title' => $value->checkout_title,
                     'checkout_subtitle' => $value->checkout_subtitle,
                     'checkout_address' => $value->checkout_address,
@@ -295,8 +308,6 @@ class AbsenController extends Controller
                     'checkout_image' => (isset($value->checkout_image)) ?asset('storage/' . $value->checkout_image) : null,
 
                     'time_elapse' => $time_elapse1 . ':' . $time_elapse2,
-    
-    
                 ];
     
             } //end if
@@ -348,7 +359,20 @@ class AbsenController extends Controller
     {
 
         $selectedUsername = $request->input('username');
-        $selectedUserId = User::where('email', $selectedUsername)->first()->id;
+
+        try {
+
+            $selectedUserId = User::where('email', $selectedUsername)->first()->id;
+
+        } catch (\Throwable $th) {
+
+            //throw $th;
+            return response()->json(Response::viewModelError500('Data not found, Invalid Username'));
+
+        }        
+
+
+
         $startdt = $request->input('startdt');
         $enddt = $request->input('enddt');
         $historyMedia = $request->input('history_media');
@@ -401,7 +425,6 @@ class AbsenController extends Controller
         ];
 
         $attends = $this->data->getAttendancesByUserIdAndCheckpointDate($userId, $checkpointDate);
-
         $attend_list = $attends->sortBy('attend_dt');
 
 
@@ -417,9 +440,19 @@ class AbsenController extends Controller
     //postHistoryByUserIdAndCheckpointDate
     public function postHistoryByUserIdAndCheckpointDate(Request $request)
     {
-
         $selectedUsername = $request->input('username');
-        $selectedUserId = User::where('email', $selectedUsername)->first()->id;
+        try {
+
+            //code...
+            $selectedUserId = User::where('email', $selectedUsername)->first()->id;
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(Response::viewModelError500('Data not found, Invalid Username'));
+
+
+        }        
+
         $checkpointDate = $request->input('checkpoint_date');
         $historyMedia = $request->input('history_media');
 
@@ -436,7 +469,6 @@ class AbsenController extends Controller
 
 
         $dd = $this->historyByUserIdAndCheckpointDate($selectedUserId, $checkpointDateIso);
-
 
         if (isset($selectedUserId)) {
         
@@ -490,6 +522,21 @@ class AbsenController extends Controller
         $upload = $request->file('upload'); //upload file (image/document) ==> if included
         $imageTemp = $request->input('imageTemp'); //temporary file uploaded
 
+        //Get UTC
+        $utc_tz = $request->input('utc_tz');
+        $utc_millis = $request->input('utc_millis');
+        $utc_offset = $request->input('utc_offset');
+
+        //validasi location
+        if (!isset($latitude) || !isset($longitude)) {
+
+            return response()->json([
+                'status_failed' => 'CHECKIN GAGAL - Data Lokasi tidak dilampirkan',
+                'checkout_description' => $request->input('checkout_description'),
+            ], 500);
+
+        } //end if
+        
         //validasi upload foto mandatory
         if (!isset($upload)) {
 
@@ -497,18 +544,26 @@ class AbsenController extends Controller
             //                     ->with('checkin_description', $request->input('checkin_description'));
 
             return response()->json([
-                'status-failed' => 'CHECKIN GAGAL - Foto harus dilampirkan',
+                'status_failed' => 'CHECKIN GAGAL - Foto harus dilampirkan',
                 'checkin_description' => $request->input('checkin_description'),
             ], 500);
             
             
         } //end if
 
+        //validasi Timezone
+        if (!isset($utc_tz) || !isset($utc_millis) || !isset($utc_offset)) {
+
+            return response()->json([
+                'status_failed' => 'CHECKIN GAGAL - Informasi Timezone harus dilampirkan',
+                'checkin_description' => $request->input('checkin_description'),
+            ], 500);
+                                
+        } //end if
+
 
         $host = $this->getFullURL($latitude, $longitude);
         $data = $this->oLocater->locate($host);
-        return response()->json($host);
-
 
         // $data = $parData;
         // $city1 = $data->results[0]->address_components[2]->short_name;
@@ -532,12 +587,22 @@ class AbsenController extends Controller
             $checkin_image = Filex::uploadOrCopyAndRemove('', $uploadTemp, $this->uploadDirectory, $upload, 'public', false, 'checkin');
 
             $attend->user_id = $authUser->id;
+
             $attend->attend_dt = now();
+            $attend->attend_utctz = $utc_tz;
+            $attend->attend_utcmillis = $utc_millis;
+            $attend->attend_utcoffset = $utc_offset;
+
             $attend->checkin_time = now();
             $attend->checkin_city = $this->setCity($data);
             $attend->checkin_address = $this->setAddress($data);
             $attend->checkin_latitude = $latitude;
             $attend->checkin_longitude = $longitude;
+
+            $attend->checkin_utctz = $utc_tz;
+            $attend->checkin_utcmillis = $utc_millis;
+            $attend->checkin_utcoffset = $utc_offset;
+
             $attend->checkin_ip = null;
             $attend->checkin_metadata = json_encode($data);
             $attend->checkin_image = $checkin_image;
@@ -553,17 +618,21 @@ class AbsenController extends Controller
                 'metadata' => json_encode($data)
             ];
     
-            return response()->json($response);
+            return response()->json($response, 200);
     
         } //end if
 
-        $response = [
-            'message' => 'data checkin absensi gagal tersimpan',
-            'result' => $data,
-            'metadata' => json_encode($data)
-        ];
+        return response()->json([
+            'status_failed' => 'CHECKIN GAGAL - Kontak admin untuk informasi lebih lanjut',
+            'checkin_description' => '',
+        ], 500);
 
-        return response()->json($response);
+        // $response = [
+        //     'message' => 'data checkin absensi gagal tersimpan',
+        //     'result' => $data,
+        //     'metadata' => json_encode($data)
+        // ];
+        // return response()->json($response, 500);
     }
 
     /**
@@ -578,6 +647,7 @@ class AbsenController extends Controller
      */
     public function checkout(Request $request)
     {
+
 
         $data = null;
         $attend = Attend::find($request->input('attend_id'));
@@ -595,20 +665,42 @@ class AbsenController extends Controller
             $upload = $request->file('upload'); //upload file (image/document) ==> if included
             $imageTemp = $request->input('imageTemp'); //temporary file uploaded
 
+            //Get UTC
+            $utc_tz = $request->input('utc_tz');
+            $utc_millis = $request->input('utc_millis');
+            $utc_offset = $request->input('utc_offset');
 
-            //validasi upload foto mandatory
-            if (!isset($upload)) {
-
-                // return redirect('/')->with('status-failed', 'CHECKOUT GAGAL - Foto harus dilampirkan')
-                //                      ->with('checkout_description', $request->input('checkout_description'));
+            //validasi location
+            if (!isset($latitude) || !isset($longitude)) {
 
                 return response()->json([
-                    'status-failed' => 'CHECKOUT GAGAL - Foto harus dilampirkan',
+                    'status_failed' => 'CHECKOUT GAGAL - Data Lokasi tidak dilampirkan',
                     'checkout_description' => $request->input('checkout_description'),
                 ], 500);
 
             } //end if
 
+            //validasi upload foto mandatory
+            if (!isset($upload)) {
+
+                return response()->json([
+                    'status_failed' => 'CHECKOUT GAGAL - Foto harus dilampirkan',
+                    'checkout_description' => $request->input('checkout_description'),
+                ], 500);
+
+            } //end if
+
+            //validasi Timezone
+            if (!isset($utc_tz) || !isset($utc_millis) || !isset($utc_offset)) {
+
+                return response()->json([
+                    'status_failed' => 'CHECKOUT GAGAL - Informasi Timezone harus dilampirkan',
+                    'checkout_description' => $request->input('checkout_description'),
+                ], 500);
+
+            } //end if
+
+        
             $host = $this->getFullURL($latitude, $longitude);
             $data = $this->oLocater->locate($host);
 
@@ -628,6 +720,11 @@ class AbsenController extends Controller
                 $attend->checkout_address = $this->setAddress($data);
                 $attend->checkout_latitude = $latitude;
                 $attend->checkout_longitude = $longitude;
+
+                $attend->checkout_utctz = $utc_tz;
+                $attend->checkout_utcmillis = $utc_millis;
+                $attend->checkout_utcoffset = $utc_offset;
+
                 $attend->checkout_ip = null;
                 $attend->checkout_metadata = json_encode($data);
                 $attend->checkout_image = $checkout_image;
@@ -642,19 +739,24 @@ class AbsenController extends Controller
                     'metadata' => json_encode($data)
                 ];
         
-                return response()->json($response);
+                return response()->json($response, 200);
     
             } //end if
 
         } //end if
 
-        $response = [
-            'message' => 'data checkout absensi gagal tersimpan',
-            'result' => $data,
-            'metadata' => json_encode($data)
-        ];
+        return response()->json([
+            'status_failed' => 'CHECKOUT GAGAL - Kontak admin untuk informasi lebih lanjut',
+            'checkout_description' => '',
+        ], 500);
 
-        return response()->json($response);
+        // $response = [
+        //     'message' => 'data checkout absensi gagal tersimpan',
+        //     'result' => $data,
+        //     'metadata' => json_encode($data)
+        // ];
+
+        // return response()->json($response, 500);
 
     } //end method
 

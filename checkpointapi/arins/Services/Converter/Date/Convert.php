@@ -7,7 +7,7 @@ use Carbon\Carbon;
 
 class Convert implements ConvertInterface
 {
-    use ConvertStringToDate;
+    use ConvertStringToDate, ConvertMillisToDate, ConvertDateToDate;
 
     protected $result;
     protected $translationPrefixKey;

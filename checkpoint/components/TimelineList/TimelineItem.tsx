@@ -1,13 +1,22 @@
 import React, { useState, memo } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, LayoutChangeEvent } from "react-native";
+import {
+    View,
+    Text,
+    StyleSheet,
+    TouchableOpacity,
+    LayoutChangeEvent
+} from "react-native";
 
 //Packages
 import FastImage from "react-native-fast-image";
 
 //Components
 import Icon from '@/components/Icon/Icon';
+
 //Constants
 import { Colors } from "@/constants/Colors";
+import Styles from '@/constants/Styles';
+
 //Interfaces
 import ITimeLine from "@/interfaces/ITimeLine";
 
@@ -16,26 +25,16 @@ type TimelineItemProps = {
 }
 const TimelineItem = memo(({item}: TimelineItemProps) => {
     const [parentheight, setParentHeight] = useState(0);
+    const [isShowImage, setIsShowImage] = useState(false);
 
 
     const color = () => {
-        if(item.type === 'Checkin') {
-            return {
-                bg: Colors.orange,
-                text: Colors.white,
-                icon: Colors.white,
-                type: Colors.orange,
-                border: Colors.white,
-            }
-        }
-        if(item.type === 'Checkout') {
-            return {
-                bg: Colors.whiteDark,
-                text: Colors.greyDark,
-                icon: Colors.greyDark,
-                type: Colors.greyDark,
-                border: Colors.orange,
-            }
+        return {
+            bg: Colors.grey,
+            text: Colors.greyDark,
+            icon: Colors.greyDark,
+            type: Colors.greyDark,
+            border: Colors.greyDark,
         }
     }
 
@@ -44,59 +43,137 @@ const TimelineItem = memo(({item}: TimelineItemProps) => {
         setParentHeight(height);
     }
 
+    const handleShowImage = () => {
+        setIsShowImage(!isShowImage);
+    }   
+
     return (
-        <TouchableOpacity style={styles.itemContainer} activeOpacity={0.8}>
-            <View style={styles.itemLeft}>
-                <Text style={{fontWeight: 'bold'}}>{ item.date }</Text>
-                <Text style={{fontWeight: 'bold'}}>{ item.time }</Text>
-                <Text style={{color: color()?.type}}>{ item.type }</Text>
-            </View>
-            <View style={styles.itemRight}>
-                <View style={{ backgroundColor: color()?.bg, borderRadius: 10, padding: 24, rowGap: 5 }} onLayout={onLayout}>
-                    <View>
+        <TouchableOpacity style={[
+            styles.itemContainer,
+            {
+                backgroundColor: Colors.grey,
+                borderTopColor: item.type == 'Checkin' ? Colors.success : Colors.danger,
+            }
+        ]} activeOpacity={0.8}>
+            <View onLayout={onLayout} >
+                <View style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    alignItems: 'flex-start',
+                    justifyContent: 'space-between',
+                    marginBottom: 15,
+                }}>
+                    <View style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        columnGap: 5,
+                    }}>
                         {
-                            item.title &&
-                            <Text style={{ color: color()?.text, fontSize: 16, fontWeight: 'bold' }}>
-                                {item.title}
-                            </Text>
+                            item.type == 'Checkin' ?
+                            <Icon.Checkin color={Colors.greyDark} size={20} /> :
+                            <Icon.Checkout color={Colors.greyDark} size={20} />
                         }
-                        {
-                            item.subtitle &&
-                            <Text style={{ color: color()?.text, fontSize: 12, fontWeight: '500' }}>{item.subtitle}</Text>
-                        }
-                        <Text style={{ color: color()?.text, fontSize: 12, fontWeight: '500' }}>{item.description}</Text>
+                        <Text style={[styles.itemTitle, { color: color()?.text }]}>
+                            { item.type == 'Checkin' ? 'Check-in' : 'Check-out' }
+                        </Text>
                     </View>
+                    <TouchableOpacity style={[
+                        Styles.btn,
+                        {
+                            flex: .6,
+                            flexDirection: 'row',
+                            justifyContent: 'space-evenly',
+                            backgroundColor: Colors.greyLight,
+                            paddingHorizontal: 10,
+                            paddingVertical: 5,
+                        }
+                    ]} onPress={ () => handleShowImage() }>
 
-                    {/* <CachedImage
-                        source={{ uri: item.image }}
-                        cacheKey={item.id}
-                        style={{
-                            width: '100%',
-                            height: parentheight/2,
-                            marginTop: 10,
-                        }}
-                    /> */}
 
-                    {
-                        item.image &&
+                        <Text style={ [
+                            Styles.btnText,
+                            {
+                                color: Colors.white,
+                                marginRight: 5,
+                            }
+                        ] }>
+                            { isShowImage ? 'Hide Image' : 'Show Image' }
+                        </Text>
+                        {
+                            isShowImage ?
+                            <Icon.ArrowUp color={item.type == 'Checkin' ? Colors.white : Colors.white} size={18}/>
+                            :
+                            <Icon.ArrowDown color={item.type == 'Checkin' ? Colors.white : Colors.white} size={18}/>
+
+                        }
+                        
+
+                    </TouchableOpacity>
+                    
+                </View>
+
+                {
+                    item.image && isShowImage &&
+                    <View style={{
+                        flex: 1,
+                        flexWrap: 'wrap',
+                        backgroundColor: Colors.greyLight,
+                        marginBottom: 15,
+                        borderRadius: 5,
+                        paddingHorizontal: 10,
+                    }}>
                         <FastImage
                             source={{ uri: item.image, priority: FastImage.priority.normal }}
                             resizeMode={ FastImage.resizeMode.contain }
                             style={{
                                 width: '100%',
-                                marginTop: 10,
                                 height: item.image  ? parentheight/2 : 0,
+                                borderRadius: 5
                             }}
                         />
-                    }
+                    </View>
+                }
 
-                    <View style={{flexDirection: 'row', alignItems: 'center', columnGap: 14 }}>
-                        <Icon.Location color={color()?.icon} size={16}/>
-                        <View>
-                            <Text style={{ color: color()?.text }}>{item.address}</Text>
-                        </View>
+
+                <View style={styles.item}>
+                    <Icon.Date color={color()?.icon} size={18}/>
+                    <View>
+                        <Text style={{ color: color()?.text }}>{item.date}</Text>
                     </View>
                 </View>
+                <View style={styles.item}>
+                    <Icon.Time color={color()?.icon} size={18}/>
+                    <View>
+                        <Text style={{ color: color()?.text }}>{item.time}</Text>
+                    </View>
+                </View>
+                <View style={styles.item}>
+                    <Icon.Note color={color()?.icon} size={18}/>
+                    <View style={{ flex: 1, }}>
+                        <Text style={{ color: color()?.text }}>{item.description}</Text>
+                    </View>
+                </View>
+
+                <View style={styles.item}>
+                    <Icon.Location color={color()?.icon} size={18}/>
+                    <View style={{ flex: 1, }}>
+                        <Text style={{ color: color()?.text, overflow: 'scroll' }}>{item.address}</Text>
+                    </View>
+                </View>
+
+                {/* <CachedImage
+                    source={{ uri: item.image }}
+                    cacheKey={item.id}
+                    style={{
+                        width: '100%',
+                        height: parentheight/2,
+                        marginTop: 10,
+                    }}
+                /> */}
+
+
             </View>
         </TouchableOpacity>
     )
@@ -105,7 +182,23 @@ const TimelineItem = memo(({item}: TimelineItemProps) => {
 export default TimelineItem;
 
 const styles = StyleSheet.create({
-    itemContainer: {flexDirection: 'row'},
-    itemLeft: {flex: 1, alignItems: 'center', justifyContent: 'flex-start'},
-    itemRight: {flex:3, paddingBottom: 20, borderLeftWidth: 3, borderLeftColor: Colors.white},
+    itemContainer: {
+        flex:1,
+        flexDirection: 'column',
+        borderTopWidth: 7,
+        paddingHorizontal: 18,
+        paddingTop: 18,
+        paddingBottom: 20,
+        marginBottom: 20
+    },
+    itemTitle: {
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    item: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        columnGap: 10
+    },
 });

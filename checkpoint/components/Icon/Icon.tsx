@@ -1,13 +1,14 @@
 import React from 'react';
 import {
     FontAwesome,
-    FontAwesome6,
     Ionicons,
     MaterialIcons,
     Foundation,
     AntDesign,
     Fontisto,
+    Entypo, 
 } from '@expo/vector-icons';
+
 
 
 import { Text, StyleProp, ViewStyle } from 'react-native';
@@ -69,7 +70,7 @@ export const IconImage = ({size = defaultSize, color=defaultColor, style}: IconP
 }
 
 export const IconUser = ({size = defaultSize, color=defaultColor, style}: IconProps) => {
-    return <FontAwesome6 name="user" size={size} color={color} style={style} />
+    return <FontAwesome name="user" size={size} color={color} style={style} />
 }
 
 export const IconKey = ({size = defaultSize, color=defaultColor, style}: IconProps) => {
@@ -83,6 +84,55 @@ export const IconDateRange = ({size = defaultSize, color=defaultColor, style}: I
 export const IconDate = ({ size = defaultSize, color = defaultColor, style }: IconProps) => {
     return <Fontisto name="date" size={size} color={color} style={style} />
 }
+
+export const IconTime = ({ size = defaultSize, color = defaultColor, style }: IconProps) => {
+    return <Ionicons name="time-outline" size={size} color={color} style={style} />
+}
+
+export const IconCheckin = ({ size = defaultSize, color = defaultColor, style }: IconProps) => {
+    return <MaterialIcons name="file-download" size={size} color={color} style={style} />
+}
+
+export const IconCheckout = ({ size = defaultSize, color = defaultColor, style }: IconProps) => {
+    return <MaterialIcons name="file-upload" size={size} color={color} style={style} />
+}
+
+export const IconNote = ({ size = defaultSize, color = defaultColor, style }: IconProps) => {
+    return <MaterialIcons name="notes" size={size} color={color} style={style} />
+}
+
+export const IconArrowUp = ({ size = defaultSize, color = defaultColor, style }: IconProps) => {
+    return <MaterialIcons name="keyboard-arrow-up" size={size} color={color} style={style} />
+}
+
+export const IconArrowDown = ({ size = defaultSize, color = defaultColor, style }: IconProps) => {
+    return <MaterialIcons name="keyboard-arrow-down" size={size} color={color} style={style} />
+}
+
+export const IconArrowRight = ({ size = defaultSize, color = defaultColor, style }: IconProps) => {
+    return <MaterialIcons name="keyboard-arrow-right" size={size} color={color} style={style} />
+}
+
+export const IconArrowLeft = ({ size = defaultSize, color = defaultColor, style }: IconProps) => {
+    return <MaterialIcons name="keyboard-arrow-left" size={size} color={color} style={style} />
+}
+
+export const IconSync = ({ size = defaultSize, color = defaultColor, style }: IconProps) => {
+    return <AntDesign name="sync" size={size} color={color} style={style} />
+}
+
+export const IconPDF = ({ size = defaultSize, color = defaultColor, style }: IconProps) => {
+    return <MaterialIcons name="picture-as-pdf" size={size} color={color} style={style} />
+}
+
+export const IconShare = ({size = defaultSize, color=defaultColor, style}: IconProps) => {
+    return <FontAwesome name="share" size={size} color={color} style={style} />
+}
+
+export const IconUpdateLocation = ({size = defaultSize, color=defaultColor, style}: IconProps) => {
+    return <MaterialIcons name="edit-location" size={size} color={color} style={style} />
+}
+
 
 const Icon = {
     Home: IconHome,
@@ -100,6 +150,18 @@ const Icon = {
     Key: IconKey,
     DateRange: IconDateRange,
     Date: IconDate,
+    Time: IconTime,
+    Checkin: IconCheckin,
+    Checkout: IconCheckout,
+    Note: IconNote,
+    ArrowUp: IconArrowUp,
+    ArrowDown: IconArrowDown,
+    ArrowRight: IconArrowRight,
+    ArrowLeft: IconArrowLeft,
+    Sync: IconSync,
+    PDF: IconPDF,
+    Share: IconShare,
+    UpdateLocation: IconUpdateLocation
 }
 
 export default Icon

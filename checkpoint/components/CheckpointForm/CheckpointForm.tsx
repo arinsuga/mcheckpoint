@@ -1,8 +1,9 @@
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import {
     View,
     Text,
+    TextInput,
     Image,
     Platform,
     Dimensions,
@@ -13,16 +14,27 @@ import {
 } from 'react-native';
 
 //Packages
+import moment from 'moment';
+import * as localization from 'expo-localization';
+import * as momentTZ from 'moment-timezone';
 import { useRouter } from 'expo-router';
 import {PhotoFile} from 'react-native-vision-camera';
 import * as Location from 'expo-location';
+import { showMessage, MessageOptions } from 'react-native-flash-message';
 
-import FieldTextInput from '../FieldTextInput/FieldTextInput';
+//Components
 import FieldMultilineTextInput from '../FieldMultilineTextInput/FieldMultilineTextInput';
-import { Colors } from '@/constants/Colors';
-import ICheckpoint from '@/interfaces/ICheckpoint';
-import { checkin, checkout } from '@/services/CheckpointService';
 import WaitingIndicator from '@/components/WaitingIndicator/WaitingIndicator';
+
+//Constants
+import { Colors } from '@/constants/Colors';
+
+//Interfaces
+import ICheckpoint from '@/interfaces/ICheckpoint';
+
+//Services
+import { checkin, checkout } from '@/services/CheckpointService';
+import { timeout } from 'rxjs';
 
 interface IChekPointFormProps {
   action: 'checkin' | 'checkout'; 
@@ -40,8 +52,15 @@ const CheckpointForm = ({action, actionButton, file, attendId}: IChekPointFormPr
       attend_id: attendId,
       latitude: '',
       longitude: '',
+      utc_tz: '',
+      utc_millis: '',
+      utc_offset: '',
+      title: '',
+      subtitle: '',
+      description: '',
     });
     const uri = `file://${file?.path}`;
+    const localInputRef = useRef<TextInput>(null);
 
 
 
@@ -58,45 +77,117 @@ useEffect(() => {
 
   })();
 
+  const timeout = setTimeout(() => localInputRef.current?.focus(), 100);
+
+  return () => clearTimeout(timeout);
 
 }, []);
 
+      let messageOptionSuccess: MessageOptions = {
+          message: '',
+          description: '',
+          type: 'success',
+          duration: 5000,
+          floating: true,
+          icon: 'success',
+          backgroundColor: Colors.success,
+          color: Colors.white,
+      };
+      let messageOptionDanger: MessageOptions = {
+          message: '',
+          description: '',
+          type: 'danger',
+          duration: 5000,
+          floating: true,
+          icon: 'success',
+          backgroundColor: Colors.danger,
+          color: Colors.white,
+      };
+      let messageOptionFailed: MessageOptions = {
+          message: '',
+          description: '',
+          type: 'default',
+          duration: 5000,
+          floating: true,
+          icon: 'danger',
+          backgroundColor: Colors.grey,
+          color: Colors.white,
+      };
+      let messageOption: MessageOptions = { ...messageOptionSuccess };
 
     const router = useRouter();
 
+    const handleFocus = () => localInputRef.current?.focus();
+
     const hideCaptured = () => setDisplaycamera(false);
 
+    //#TODO
     const showCaptured = () => setDisplaycamera(true);
 
     const handleSave = useCallback(async (checkpointData: ICheckpoint) => {
 
+        let result = null;
         try {
 
           setIsWaiting(true);
-          if (checkpointData.checkType == 'checkin') {
 
+          const checkpointCurrentData = {...checkpointData};
+
+          const now = moment();
+          checkpointCurrentData.utc_tz = localization.getCalendars()[0].timeZone as string;
+          checkpointCurrentData.utc_millis = now.utc().valueOf().toString();
+          checkpointCurrentData.utc_offset = (momentTZ.tz( checkpointCurrentData.utc_tz ).utcOffset() / 60).toString(); 
+
+          if (checkpointData.checkType == 'checkin') {
         
-            const result = await checkin(checkpointData);
-            alert('Checkin berhasil...');
+              result = await checkin(checkpointCurrentData);
+              messageOption = {
+                ...messageOptionSuccess,
+                message: 'CHECKIN',
+                description: 'Checkin berhasil...',
+              }
 
           } else if (checkpointData.checkType == 'checkout') {
 
-            const result = await checkout(checkpointData);
-            alert('Checkout berhasil...');
+              result = await checkout(checkpointCurrentData);
+              messageOption = {
+                ...messageOptionDanger,
+                message: 'CHECKOUT',
+                description: 'Checkout berhasil...',
+              }
 
           } else {
 
-            alert('Data gagal tersimpan...');
+              messageOption = {
+                ...messageOptionFailed,
+                description: 'Data gagal tersimpan...',
+              };
 
           }
+          
+          if (result.status == 500) {
+
+              messageOption = {
+                ...messageOptionFailed,
+                message: `ERROR: ${result.status}`,
+                description: result.data.message,
+              };
+            
+          }
+
+          showMessage(messageOption);
 
 
           return true;
   
         } catch (error) {
 
-            alert('Data gagal disimpan...');
-            return false;
+            messageOption = {
+              ...messageOptionFailed,
+              description: 'Data gagal tersimpan...',
+            };
+            showMessage(messageOption);
+            return true;
 
         }
     }, []);
@@ -117,26 +208,11 @@ useEffect(() => {
               }}
             />
 
-            <FieldTextInput
-              placeholder='Title'
-              onFocus={hideCaptured}
-              onChangeText={(nextText) => setCheckpoint({ ...checkpoint, title: nextText })}
-              style={{
-                width: Dimensions.get('window').width-50,
-              }}
-            />
-            <FieldTextInput
-              placeholder='Sub Title'
-              onFocus={hideCaptured}
-              onChangeText={(nextText) => setCheckpoint({ ...checkpoint, subtitle: nextText })}
-              style={{
-                width: Dimensions.get('window').width-50,
-              }}
-            />
             <FieldMultilineTextInput
               placeholder='Description'
               onFocus={hideCaptured}
               onChangeText={(nextText) => setCheckpoint({ ...checkpoint, description: nextText })}
+              inputRef={ localInputRef }
               style={{
                 width: Dimensions.get('window').width-50,
               }}
@@ -150,9 +226,13 @@ useEffect(() => {
                     const success = await handleSave(checkpoint);
                     if (success) router.replace('/')
                   }}
-                  style={styles.checkButton}
+                  style={[styles.checkButton, {
+                    backgroundColor: checkpoint.checkType == 'checkin' ? Colors.success : action == 'checkout' ? Colors.danger : Colors.grey,
+                  }]}
               >
-                <Text style={{color: Colors.white}}>{ checkpoint.checkType == 'checkin' ? 'Checkin' : 'Checkout' }</Text>
+                <Text style={{color: Colors.white}}>
+                  { checkpoint.checkType == 'checkin' ? 'Save Checkin' : 'Save Checkout' }
+                </Text>
               </TouchableOpacity> :
               <View
                   style={[
@@ -167,8 +247,6 @@ useEffect(() => {
               </View>
 
             }
-
-
 
             <WaitingIndicator isWaiting={isWaiting} />
 
@@ -185,6 +263,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 50,
     width: Dimensions.get('window').width-100,
-    backgroundColor: Colors.primary,
   }
 });

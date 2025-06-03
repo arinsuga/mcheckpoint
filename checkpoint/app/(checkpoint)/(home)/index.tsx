@@ -5,7 +5,7 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  Alert
+  Dimensions,
 } from "react-native";
 
 //Packages
@@ -14,6 +14,8 @@ import 'react-native-get-random-values';
 import * as Print from 'expo-print'
 import { shareAsync } from "expo-sharing";
 import * as FileSystem from 'expo-file-system';
+import { useRouter, Router } from "expo-router";
+import { hideMessage } from 'react-native-flash-message';
 
 //Context
 import { useAuth } from "@/contexts/Authcontext";
@@ -22,8 +24,8 @@ import { useAuth } from "@/contexts/Authcontext";
 import Relogin from "@/components/Relogin/Relogin";
 import DateList from "@/components/DateList/DateList";
 import TimelineList from "@/components/TimelineList/TimelineList";
-import WaitingIndicator from "@/components/WaitingIndicator/WaitingIndicator";
 import DialogDatePeriod from "@/components/DialogDatePeriod/DialogDatePeriod";
+import Icon from "@/components/Icon/Icon";
 
 //Templates
 import AttendHistory from "@/templates/attends/AttendHistory";
@@ -54,6 +56,33 @@ export default function History() {
     const [showPeriod, setShowPeriod] = useState(false);
     const { Authenticate, authState } = useAuth();
 
+    const router: Router = useRouter();
+
+    const getStyles = () => {
+
+      const buttonContainerWidth = Dimensions.get('window').width;
+      const buttonWidth = buttonContainerWidth*0.92;
+      const buttonLeftPosition = (buttonContainerWidth - buttonWidth)/2;
+      const styles = StyleSheet.create({
+
+        checkButton: {
+          flex: 1,
+          flexDirection: 'row',
+          position: "absolute",
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: buttonWidth,
+          paddingVertical: 15,
+          bottom: 10,
+          left: buttonLeftPosition,
+          backgroundColor: Colors.orange,
+        }
+
+      });
+
+      return styles
+    }
+    
     const handleSelectedDate = useCallback(async (date: moment.Moment) => {
 
         //check Authentication
@@ -77,7 +106,8 @@ export default function History() {
       try {
 
         const dataHistory: ICheckpointHistory[] = await historyByUserIdCheckpointDate(userName, date, 'view');
-        const data = TimeLineService.fillTimeLine(dataHistory);
+        let data = TimeLineService.fillTimeLine(dataHistory);
+        data.sort((a, b) => parseInt(b.milliseconds) - parseInt(a.milliseconds));
 
         return data
       } catch (error: any) {
@@ -195,13 +225,26 @@ export default function History() {
           <View style={{flexDirection: 'row', alignItems: 'center', columnGap: 8}}>
             <Text style={{fontSize: 36, fontWeight: 'bold'}}>{ selectedDate ? selectedDate.format('DD') : 'N/A' }</Text>
             <View style={{flexDirection:'column'}}>
-              <Text style={{color: Colors.grey, fontWeight: 'bold'}}>{ selectedDate.format('dddd') } - { currentDate.format('YYYY-MM-DD') === selectedDate.format('YYYY-MM-DD') ? 'Today' : '' }</Text>
+              <Text style={{color: Colors.grey, fontWeight: 'bold'}}>{ selectedDate.format('dddd') } { currentDate.format('YYYY-MM-DD') === selectedDate.format('YYYY-MM-DD') ? '- Today' : '' }</Text>
               <Text style={{color: Colors.grey, fontWeight: 'bold'}}>{ selectedDate.format('MMM') } { selectedDate.format('YYYY') }</Text>
             </View>
           </View>
-          <TouchableOpacity style={ [Styles.btn, { backgroundColor: Colors.danger }] } onPress={ () => handleCreatePDF() }>
+          <TouchableOpacity style={[
+            Styles.btn,
+            {
+              flex: 0.5,
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              paddingVertical: 8,
+              paddingHorizontal: 10,
+              backgroundColor: Colors.orange,
+              borderRadius: 0,
+            }
+          ]} onPress={ () => handleCreatePDF() }>
 
-            <Text style={ Styles.btnText }>PDF</Text>
+            <Icon.Share size={16} color={ Colors.white } />
+            <Text style={[Styles.btnText, { marginLeft: 5 }]}>Share</Text>
 
           </TouchableOpacity>
 
@@ -214,11 +257,27 @@ export default function History() {
         <View style={{backgroundColor: Colors.white, height: 1}}></View>
         
         {/* DATA LIST */}
-        <View style={{paddingHorizontal: 12}}>
+        <View style={{paddingHorizontal: 12, height: '89%'}}>
 
           <TimelineList data={timeLineList} date={selectedDate} isRefreshing={false} onRefresh={handleSelectedDate} />
           <Relogin display={ !authenticated && !isWaiting } />
         </View>
+
+
+        <TouchableOpacity
+            onPress={ async() => {
+              hideMessage();
+              router.push('/pinloc');
+            }} 
+            style={ getStyles().checkButton }
+        >
+          <Icon.Location size={28} color={ Colors.white } />
+          <Text style={{color: Colors.white, fontSize: 15, marginLeft: 15}}>
+              Update Location
+          </Text>
+        </TouchableOpacity>
+
+
 
         <DialogDatePeriod visible={showPeriod} actionOk={handleCreatePDFOk} actionCancel={handleCreatePDFCancel} />
       </SafeAreaView>

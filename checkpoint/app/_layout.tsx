@@ -1,6 +1,7 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Slot } from 'expo-router';
+import FlashMessage from 'react-native-flash-message';
 
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
@@ -34,6 +35,7 @@ export default function RootLayout() {
 
           <Slot />
 
+          <FlashMessage position="center" />
         
       </Authprovider>
   );

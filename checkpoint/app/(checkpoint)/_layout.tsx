@@ -42,11 +42,8 @@ export default function AppLayout() {
 
                 </View>
               )
-        }}>
+        }} />
 
-            <Stack.Screen name="(tabs)" />
-
-        </Stack>
 
 
       }

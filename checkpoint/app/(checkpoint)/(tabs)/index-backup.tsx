@@ -3,6 +3,7 @@ import {
   Text,
   View,
   TouchableOpacity,
+  ActivityIndicator,
   StyleSheet,
   Dimensions,
   ScrollView,

@@ -38,17 +38,17 @@ const DateList = React.memo((
                     dayComponentHeight={50}
                     dayContainerStyle={{
                         height: 50,
-                        borderRadius: 10,
+                        borderRadius: 0,
                         alignItems: 'center'
                     }}
                     calendarAnimation={{type: 'sequence', duration: 0}}
-                    daySelectionAnimation={{type: 'background', duration: 0, highlightColor: Colors.orange}}
+                    daySelectionAnimation={{type: 'background', duration: 0, highlightColor: Colors.orange }}
                     style={{height: 100, paddingTop: 10, paddingBottom: 10}}
                     calendarHeaderStyle={{color: Colors.black}}
                     calendarColor={Colors.white}
                     dateNumberStyle={ { color: Colors.black }}
                     dateNameStyle={{color: Colors.black}}
-                    highlightDateNumberStyle={{color: Colors.white}}
+                    highlightDateNumberStyle={{ color: Colors.white }}
                     highlightDateNameStyle={{color: Colors.white}}
                     disabledDateNameStyle={{color: Colors.grey}}
                     disabledDateNumberStyle={{color: Colors.grey}}
