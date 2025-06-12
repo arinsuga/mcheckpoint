@@ -7,6 +7,7 @@ import {
     Foundation,
     AntDesign,
     Fontisto,
+    Entypo, 
 } from '@expo/vector-icons';
 
 
@@ -84,6 +85,14 @@ export const IconDate = ({ size = defaultSize, color = defaultColor, style }: Ic
     return <Fontisto name="date" size={size} color={color} style={style} />
 }
 
+export const IconCheckin = ({ size = defaultSize, color = defaultColor, style }: IconProps) => {
+    return <Entypo name="login" size={size} color={color} style={style} />
+}
+
+export const IconCheckout = ({ size = defaultSize, color = defaultColor, style }: IconProps) => {
+    return <Entypo name="log-out" size={size} color={color} style={style} />
+}
+
 const Icon = {
     Home: IconHome,
     History: IconHistory,
@@ -100,6 +109,8 @@ const Icon = {
     Key: IconKey,
     DateRange: IconDateRange,
     Date: IconDate,
+    Checkin: IconCheckin,
+    Checkout: IconCheckout
 }
 
 export default Icon

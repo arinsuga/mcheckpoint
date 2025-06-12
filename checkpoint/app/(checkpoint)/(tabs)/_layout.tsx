@@ -66,6 +66,7 @@ export default function AppLayout() {
           }} />
           <Tabs.Screen name="tabpinloc"
                       options={{
+                        href: null,
                         tabBarIcon: ({focused, color, size}) => <Icon.Camera color={color} size={size} />
                       }}
                       listeners={() => ({

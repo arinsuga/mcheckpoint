@@ -6,8 +6,6 @@ import {
   ActivityIndicator,
   StyleSheet,
   Dimensions,
-  StyleProp,
-  ViewStyle,
 } from "react-native";
 
 //Packages
@@ -18,11 +16,8 @@ import Logo from "@/components/Logo/Logo";
 import Icon from "@/components/Icon/Icon";
 
 //Services
-import { refreshAuthToken, getUsername } from "@/services/AuthService";
+import { getUsername } from "@/services/AuthService";
 import { check } from '@/services/CheckpointService';
-
-//Interfaces
-import ICheckpoint from "@/interfaces/ICheckpoint";
 
 //Constants
 import { Colors } from "@/constants/Colors";
@@ -34,18 +29,22 @@ export default function Home() {
 
     const getStyles = (action: 'checkin' | 'checkout' | '') => {
 
+      const buttonContainerWidth = Dimensions.get('window').width;
+      const buttonWidth = buttonContainerWidth*0.5;
+      const buttonLeftPosition = (buttonContainerWidth - buttonWidth)/2;
       const styles = StyleSheet.create({
 
         checkButton: {
           flex: 1,
+          flexDirection: 'row',
           position: "absolute",
           justifyContent: 'center',
           alignItems: 'center',
-          width: Dimensions.get('window').width*0.3,
-          padding: 10,
+          width: buttonWidth,
+          paddingVertical: 10,
           borderRadius: 10,
           bottom: 30,
-          right: 30,
+          left: buttonLeftPosition,
           backgroundColor: action == 'checkin' ? Colors.green : action == 'checkout' ? Colors.red : Colors.grey,
         }
 
@@ -90,7 +89,6 @@ export default function Home() {
 
             <Logo size="s" />
             </View>
-            <Text style={{ marginBottom: 40 }}>1.1.0</Text>
         </View>
 
               {
@@ -100,7 +98,9 @@ export default function Home() {
                     onPress={ async() => router.push('/pinloc')} 
                     style={ getStyles(action).checkButton }
                 >
-                  <Text style={{color: Colors.white}}>{ action == 'checkin' ? 'Checkin' : 'Checkout' }</Text>
+                  { action == 'checkin' ? <Icon.Checkin size={28} color={ Colors.white } /> :
+                  <Icon.Checkout size={28} color={ Colors.white } /> }
+                  <Text style={{color: Colors.white, fontSize: 15, marginLeft: 10}}>{ action == 'checkin' ? 'Checkin' : 'Checkout' }</Text>
                 </TouchableOpacity> :
                 <View
                     style={[
