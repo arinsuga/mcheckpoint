@@ -275,12 +275,14 @@ class AbsenController extends Controller
                     'checkin_latitude' => $value->checkin_latitude,
                     'checkin_longitude' => $value->checkin_longitude,
                     'checkin_milliseconds' => (isset($value->checkin_time)) ? $value->checkin_time->timestamp*1000 : $value->checkin_time,
-                    'checkin_datetime' => $value->checkin_time,
+                    'checkin_datetime' => $value->checkin_time .
+                    " ( " . ConvertDate::millisOffsetDesc($value->checkin_utcoffset) . " ) ",
 
                     // 'checkin_date' => Formater::date($value->checkin_time),
                     // 'checkin_time' => Formater::time($value->checkin_time),
                     'checkin_date' => Formater::date(ConvertDate::DatetimeByTimezone($value->checkin_time, $value->checkin_utctz)),
-                    'checkin_time' => Formater::time(ConvertDate::DatetimeByTimezone($value->checkin_time, $value->checkin_utctz)),
+                    'checkin_time' => Formater::time(ConvertDate::DatetimeByTimezone($value->checkin_time, $value->checkin_utctz)) .
+                    " ( " . ConvertDate::millisOffsetDesc($value->checkin_utcoffset) . " ) ",
 
                     'checkin_title' => $value->checkin_title,
                     'checkin_subtitle' => $value->checkin_subtitle,
@@ -291,12 +293,14 @@ class AbsenController extends Controller
                     'checkout_latitude' => $value->checkout_latitude,
                     'checkout_longitude' => $value->checkout_longitude,
                     'checkout_milliseconds' => (isset($value->checkout_time)) ? $value->checkout_time->timestamp*1000 : $value->checkout_time,
-                    'checkout_datetime' => $value->checkout_time,
+                    'checkout_datetime' => $value->checkout_time .
+                    " ( " . ConvertDate::millisOffsetDesc($value->checkout_utcoffset) . " ) ",
 
                     // 'checkout_date' => Formater::date($value->checkout_time),
                     // 'checkout_time' => Formater::time($value->checkout_time),
                     'checkout_date' => Formater::date(ConvertDate::DatetimeByTimezone($value->checkout_time, $value->checkout_utctz)),
-                    'checkout_time' => Formater::time(ConvertDate::DatetimeByTimezone($value->checkout_time, $value->checkout_utctz)),
+                    'checkout_time' => Formater::time(ConvertDate::DatetimeByTimezone($value->checkout_time, $value->checkout_utctz)) .
+                    " ( " . ConvertDate::millisOffsetDesc($value->checkout_utcoffset) . " ) ",
 
                     'checkout_title' => $value->checkout_title,
                     'checkout_subtitle' => $value->checkout_subtitle,
