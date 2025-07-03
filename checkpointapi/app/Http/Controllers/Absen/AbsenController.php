@@ -269,7 +269,7 @@ class AbsenController extends Controller
                     'user_id' => $value->user->id,
                     'name' => $value->user->name,
                     'attend_dt' => Formater::dateMonth($value->attend_dt),
-            
+             
                     'checkin_latitude' => $value->checkin_latitude,
                     'checkin_longitude' => $value->checkin_longitude,
                     'checkin_milliseconds' => (isset($value->checkin_time)) ? $value->checkin_time->timestamp*1000 : $value->checkin_time,
@@ -507,8 +507,6 @@ class AbsenController extends Controller
 
         $host = $this->getFullURL($latitude, $longitude);
         $data = $this->oLocater->locate($host);
-        return response()->json($host);
-
 
         // $data = $parData;
         // $city1 = $data->results[0]->address_components[2]->short_name;

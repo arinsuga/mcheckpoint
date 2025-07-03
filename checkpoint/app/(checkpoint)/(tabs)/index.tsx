@@ -30,7 +30,7 @@ export default function Home() {
     const getStyles = (action: 'checkin' | 'checkout' | '') => {
 
       const buttonContainerWidth = Dimensions.get('window').width;
-      const buttonWidth = buttonContainerWidth*0.5;
+      const buttonWidth = buttonContainerWidth*0.4;
       const buttonLeftPosition = (buttonContainerWidth - buttonWidth)/2;
       const styles = StyleSheet.create({
 

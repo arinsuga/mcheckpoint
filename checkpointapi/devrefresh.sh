@@ -3,9 +3,8 @@ php artisan cache:clear &&
 php artisan config:clear &&
 php artisan view:clear &&
 php artisan route:clear &&
-php artisan migrate &&
 composer dumpautoload &&
 php artisan optimize &&
 php artisan config:cache &&
 php artisan view:cache &&
-php artisan route:cache
+php artisan route:cache 
