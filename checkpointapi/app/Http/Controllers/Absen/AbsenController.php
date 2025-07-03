@@ -268,14 +268,20 @@ class AbsenController extends Controller
                     'id' => $value->id,
                     'user_id' => $value->user->id,
                     'name' => $value->user->name,
-                    'attend_dt' => Formater::dateMonth($value->attend_dt),
+
+                    // 'attend_dt' => Formater::dateMonth($value->attend_dt),
+                    'attend_dt' => Formater::dateMonth(ConvertDate::DatetimeByTimezone($value->attend_dt, $value->attend_utctz)),
              
                     'checkin_latitude' => $value->checkin_latitude,
                     'checkin_longitude' => $value->checkin_longitude,
                     'checkin_milliseconds' => (isset($value->checkin_time)) ? $value->checkin_time->timestamp*1000 : $value->checkin_time,
                     'checkin_datetime' => $value->checkin_time,
-                    'checkin_date' => Formater::date($value->checkin_time),
-                    'checkin_time' => Formater::time($value->checkin_time),
+
+                    // 'checkin_date' => Formater::date($value->checkin_time),
+                    // 'checkin_time' => Formater::time($value->checkin_time),
+                    'checkin_date' => Formater::date(ConvertDate::DatetimeByTimezone($value->checkin_time, $value->checkin_utctz)),
+                    'checkin_time' => Formater::time(ConvertDate::DatetimeByTimezone($value->checkin_time, $value->checkin_utctz)),
+
                     'checkin_title' => $value->checkin_title,
                     'checkin_subtitle' => $value->checkin_subtitle,
                     'checkin_address' => $value->checkin_address,
@@ -286,8 +292,12 @@ class AbsenController extends Controller
                     'checkout_longitude' => $value->checkout_longitude,
                     'checkout_milliseconds' => (isset($value->checkout_time)) ? $value->checkout_time->timestamp*1000 : $value->checkout_time,
                     'checkout_datetime' => $value->checkout_time,
-                    'checkout_date' => Formater::date($value->checkout_time),
-                    'checkout_time' => Formater::time($value->checkout_time),
+
+                    // 'checkout_date' => Formater::date($value->checkout_time),
+                    // 'checkout_time' => Formater::time($value->checkout_time),
+                    'checkout_date' => Formater::date(ConvertDate::DatetimeByTimezone($value->checkout_time, $value->checkout_utctz)),
+                    'checkout_time' => Formater::time(ConvertDate::DatetimeByTimezone($value->checkout_time, $value->checkout_utctz)),
+
                     'checkout_title' => $value->checkout_title,
                     'checkout_subtitle' => $value->checkout_subtitle,
                     'checkout_address' => $value->checkout_address,
@@ -295,8 +305,6 @@ class AbsenController extends Controller
                     'checkout_image' => (isset($value->checkout_image)) ?asset('storage/' . $value->checkout_image) : null,
 
                     'time_elapse' => $time_elapse1 . ':' . $time_elapse2,
-    
-    
                 ];
     
             } //end if
