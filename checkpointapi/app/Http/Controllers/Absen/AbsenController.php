@@ -502,6 +502,11 @@ class AbsenController extends Controller
         $upload = $request->file('upload'); //upload file (image/document) ==> if included
         $imageTemp = $request->input('imageTemp'); //temporary file uploaded
 
+        //Get UTC
+        $utc_tz = $request->input('utc_tz');
+        $utc_millis = $request->input('utc_millis');
+        $utc_offset = $request->input('utc_offset');
+
         //validasi upload foto mandatory
         if (!isset($upload)) {
 
@@ -605,6 +610,10 @@ class AbsenController extends Controller
             $upload = $request->file('upload'); //upload file (image/document) ==> if included
             $imageTemp = $request->input('imageTemp'); //temporary file uploaded
 
+            //Get UTC
+            $utc_tz = $request->input('utc_tz');
+            $utc_millis = $request->input('utc_millis');
+            $utc_offset = $request->input('utc_offset');
 
             //validasi upload foto mandatory
             if (!isset($upload)) {

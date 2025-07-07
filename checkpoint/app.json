@@ -64,7 +64,8 @@
           "enableLocation": true,
           "locationPermissionText": "[checkpoint] needs your location."
         }
-      ]
+      ],
+      "expo-localization"
     ],
     "experiments": {
       "typedRoutes": true

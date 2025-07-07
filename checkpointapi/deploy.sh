@@ -1,11 +1,11 @@
-php artisan optimize:clear &&
-php artisan cache:clear &&
-php artisan config:clear &&
-php artisan view:clear &&
-php artisan route:clear &&
-php artisan migrate &&
-composer dumpautoload &&
-php artisan optimize &&
-php artisan config:cache &&
-php artisan view:cache &&
+php artisan optimize:clear
+php artisan cache:clear
+php artisan config:clear
+php artisan view:clear
+php artisan route:clear
+composer dumpautoload --no-scripts
+php artisan migrate
+php artisan optimize
+php artisan config:cache
+php artisan view:cache
 php artisan route:cache

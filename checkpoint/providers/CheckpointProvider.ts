@@ -4,6 +4,7 @@ import moment from 'moment';
 import axios from 'axios';
 import Fileutils from '../utils/Fileutils';
 
+
 //Interfaces
 import ICheckpoint from '../interfaces/ICheckpoint';
 
@@ -66,9 +67,10 @@ export const checkin = async (checkinData: ICheckpoint): Promise<any> => {
     formData.append('checkin_subtitle', checkinData.subtitle as string);
     formData.append('checkin_description', checkinData.description as string);
 
-    // formData.append('checkin_title', 'HPTEST - ' + checkinData.title as string);
-    // formData.append('checkin_subtitle', 'HPTEST - ' + checkinData.subtitle as string);
-    // formData.append('checkin_description', 'HPTEST - ' + checkinData.description as string);
+    const now = moment();
+    console.log(`now : ${now}`);
+
+    return '#test';
 
     const response = await axios.post(`${API_URL}/checkin`, formData,
       {
