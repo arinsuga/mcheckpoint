@@ -30,7 +30,6 @@ class AbsenController extends Controller
     protected $viewModel;
     protected $uploadDirectory;
 
-
     /**
      * Create a new controller instance.
      *

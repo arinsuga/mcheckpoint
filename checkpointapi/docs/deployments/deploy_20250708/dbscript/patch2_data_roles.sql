@@ -1,12 +1,4 @@
 -- ===================================================
--- UNUSED USERS ( table users )
--- ===================================================
-
-delete FROM `users`
-WHERE id > 3
-and dept is null
-
--- ===================================================
 -- SYSTEM ( table roles )
 -- ===================================================
 INSERT INTO `roles` (`id`, `app_id`, `code`, `name`, `description`, `created_at`, `updated_at`) VALUES

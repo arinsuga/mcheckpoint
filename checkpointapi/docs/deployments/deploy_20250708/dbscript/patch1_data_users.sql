@@ -2,5 +2,4 @@
 -- UNUSED USERS ( table users )
 -- ===================================================
 delete FROM `users`
-WHERE id > 3
-and dept is null
+WHERE id > 3 and dept is null
