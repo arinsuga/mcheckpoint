@@ -11,6 +11,9 @@ import {
     StyleSheet,
     ActivityIndicator
 } from 'react-native';
+import moment from 'moment';
+import * as localization from 'expo-localization';
+import * as momentTZ from 'moment-timezone';
 
 //Packages
 import { useRouter } from 'expo-router';
@@ -73,15 +76,31 @@ useEffect(() => {
         try {
 
           setIsWaiting(true);
+
+          const checkpointCurrentData = {...checkpointData};
+
+          const now = moment();
+          checkpointCurrentData.utc_tz = localization.getCalendars()[0].timeZone as string;
+          checkpointCurrentData.utc_millis = now.utc().valueOf().toString();
+          checkpointCurrentData.utc_offset = (momentTZ.tz( checkpointCurrentData.utc_tz ).utcOffset() / 60).toString() ; 
+          // console.log({
+          //   now,
+          //   utc_tz: checkpointCurrentData.utc_tz,
+          //   utc_millis: checkpointCurrentData.utc_millis,
+          //   utc_offset: checkpointCurrentData.utc_offset,
+          // });
+
+
           if (checkpointData.checkType == 'checkin') {
 
         
-            const result = await checkin(checkpointData);
+            const result = await checkin(checkpointCurrentData);
+            console.log(result.data.data);
             alert('Checkin berhasil...');
 
           } else if (checkpointData.checkType == 'checkout') {
 
-            const result = await checkout(checkpointData);
+            const result = await checkout(checkpointCurrentData);
             alert('Checkout berhasil...');
 
           } else {

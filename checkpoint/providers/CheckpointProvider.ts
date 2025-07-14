@@ -1,9 +1,8 @@
 
 //Packages
-import moment from 'moment';
 import axios from 'axios';
 import Fileutils from '../utils/Fileutils';
-
+import moment from 'moment';
 
 //Interfaces
 import ICheckpoint from '../interfaces/ICheckpoint';
@@ -63,14 +62,14 @@ export const checkin = async (checkinData: ICheckpoint): Promise<any> => {
     formData.append('longitude', checkinData.longitude as string);
     formData.append('imageTemp', checkinData.imageTemp as string);
 
+    formData.append('utc_tz', checkinData.utc_tz as string);
+    formData.append('utc_millis', checkinData.utc_millis as string);
+    formData.append('utc_offset', checkinData.utc_offset as string);
+
     formData.append('checkin_title', checkinData.title as string);
     formData.append('checkin_subtitle', checkinData.subtitle as string);
     formData.append('checkin_description', checkinData.description as string);
 
-    const now = moment();
-    console.log(`now : ${now}`);
-
-    return '#test';
 
     const response = await axios.post(`${API_URL}/checkin`, formData,
       {
@@ -110,6 +109,11 @@ export const checkout = async (checkoutData: ICheckpoint): Promise<any> => {
     formData.append('attend_id', checkoutData.attend_id as string);
     formData.append('latitude', checkoutData.latitude as string);
     formData.append('longitude', checkoutData.longitude as string);
+
+    formData.append('utc_tz', checkoutData.utc_tz as string);
+    formData.append('utc_millis', checkoutData.utc_millis as string);
+    formData.append('utc_offset', checkoutData.utc_offset as string);
+    
     formData.append('imageTemp', checkoutData.imageTemp as string);
     formData.append('checkout_title', checkoutData.title as string);
     formData.append('checkout_subtitle', checkoutData.subtitle as string);
@@ -118,6 +122,8 @@ export const checkout = async (checkoutData: ICheckpoint): Promise<any> => {
     // formData.append('checkout_title', 'HPTEST - ' + checkoutData.title as string);
     // formData.append('checkout_subtitle', 'HPTEST - ' + checkoutData.subtitle as string);
     // formData.append('checkout_description', 'HPTEST - ' + checkoutData.description as string);
+
+    console.log(checkoutData);
 
     const response = await axios.post(`${API_URL}/checkout`, formData,
       {

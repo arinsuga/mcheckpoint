@@ -546,12 +546,22 @@ class AbsenController extends Controller
             $checkin_image = Filex::uploadOrCopyAndRemove('', $uploadTemp, $this->uploadDirectory, $upload, 'public', false, 'checkin');
 
             $attend->user_id = $authUser->id;
+
             $attend->attend_dt = now();
+            $attend->attend_utctz = $utc_tz;
+            $attend->attend_utcmillis = $utc_millis;
+            $attend->attend_utcoffset = $utc_offset;
+
             $attend->checkin_time = now();
             $attend->checkin_city = $this->setCity($data);
             $attend->checkin_address = $this->setAddress($data);
             $attend->checkin_latitude = $latitude;
             $attend->checkin_longitude = $longitude;
+
+            $attend->checkin_utctz = $utc_tz;
+            $attend->checkin_utcmillis = $utc_millis;
+            $attend->checkin_utcoffset = $utc_offset;
+
             $attend->checkin_ip = null;
             $attend->checkin_metadata = json_encode($data);
             $attend->checkin_image = $checkin_image;
@@ -646,6 +656,11 @@ class AbsenController extends Controller
                 $attend->checkout_address = $this->setAddress($data);
                 $attend->checkout_latitude = $latitude;
                 $attend->checkout_longitude = $longitude;
+
+                $attend->checkout_utctz = $utc_tz;
+                $attend->checkout_utcmillis = $utc_millis;
+                $attend->checkout_utcoffset = $utc_offset;
+
                 $attend->checkout_ip = null;
                 $attend->checkout_metadata = json_encode($data);
                 $attend->checkout_image = $checkout_image;
