@@ -359,7 +359,20 @@ class AbsenController extends Controller
     {
 
         $selectedUsername = $request->input('username');
-        $selectedUserId = User::where('email', $selectedUsername)->first()->id;
+
+        try {
+
+            $selectedUserId = User::where('email', $selectedUsername)->first()->id;
+
+        } catch (\Throwable $th) {
+
+            //throw $th;
+            return response()->json(Response::viewModelError500('Data not found, Invalid Username'));
+
+        }        
+
+
+
         $startdt = $request->input('startdt');
         $enddt = $request->input('enddt');
         $historyMedia = $request->input('history_media');
@@ -412,7 +425,6 @@ class AbsenController extends Controller
         ];
 
         $attends = $this->data->getAttendancesByUserIdAndCheckpointDate($userId, $checkpointDate);
-
         $attend_list = $attends->sortBy('attend_dt');
 
 
@@ -430,7 +442,18 @@ class AbsenController extends Controller
     {
 
         $selectedUsername = $request->input('username');
-        $selectedUserId = User::where('email', $selectedUsername)->first()->id;
+        try {
+
+            //code...
+            $selectedUserId = User::where('email', $selectedUsername)->first()->id;
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(Response::viewModelError500('Data not found, Invalid Username'));
+
+
+        }        
+
         $checkpointDate = $request->input('checkpoint_date');
         $historyMedia = $request->input('history_media');
 
@@ -447,7 +470,6 @@ class AbsenController extends Controller
 
 
         $dd = $this->historyByUserIdAndCheckpointDate($selectedUserId, $checkpointDateIso);
-
 
         if (isset($selectedUserId)) {
         
