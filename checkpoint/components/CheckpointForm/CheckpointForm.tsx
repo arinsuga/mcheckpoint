@@ -95,7 +95,6 @@ useEffect(() => {
 
         
             const result = await checkin(checkpointCurrentData);
-            console.log(result.data.data);
             alert('Checkin berhasil...');
 
           } else if (checkpointData.checkType == 'checkout') {
