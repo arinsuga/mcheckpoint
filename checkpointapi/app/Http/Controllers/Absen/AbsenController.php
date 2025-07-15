@@ -268,8 +268,8 @@ class AbsenController extends Controller
                     'user_id' => $value->user->id,
                     'name' => $value->user->name,
 
-                    // 'attend_dt' => Formater::dateMonth($value->attend_dt),
-                    'attend_dt' => Formater::dateMonth(ConvertDate::DatetimeByTimezone($value->attend_dt, $value->attend_utctz)),
+                    'attend_dt' => (!isset($value->attend_utctz)) ? '' :
+                    Formater::dateMonth(ConvertDate::DatetimeByTimezone($value->attend_dt, $value->attend_utctz)),
              
                     'checkin_latitude' => $value->checkin_latitude,
                     'checkin_longitude' => $value->checkin_longitude,
@@ -277,10 +277,10 @@ class AbsenController extends Controller
                     'checkin_datetime' => $value->checkin_time .
                     " ( " . ConvertDate::millisOffsetDesc($value->checkin_utcoffset) . " ) ",
 
-                    // 'checkin_date' => Formater::date($value->checkin_time),
-                    // 'checkin_time' => Formater::time($value->checkin_time),
-                    'checkin_date' => Formater::date(ConvertDate::DatetimeByTimezone($value->checkin_time, $value->checkin_utctz)),
-                    'checkin_time' => Formater::time(ConvertDate::DatetimeByTimezone($value->checkin_time, $value->checkin_utctz)) .
+                    'checkin_date' => (!isset($value->checkin_utctz)) ? '' :
+                    Formater::date(ConvertDate::DatetimeByTimezone($value->checkin_time, $value->checkin_utctz)),
+                    'checkin_time' => (!isset($value->checkin_utctz)) ? '' :
+                    Formater::time(ConvertDate::DatetimeByTimezone($value->checkin_time, $value->checkin_utctz)) .
                     " ( " . ConvertDate::millisOffsetDesc($value->checkin_utcoffset) . " ) ",
 
                     'checkin_title' => $value->checkin_title,
@@ -295,10 +295,10 @@ class AbsenController extends Controller
                     'checkout_datetime' => $value->checkout_time .
                     " ( " . ConvertDate::millisOffsetDesc($value->checkout_utcoffset) . " ) ",
 
-                    // 'checkout_date' => Formater::date($value->checkout_time),
-                    // 'checkout_time' => Formater::time($value->checkout_time),
-                    'checkout_date' => Formater::date(ConvertDate::DatetimeByTimezone($value->checkout_time, $value->checkout_utctz)),
-                    'checkout_time' => Formater::time(ConvertDate::DatetimeByTimezone($value->checkout_time, $value->checkout_utctz)) .
+                    'checkout_date' => (!isset($value->checkout_utctz)) ? '' :
+                    Formater::date(ConvertDate::DatetimeByTimezone($value->checkout_time, $value->checkout_utctz)),
+                    'checkout_time' => (!isset($value->checkout_utctz)) ? '' :
+                    Formater::time(ConvertDate::DatetimeByTimezone($value->checkout_time, $value->checkout_utctz)) .
                     " ( " . ConvertDate::millisOffsetDesc($value->checkout_utcoffset) . " ) ",
 
                     'checkout_title' => $value->checkout_title,
@@ -440,7 +440,6 @@ class AbsenController extends Controller
     //postHistoryByUserIdAndCheckpointDate
     public function postHistoryByUserIdAndCheckpointDate(Request $request)
     {
-
         $selectedUsername = $request->input('username');
         try {
 

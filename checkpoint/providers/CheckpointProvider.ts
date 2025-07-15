@@ -207,6 +207,9 @@ export const historyByUserIdCheckpointDate = async (
         },
       });
 
+    console.log('===== historyByUserIdCheckpointDate response =====');  
+    console.log(response.data);
+    
     return response;
 
   } catch (error: any) {

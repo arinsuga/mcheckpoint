@@ -43,6 +43,9 @@ const CheckpointForm = ({action, actionButton, file, attendId}: IChekPointFormPr
       attend_id: attendId,
       latitude: '',
       longitude: '',
+      title: '',
+      subtitle: '',
+      description: '',
     });
     const uri = `file://${file?.path}`;
 
@@ -82,7 +85,8 @@ useEffect(() => {
           const now = moment();
           checkpointCurrentData.utc_tz = localization.getCalendars()[0].timeZone as string;
           checkpointCurrentData.utc_millis = now.utc().valueOf().toString();
-          checkpointCurrentData.utc_offset = (momentTZ.tz( checkpointCurrentData.utc_tz ).utcOffset() / 60).toString() ; 
+          checkpointCurrentData.utc_offset = (momentTZ.tz( checkpointCurrentData.utc_tz ).utcOffset() / 60).toString(); 
+
           // console.log({
           //   now,
           //   utc_tz: checkpointCurrentData.utc_tz,
@@ -135,22 +139,6 @@ useEffect(() => {
               }}
             />
 
-            <FieldTextInput
-              placeholder='Title'
-              onFocus={hideCaptured}
-              onChangeText={(nextText) => setCheckpoint({ ...checkpoint, title: nextText })}
-              style={{
-                width: Dimensions.get('window').width-50,
-              }}
-            />
-            <FieldTextInput
-              placeholder='Sub Title'
-              onFocus={hideCaptured}
-              onChangeText={(nextText) => setCheckpoint({ ...checkpoint, subtitle: nextText })}
-              style={{
-                width: Dimensions.get('window').width-50,
-              }}
-            />
             <FieldMultilineTextInput
               placeholder='Description'
               onFocus={hideCaptured}
@@ -168,9 +156,13 @@ useEffect(() => {
                     const success = await handleSave(checkpoint);
                     if (success) router.replace('/')
                   }}
-                  style={styles.checkButton}
+                  style={[styles.checkButton, {
+                    backgroundColor: checkpoint.checkType == 'checkin' ? Colors.green : action == 'checkout' ? Colors.red : Colors.grey,
+                  }]}
               >
-                <Text style={{color: Colors.white}}>{ checkpoint.checkType == 'checkin' ? 'Checkin' : 'Checkout' }</Text>
+                <Text style={{color: Colors.white}}>
+                  { checkpoint.checkType == 'checkin' ? 'Save Checkin' : 'Save Checkout' }
+                </Text>
               </TouchableOpacity> :
               <View
                   style={[
@@ -203,6 +195,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 50,
     width: Dimensions.get('window').width-100,
-    backgroundColor: Colors.primary,
   }
 });
