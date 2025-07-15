@@ -49,15 +49,13 @@ const TimelineItem = memo(({item}: TimelineItemProps) => {
             <View style={styles.itemLeft}>
                 <Text style={{fontWeight: 'bold'}}>{ item.date }</Text>
                 <Text style={{fontWeight: 'bold'}}>{ item.time }</Text>
-                <Text style={{color: color()?.type}}>{ item.type }</Text>
             </View>
             <View style={styles.itemRight}>
                 <View style={{ backgroundColor: color()?.bg, borderRadius: 10, padding: 24, rowGap: 5 }} onLayout={onLayout}>
                     <View>
                         {
-                            item.title &&
                             <Text style={{ color: color()?.text, fontSize: 16, fontWeight: 'bold' }}>
-                                {item.title}
+                                {item.type}
                             </Text>
                         }
                         {
