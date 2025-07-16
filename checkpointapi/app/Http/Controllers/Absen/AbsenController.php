@@ -541,6 +541,16 @@ class AbsenController extends Controller
             
         } //end if
 
+        //validasi Timezone
+        if (!isset($utc_tz) || !isset($utc_millis) || !isset($utc_offset)) {
+
+            return response()->json([
+                'status-failed' => 'CHECKIN GAGAL - Informasi Timezone harus dilampirkan',
+                'checkin_description' => $request->input('checkin_description'),
+            ], 500);
+                                
+        } //end if
+
 
         $host = $this->getFullURL($latitude, $longitude);
         $data = $this->oLocater->locate($host);
@@ -648,11 +658,18 @@ class AbsenController extends Controller
             //validasi upload foto mandatory
             if (!isset($upload)) {
 
-                // return redirect('/')->with('status-failed', 'CHECKOUT GAGAL - Foto harus dilampirkan')
-                //                      ->with('checkout_description', $request->input('checkout_description'));
-
                 return response()->json([
                     'status-failed' => 'CHECKOUT GAGAL - Foto harus dilampirkan',
+                    'checkout_description' => $request->input('checkout_description'),
+                ], 500);
+
+            } //end if
+
+            //validasi Timezone
+            if (!isset($utc_tz) || !isset($utc_millis) || !isset($utc_offset)) {
+
+                return response()->json([
+                    'status-failed' => 'CHECKOUT GAGAL - Informasi Timezone harus dilampirkan',
                     'checkout_description' => $request->input('checkout_description'),
                 ], 500);
 

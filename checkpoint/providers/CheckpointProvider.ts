@@ -123,8 +123,6 @@ export const checkout = async (checkoutData: ICheckpoint): Promise<any> => {
     // formData.append('checkout_subtitle', 'HPTEST - ' + checkoutData.subtitle as string);
     // formData.append('checkout_description', 'HPTEST - ' + checkoutData.description as string);
 
-    console.log(checkoutData);
-
     const response = await axios.post(`${API_URL}/checkout`, formData,
       {
         headers: {
@@ -207,9 +205,6 @@ export const historyByUserIdCheckpointDate = async (
         },
       });
 
-    console.log('===== historyByUserIdCheckpointDate response =====');  
-    console.log(response.data);
-    
     return response;
 
   } catch (error: any) {

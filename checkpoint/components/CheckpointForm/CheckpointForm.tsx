@@ -43,6 +43,9 @@ const CheckpointForm = ({action, actionButton, file, attendId}: IChekPointFormPr
       attend_id: attendId,
       latitude: '',
       longitude: '',
+      utc_tz: '',
+      utc_millis: '',
+      utc_offset: '',
       title: '',
       subtitle: '',
       description: '',
@@ -95,15 +98,16 @@ useEffect(() => {
           // });
 
 
+          let result = null;
           if (checkpointData.checkType == 'checkin') {
 
         
-            const result = await checkin(checkpointCurrentData);
+            result = await checkin(checkpointCurrentData);
             alert('Checkin berhasil...');
 
           } else if (checkpointData.checkType == 'checkout') {
 
-            const result = await checkout(checkpointCurrentData);
+            result = await checkout(checkpointCurrentData);
             alert('Checkout berhasil...');
 
           } else {
@@ -112,6 +116,10 @@ useEffect(() => {
 
           }
 
+          // console.log({
+          //   data: result.response.data,
+          //   status: result.response.status
+          // });
 
           return true;
   
