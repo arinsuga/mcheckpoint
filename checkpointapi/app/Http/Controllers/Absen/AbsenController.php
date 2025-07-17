@@ -534,7 +534,7 @@ class AbsenController extends Controller
             //                     ->with('checkin_description', $request->input('checkin_description'));
 
             return response()->json([
-                'status-failed' => 'CHECKIN GAGAL - Foto harus dilampirkan',
+                'status_failed' => 'CHECKIN GAGAL - Foto harus dilampirkan',
                 'checkin_description' => $request->input('checkin_description'),
             ], 500);
             
@@ -545,7 +545,7 @@ class AbsenController extends Controller
         if (!isset($utc_tz) || !isset($utc_millis) || !isset($utc_offset)) {
 
             return response()->json([
-                'status-failed' => 'CHECKIN GAGAL - Informasi Timezone harus dilampirkan',
+                'status_failed' => 'CHECKIN GAGAL - Informasi Timezone harus dilampirkan',
                 'checkin_description' => $request->input('checkin_description'),
             ], 500);
                                 
@@ -659,7 +659,7 @@ class AbsenController extends Controller
             if (!isset($upload)) {
 
                 return response()->json([
-                    'status-failed' => 'CHECKOUT GAGAL - Foto harus dilampirkan',
+                    'status_failed' => 'CHECKOUT GAGAL - Foto harus dilampirkan',
                     'checkout_description' => $request->input('checkout_description'),
                 ], 500);
 
@@ -669,7 +669,7 @@ class AbsenController extends Controller
             if (!isset($utc_tz) || !isset($utc_millis) || !isset($utc_offset)) {
 
                 return response()->json([
-                    'status-failed' => 'CHECKOUT GAGAL - Informasi Timezone harus dilampirkan',
+                    'status_failed' => 'CHECKOUT GAGAL - Informasi Timezone harus dilampirkan',
                     'checkout_description' => $request->input('checkout_description'),
                 ], 500);
 

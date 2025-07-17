@@ -99,22 +99,26 @@ useEffect(() => {
 
 
           let result = null;
+          let resultMessage = '';
           if (checkpointData.checkType == 'checkin') {
 
         
             result = await checkin(checkpointCurrentData);
-            alert('Checkin berhasil...');
+            resultMessage = 'Checkin berhasil...';
 
           } else if (checkpointData.checkType == 'checkout') {
 
             result = await checkout(checkpointCurrentData);
-            alert('Checkout berhasil...');
+            resultMessage = 'Checkout berhasil...';
 
           } else {
 
-            alert('Data gagal tersimpan...');
+            resultMessage = 'Data gagal tersimpan...';
 
           }
+          
+          result.response.status == 500 ? resultMessage = result.response.data.status_failed : null ;
+          alert(resultMessage);
 
           // console.log({
           //   data: result.response.data,
@@ -125,8 +129,8 @@ useEffect(() => {
   
         } catch (error) {
 
-            alert('Data gagal disimpan...');
-            return false;
+            alert('Data gagal disimpanXXX...');
+            return true;
 
         }
     }, []);
