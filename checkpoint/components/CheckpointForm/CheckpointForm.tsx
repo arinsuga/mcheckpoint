@@ -11,21 +11,28 @@ import {
     StyleSheet,
     ActivityIndicator
 } from 'react-native';
+
+//Packages
 import moment from 'moment';
 import * as localization from 'expo-localization';
 import * as momentTZ from 'moment-timezone';
-
-//Packages
 import { useRouter } from 'expo-router';
 import {PhotoFile} from 'react-native-vision-camera';
 import * as Location from 'expo-location';
+import { showMessage, MessageOptions } from 'react-native-flash-message';
 
-import FieldTextInput from '../FieldTextInput/FieldTextInput';
+//Components
 import FieldMultilineTextInput from '../FieldMultilineTextInput/FieldMultilineTextInput';
-import { Colors } from '@/constants/Colors';
-import ICheckpoint from '@/interfaces/ICheckpoint';
-import { checkin, checkout } from '@/services/CheckpointService';
 import WaitingIndicator from '@/components/WaitingIndicator/WaitingIndicator';
+
+//Constants
+import { Colors } from '@/constants/Colors';
+
+//Interfaces
+import ICheckpoint from '@/interfaces/ICheckpoint';
+
+//Services
+import { checkin, checkout } from '@/services/CheckpointService';
 
 interface IChekPointFormProps {
   action: 'checkin' | 'checkout'; 
@@ -79,6 +86,29 @@ useEffect(() => {
 
     const handleSave = useCallback(async (checkpointData: ICheckpoint) => {
 
+        let result = null;
+        let messageOptionSuccess: MessageOptions = {
+            message: 'Success...',
+            description: '',
+            type: 'success',
+            duration: 3000,
+            floating: true,
+            icon: 'success',
+            backgroundColor: Colors.success,
+            color: Colors.white,
+        };
+        let messageOptionDanger: MessageOptions = {
+            message: 'Failed...',
+            description: '',
+            type: 'danger',
+            duration: 3000,
+            floating: true,
+            icon: 'danger',
+            backgroundColor: Colors.danger,
+            color: Colors.white,
+        };
+        let messageOption: MessageOptions = { ...messageOptionSuccess };
+
         try {
 
           setIsWaiting(true);
@@ -90,46 +120,57 @@ useEffect(() => {
           checkpointCurrentData.utc_millis = now.utc().valueOf().toString();
           checkpointCurrentData.utc_offset = (momentTZ.tz( checkpointCurrentData.utc_tz ).utcOffset() / 60).toString(); 
 
-          // console.log({
-          //   now,
-          //   utc_tz: checkpointCurrentData.utc_tz,
-          //   utc_millis: checkpointCurrentData.utc_millis,
-          //   utc_offset: checkpointCurrentData.utc_offset,
-          // });
-
-
-          let result = null;
-          let resultMessage = '';
           if (checkpointData.checkType == 'checkin') {
-
         
-            result = await checkin(checkpointCurrentData);
-            resultMessage = 'Checkin berhasil...';
+              result = await checkin(checkpointCurrentData);
+              messageOption = {
+                ...messageOptionSuccess,
+                description: 'Checkin berhasil...',
+              }
 
           } else if (checkpointData.checkType == 'checkout') {
 
-            result = await checkout(checkpointCurrentData);
-            resultMessage = 'Checkout berhasil...';
+              result = await checkout(checkpointCurrentData);
+              messageOption = {
+                ...messageOptionDanger,
+                description: 'Checkout berhasil...',
+              }
 
           } else {
 
-            resultMessage = 'Data gagal tersimpan...';
+              messageOption = {
+                ...messageOptionDanger,
+                description: 'Data gagal tersimpan...',
+              };
 
           }
           
-          result.response.status == 500 ? resultMessage = result.response.data.status_failed : null ;
-          alert(resultMessage);
+          // if (result.response.status == 500) {
+          //     messageOption = {
+          //       ...messageOptionDanger,
+          //       description: result.response.data.status_failed,
+          //     };
+          // }
 
-          // console.log({
-          //   data: result.response.data,
-          //   status: result.response.status
-          // });
+          console.log({
+            checkpointCurrentData,
+            result_message: result.message,
+            result_status: result.status, 
+            messageOption
+          });
+          showMessage(messageOption);
+
 
           return true;
   
         } catch (error) {
 
-            alert('Data gagal disimpanXXX...');
+            console.log('Error .....');
+            messageOption = {
+              ...messageOptionDanger,
+              description: 'Data gagal tersimpan...',
+            };
+            showMessage(messageOption);
             return true;
 
         }
@@ -189,8 +230,6 @@ useEffect(() => {
               </View>
 
             }
-
-
 
             <WaitingIndicator isWaiting={isWaiting} />
 

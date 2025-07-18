@@ -618,7 +618,7 @@ class AbsenController extends Controller
             'metadata' => json_encode($data)
         ];
 
-        return response()->json($response);
+        return response()->json($response, 500);
     }
 
     /**
@@ -725,7 +725,7 @@ class AbsenController extends Controller
             'metadata' => json_encode($data)
         ];
 
-        return response()->json($response);
+        return response()->json($response, 500);
 
     } //end method
 
