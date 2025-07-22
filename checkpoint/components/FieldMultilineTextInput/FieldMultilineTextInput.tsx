@@ -1,4 +1,4 @@
-import { ComponentProps } from "react";
+import { useRef } from "react";
 import {
     View,
     TextInput,
@@ -9,6 +9,7 @@ import FormStyles from "@/constants/FormStyles";
 import FieldTextInputProps from "@/props/FieldTextInputProps";
 
 export const FieldMultilineTextInput = (props: FieldTextInputProps) => {
+    const localRef = useRef<TextInput>(null);
 
     return (
         <View
@@ -26,6 +27,7 @@ export const FieldMultilineTextInput = (props: FieldTextInputProps) => {
             onBlur={props.onBlur}
             textAlignVertical="bottom"
             style={ [ FormStyles.textInput, props.style && props.style ] }
+            ref={props.inputRef ?? localRef}
           ></TextInput>
 
         </View>

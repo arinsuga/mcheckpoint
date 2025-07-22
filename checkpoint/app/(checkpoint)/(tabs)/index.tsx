@@ -10,6 +10,7 @@ import {
 
 //Packages
 import { useRouter, Router } from "expo-router";
+import { hideMessage } from 'react-native-flash-message';
 
 //Components
 import Logo from "@/components/Logo/Logo";
@@ -95,7 +96,10 @@ export default function Home() {
 
                 action == 'checkin' || action == 'checkout' ?
                 <TouchableOpacity
-                    onPress={ async() => router.push('/pinloc')} 
+                    onPress={ async() => {
+                      hideMessage();
+                      router.push('/pinloc');
+                    }} 
                     style={ getStyles(action).checkButton }
                 >
                   { action == 'checkin' ? <Icon.Checkin size={28} color={ Colors.white } /> :

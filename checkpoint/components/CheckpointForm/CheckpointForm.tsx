@@ -1,8 +1,9 @@
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import {
     View,
     Text,
+    TextInput,
     Image,
     Platform,
     Dimensions,
@@ -33,6 +34,7 @@ import ICheckpoint from '@/interfaces/ICheckpoint';
 
 //Services
 import { checkin, checkout } from '@/services/CheckpointService';
+import { timeout } from 'rxjs';
 
 interface IChekPointFormProps {
   action: 'checkin' | 'checkout'; 
@@ -58,6 +60,7 @@ const CheckpointForm = ({action, actionButton, file, attendId}: IChekPointFormPr
       description: '',
     });
     const uri = `file://${file?.path}`;
+    const localInputRef = useRef<TextInput>(null);
 
 
 
@@ -74,11 +77,47 @@ useEffect(() => {
 
   })();
 
+  const timeout = setTimeout(() => localInputRef.current?.focus(), 100);
+
+  return () => clearTimeout(timeout);
 
 }, []);
 
+      let messageOptionSuccess: MessageOptions = {
+          message: '',
+          description: '',
+          type: 'success',
+          duration: 5000,
+          floating: true,
+          icon: 'success',
+          backgroundColor: Colors.success,
+          color: Colors.white,
+      };
+      let messageOptionDanger: MessageOptions = {
+          message: '',
+          description: '',
+          type: 'danger',
+          duration: 5000,
+          floating: true,
+          icon: 'success',
+          backgroundColor: Colors.danger,
+          color: Colors.white,
+      };
+      let messageOptionFailed: MessageOptions = {
+          message: '',
+          description: '',
+          type: 'default',
+          duration: 5000,
+          floating: true,
+          icon: 'danger',
+          backgroundColor: Colors.grey,
+          color: Colors.white,
+      };
+      let messageOption: MessageOptions = { ...messageOptionSuccess };
 
     const router = useRouter();
+
+    const handleFocus = () => localInputRef.current?.focus();
 
     const hideCaptured = () => setDisplaycamera(false);
 
@@ -87,28 +126,6 @@ useEffect(() => {
     const handleSave = useCallback(async (checkpointData: ICheckpoint) => {
 
         let result = null;
-        let messageOptionSuccess: MessageOptions = {
-            message: 'Success...',
-            description: '',
-            type: 'success',
-            duration: 3000,
-            floating: true,
-            icon: 'success',
-            backgroundColor: Colors.success,
-            color: Colors.white,
-        };
-        let messageOptionDanger: MessageOptions = {
-            message: 'Failed...',
-            description: '',
-            type: 'danger',
-            duration: 3000,
-            floating: true,
-            icon: 'danger',
-            backgroundColor: Colors.danger,
-            color: Colors.white,
-        };
-        let messageOption: MessageOptions = { ...messageOptionSuccess };
-
         try {
 
           setIsWaiting(true);
@@ -120,11 +137,24 @@ useEffect(() => {
           checkpointCurrentData.utc_millis = now.utc().valueOf().toString();
           checkpointCurrentData.utc_offset = (momentTZ.tz( checkpointCurrentData.utc_tz ).utcOffset() / 60).toString(); 
 
+
+          console.log(`===== Inside ${checkpointData.checkType == 'checkin' ? 'CHECKIN' : 'CHECKOUT'} Form Result =====`);
+          console.log({
+            latitude: checkpointCurrentData.latitude,
+            longitude: checkpointCurrentData.longitude,
+            utc_tz: checkpointCurrentData.utc_tz,
+            utc_millis: checkpointCurrentData.utc_millis,
+            utc_offset: checkpointCurrentData.utc_offset,
+            result: result,
+          });
+
+
           if (checkpointData.checkType == 'checkin') {
         
               result = await checkin(checkpointCurrentData);
               messageOption = {
                 ...messageOptionSuccess,
+                message: 'CHECKIN',
                 description: 'Checkin berhasil...',
               }
 
@@ -133,31 +163,29 @@ useEffect(() => {
               result = await checkout(checkpointCurrentData);
               messageOption = {
                 ...messageOptionDanger,
+                message: 'CHECKOUT',
                 description: 'Checkout berhasil...',
               }
 
           } else {
 
               messageOption = {
-                ...messageOptionDanger,
+                ...messageOptionFailed,
                 description: 'Data gagal tersimpan...',
               };
 
           }
           
-          // if (result.response.status == 500) {
-          //     messageOption = {
-          //       ...messageOptionDanger,
-          //       description: result.response.data.status_failed,
-          //     };
-          // }
+          if (result.status == 500) {
 
-          console.log({
-            checkpointCurrentData,
-            result_message: result.message,
-            result_status: result.status, 
-            messageOption
-          });
+              messageOption = {
+                ...messageOptionFailed,
+                message: `ERROR: ${result.status}`,
+                description: result.data.message,
+              };
+            
+          }
+
           showMessage(messageOption);
 
 
@@ -165,9 +193,10 @@ useEffect(() => {
   
         } catch (error) {
 
-            console.log('Error .....');
+            console.log('===== Error Inside CheckpointForm =====');
+            console.log(error);
             messageOption = {
-              ...messageOptionDanger,
+              ...messageOptionFailed,
               description: 'Data gagal tersimpan...',
             };
             showMessage(messageOption);
@@ -196,6 +225,7 @@ useEffect(() => {
               placeholder='Description'
               onFocus={hideCaptured}
               onChangeText={(nextText) => setCheckpoint({ ...checkpoint, description: nextText })}
+              inputRef={ localInputRef }
               style={{
                 width: Dimensions.get('window').width-50,
               }}

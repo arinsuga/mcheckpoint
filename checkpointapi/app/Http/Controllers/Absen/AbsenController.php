@@ -527,6 +527,16 @@ class AbsenController extends Controller
         $utc_millis = $request->input('utc_millis');
         $utc_offset = $request->input('utc_offset');
 
+        //validasi location
+        if (!isset($latitude) || !isset($longitude)) {
+
+            return response()->json([
+                'status_failed' => 'CHECKIN GAGAL - Data Lokasi tidak dilampirkan',
+                'checkout_description' => $request->input('checkout_description'),
+            ], 500);
+
+        } //end if
+        
         //validasi upload foto mandatory
         if (!isset($upload)) {
 
@@ -608,17 +618,21 @@ class AbsenController extends Controller
                 'metadata' => json_encode($data)
             ];
     
-            return response()->json($response);
+            return response()->json($response, 200);
     
         } //end if
 
-        $response = [
-            'message' => 'data checkin absensi gagal tersimpan',
-            'result' => $data,
-            'metadata' => json_encode($data)
-        ];
+        return response()->json([
+            'status_failed' => 'CHECKIN GAGAL - Kontak admin untuk informasi lebih lanjut',
+            'checkin_description' => '',
+        ], 500);
 
-        return response()->json($response, 500);
+        // $response = [
+        //     'message' => 'data checkin absensi gagal tersimpan',
+        //     'result' => $data,
+        //     'metadata' => json_encode($data)
+        // ];
+        // return response()->json($response, 500);
     }
 
     /**
@@ -633,6 +647,7 @@ class AbsenController extends Controller
      */
     public function checkout(Request $request)
     {
+
 
         $data = null;
         $attend = Attend::find($request->input('attend_id'));
@@ -655,6 +670,16 @@ class AbsenController extends Controller
             $utc_millis = $request->input('utc_millis');
             $utc_offset = $request->input('utc_offset');
 
+            //validasi location
+            if (!isset($latitude) || !isset($longitude)) {
+
+                return response()->json([
+                    'status_failed' => 'CHECKOUT GAGAL - Data Lokasi tidak dilampirkan',
+                    'checkout_description' => $request->input('checkout_description'),
+                ], 500);
+
+            } //end if
+
             //validasi upload foto mandatory
             if (!isset($upload)) {
 
@@ -675,6 +700,7 @@ class AbsenController extends Controller
 
             } //end if
 
+        
             $host = $this->getFullURL($latitude, $longitude);
             $data = $this->oLocater->locate($host);
 
@@ -713,19 +739,24 @@ class AbsenController extends Controller
                     'metadata' => json_encode($data)
                 ];
         
-                return response()->json($response);
+                return response()->json($response, 200);
     
             } //end if
 
         } //end if
 
-        $response = [
-            'message' => 'data checkout absensi gagal tersimpan',
-            'result' => $data,
-            'metadata' => json_encode($data)
-        ];
+        return response()->json([
+            'status_failed' => 'CHECKOUT GAGAL - Kontak admin untuk informasi lebih lanjut',
+            'checkout_description' => '',
+        ], 500);
 
-        return response()->json($response, 500);
+        // $response = [
+        //     'message' => 'data checkout absensi gagal tersimpan',
+        //     'result' => $data,
+        //     'metadata' => json_encode($data)
+        // ];
+
+        // return response()->json($response, 500);
 
     } //end method
 

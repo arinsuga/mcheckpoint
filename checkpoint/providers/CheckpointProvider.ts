@@ -48,6 +48,7 @@ export const check = async (username: string): Promise<any> => {
 export const checkin = async (checkinData: ICheckpoint): Promise<any> => {
 
   const token = await getToken();
+  let errorData = null;
   try {    
 
     const filePhoto = await Compressutils.photoFileToJPEG(checkinData.file, compressWidth, compressPercent);
@@ -78,7 +79,28 @@ export const checkin = async (checkinData: ICheckpoint): Promise<any> => {
           'Accept': 'application/json',
           'Content-Type': 'multipart/form-data',
         },
+      })
+      .catch(error => {
+        console.log('===== error from axios =====');
+        console.log(`status : ${error.response.status}`);
+        console.log(`data: ${error.response.data}`);
+        console.log(`message status_faield: ${error.response.data.status_failed}`);
+        console.log(`message checkin_description: ${error.response.data.checkin_description}`);
+
+        errorData = {
+          status: error.response.status,
+          data: {
+            message: error.response.data.status_failed,
+            result: '',
+            metadata: '',
+          }
+        };
       });
+
+    if (errorData) return errorData;
+
+    // console.log(response.data);  
+      console.log('Checkin SUCCESS mas bro...');  
 
     return response;
 
@@ -87,7 +109,7 @@ export const checkin = async (checkinData: ICheckpoint): Promise<any> => {
     console.log(error);  
     console.log('Checkin ERROR mas bro...');  
 
-    return error;
+    return errorData;
 
   }
 
@@ -96,6 +118,7 @@ export const checkin = async (checkinData: ICheckpoint): Promise<any> => {
 export const checkout = async (checkoutData: ICheckpoint): Promise<any> => {
 
   const token = await getToken();
+  let errorData = null;
   try {    
 
     const filePhoto = await Compressutils.photoFileToJPEG(checkoutData.file, compressWidth, compressPercent);
@@ -130,10 +153,30 @@ export const checkout = async (checkoutData: ICheckpoint): Promise<any> => {
           'Accept': 'application/json',
           'Content-Type': 'multipart/form-data',
         },
+      })
+      .catch(error => {
+        console.log('===== error from axios =====');
+        console.log(`status : ${error.response.status}`);
+        console.log(`data: ${error.response.data}`);
+        console.log(`message status_faield: ${error.response.data.status_failed}`);
+        console.log(`message checkout_description: ${error.response.data.checkout_description}`);
+
+        errorData = {
+          status: error.response.status,
+          data: {
+            message: error.response.data.status_failed,
+            result: '',
+            metadata: '',
+          }
+        };
       });
 
-      // console.log(response.data);  
+    if (errorData) return errorData;
+
+
+    // console.log(response.data);  
       console.log('Checkout SUCCESS mas bro...');  
+
       return response;
 
   } catch (error) {
