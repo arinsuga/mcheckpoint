@@ -45,38 +45,17 @@ const TimelineItem = memo(({item}: TimelineItemProps) => {
     }
 
     return (
-        <TouchableOpacity style={styles.itemContainer} activeOpacity={0.8}>
-            <View style={styles.itemLeft}>
-                <Text style={{fontWeight: 'bold'}}>{ item.date }</Text>
-                <Text style={{fontWeight: 'bold'}}>{ item.time }</Text>
-            </View>
-            <View style={styles.itemRight}>
-                <View style={{ backgroundColor: color()?.bg, borderRadius: 10, padding: 24, rowGap: 5 }} onLayout={onLayout}>
-                    <View>
-                        {
-                            <Text style={{ color: color()?.text, fontSize: 16, fontWeight: 'bold' }}>
-                                {item.type}
-                            </Text>
-                        }
-                        {
-                            item.subtitle &&
-                            <Text style={{ color: color()?.text, fontSize: 12, fontWeight: '500' }}>{item.subtitle}</Text>
-                        }
-                        <Text style={{ color: color()?.text, fontSize: 12, fontWeight: '500' }}>{item.description}</Text>
-                    </View>
+        <TouchableOpacity style={[styles.itemContainer, {backgroundColor: color()?.bg}]} activeOpacity={0.8}>
+            <View onLayout={onLayout}>
+                <View>
+                    <Text style={[styles.itemTitle, { color: color()?.text, }]}>
+                        {item.type}
+                    </Text>
+                </View>
 
-                    {/* <CachedImage
-                        source={{ uri: item.image }}
-                        cacheKey={item.id}
-                        style={{
-                            width: '100%',
-                            height: parentheight/2,
-                            marginTop: 10,
-                        }}
-                    /> */}
-
-                    {
-                        item.image &&
+                {
+                    item.image &&
+                    <View style={{ flex: 1 }}>
                         <FastImage
                             source={{ uri: item.image, priority: FastImage.priority.normal }}
                             resizeMode={ FastImage.resizeMode.contain }
@@ -86,15 +65,47 @@ const TimelineItem = memo(({item}: TimelineItemProps) => {
                                 height: item.image  ? parentheight/2 : 0,
                             }}
                         />
-                    }
+                    </View>
+                }
 
-                    <View style={{flexDirection: 'row', alignItems: 'center', columnGap: 14 }}>
-                        <Icon.Location color={color()?.icon} size={16}/>
-                        <View>
-                            <Text style={{ color: color()?.text }}>{item.address}</Text>
-                        </View>
+
+                <View style={styles.item}>
+                    <Icon.Date color={color()?.icon} size={18}/>
+                    <View>
+                        <Text style={{ color: color()?.text }}>{item.date}</Text>
                     </View>
                 </View>
+                <View style={styles.item}>
+                    <Icon.Time color={color()?.icon} size={18}/>
+                    <View>
+                        <Text style={{ color: color()?.text }}>{item.time}</Text>
+                    </View>
+                </View>
+                <View style={styles.item}>
+                    <Icon.Note color={color()?.icon} size={18}/>
+                    <View style={{ flex: 1, }}>
+                        <Text style={{ color: color()?.text }}>{item.description}</Text>
+                    </View>
+                </View>
+
+                <View style={styles.item}>
+                    <Icon.Location color={color()?.icon} size={18}/>
+                    <View style={{ flex: 1, }}>
+                        <Text style={{ color: color()?.text, overflow: 'scroll' }}>{item.address}</Text>
+                    </View>
+                </View>
+
+                {/* <CachedImage
+                    source={{ uri: item.image }}
+                    cacheKey={item.id}
+                    style={{
+                        width: '100%',
+                        height: parentheight/2,
+                        marginTop: 10,
+                    }}
+                /> */}
+
+
             </View>
         </TouchableOpacity>
     )
@@ -103,7 +114,26 @@ const TimelineItem = memo(({item}: TimelineItemProps) => {
 export default TimelineItem;
 
 const styles = StyleSheet.create({
-    itemContainer: {flexDirection: 'row'},
-    itemLeft: {flex: 1, alignItems: 'center', justifyContent: 'flex-start'},
-    itemRight: {flex:3, paddingBottom: 20, borderLeftWidth: 3, borderLeftColor: Colors.white},
+    itemContainer: {
+        flex:1,
+        flexDirection: 'column',
+        borderLeftWidth: 3,
+        borderLeftColor: Colors.white,
+        borderRadius: 10,
+        paddingHorizontal: 18,
+        paddingTop: 10,
+        paddingBottom: 20,
+        marginBottom: 20
+    },
+    itemTitle: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom: 15,
+    },
+    item: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        columnGap: 10
+    },
 });

@@ -46,7 +46,7 @@ export default function Home() {
           borderRadius: 10,
           bottom: 30,
           left: buttonLeftPosition,
-          backgroundColor: action == 'checkin' ? Colors.green : action == 'checkout' ? Colors.red : Colors.grey,
+          backgroundColor: action == 'checkin' ? Colors.green : action == 'checkout' ? Colors.orange : Colors.grey,
         }
 
       });

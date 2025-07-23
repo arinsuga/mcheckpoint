@@ -121,6 +121,7 @@ useEffect(() => {
 
     const hideCaptured = () => setDisplaycamera(false);
 
+    //#TODO
     const showCaptured = () => setDisplaycamera(true);
 
     const handleSave = useCallback(async (checkpointData: ICheckpoint) => {
@@ -240,7 +241,7 @@ useEffect(() => {
                     if (success) router.replace('/')
                   }}
                   style={[styles.checkButton, {
-                    backgroundColor: checkpoint.checkType == 'checkin' ? Colors.green : action == 'checkout' ? Colors.red : Colors.grey,
+                    backgroundColor: checkpoint.checkType == 'checkin' ? Colors.green : action == 'checkout' ? Colors.orange : Colors.grey,
                   }]}
               >
                 <Text style={{color: Colors.white}}>

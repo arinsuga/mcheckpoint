@@ -22,7 +22,7 @@ const TimelineList = ({ data }: IDataListProps) => {
             {
                 data &&
                 <FlatList
-                    ListHeaderComponent={TimelineHeader}
+                    // ListHeaderComponent={TimelineHeader}
                     data={data}
                     renderItem={({ item }) => <TimelineItem item={item} />}
                     contentContainerStyle={{paddingBottom: 150}}

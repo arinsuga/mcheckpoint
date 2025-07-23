@@ -85,12 +85,20 @@ export const IconDate = ({ size = defaultSize, color = defaultColor, style }: Ic
     return <Fontisto name="date" size={size} color={color} style={style} />
 }
 
+export const IconTime = ({ size = defaultSize, color = defaultColor, style }: IconProps) => {
+    return <Ionicons name="time-outline" size={size} color={color} style={style} />
+}
+
 export const IconCheckin = ({ size = defaultSize, color = defaultColor, style }: IconProps) => {
     return <Entypo name="login" size={size} color={color} style={style} />
 }
 
 export const IconCheckout = ({ size = defaultSize, color = defaultColor, style }: IconProps) => {
     return <Entypo name="log-out" size={size} color={color} style={style} />
+}
+
+export const IconNote = ({ size = defaultSize, color = defaultColor, style }: IconProps) => {
+    return <MaterialIcons name="edit-note" size={size} color={color} style={style} />
 }
 
 const Icon = {
@@ -109,8 +117,10 @@ const Icon = {
     Key: IconKey,
     DateRange: IconDateRange,
     Date: IconDate,
+    Time: IconTime,
     Checkin: IconCheckin,
-    Checkout: IconCheckout
+    Checkout: IconCheckout,
+    Note: IconNote,
 }
 
 export default Icon
