@@ -6,8 +6,11 @@ import FastImage from "react-native-fast-image";
 
 //Components
 import Icon from '@/components/Icon/Icon';
+
 //Constants
 import { Colors } from "@/constants/Colors";
+import Styles from '@/constants/Styles';
+
 //Interfaces
 import ITimeLine from "@/interfaces/ITimeLine";
 
@@ -16,6 +19,7 @@ type TimelineItemProps = {
 }
 const TimelineItem = memo(({item}: TimelineItemProps) => {
     const [parentheight, setParentHeight] = useState(0);
+    const [isShowImage, setIsShowImage] = useState(false);
 
 
     const color = () => {
@@ -30,7 +34,7 @@ const TimelineItem = memo(({item}: TimelineItemProps) => {
         }
         if(item.type === 'Checkout') {
             return {
-                bg: Colors.whiteDark,
+                bg: Colors.grey,
                 text: Colors.greyDark,
                 icon: Colors.greyDark,
                 type: Colors.greyDark,
@@ -44,24 +48,72 @@ const TimelineItem = memo(({item}: TimelineItemProps) => {
         setParentHeight(height);
     }
 
+    const handleShowImage = () => {
+        setIsShowImage(!isShowImage);
+        console.log('show image');
+    }   
+
     return (
         <TouchableOpacity style={[styles.itemContainer, {backgroundColor: color()?.bg}]} activeOpacity={0.8}>
             <View onLayout={onLayout}>
-                <View>
+                <View style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    alignItems: 'flex-start',
+                    justifyContent: 'space-between',
+                }}>
                     <Text style={[styles.itemTitle, { color: color()?.text, }]}>
                         {item.type}
                     </Text>
+                    <TouchableOpacity style={[
+                        Styles.btn,
+                        {
+                            flex: .6,
+                            flexDirection: 'row',
+                            justifyContent: 'space-evenly',
+                            backgroundColor: item.type == 'Checkin' ? Colors.yellow : Colors.greyDark,
+                            paddingHorizontal: 10,
+                            paddingVertical: 5
+                        }
+                    ]} onPress={ () => handleShowImage() }>
+
+
+                        <Text style={ [
+                            Styles.btnText,
+                            {
+                                color: item.type == 'Checkin' ? Colors.black : Colors.white,
+                                marginRight: 5,
+                            }
+                        ] }>
+                            { isShowImage ? 'Hide Image' : 'Show Image' }
+                        </Text>
+                        {
+                            isShowImage ?
+                            <Icon.ArrowUp color={item.type == 'Checkin' ? Colors.black : Colors.white} size={18}/>
+                            :
+                            <Icon.ArrowDown color={item.type == 'Checkin' ? Colors.black : Colors.white} size={18}/>
+
+                        }
+                        
+
+                    </TouchableOpacity>
+                    
                 </View>
 
                 {
-                    item.image &&
-                    <View style={{ flex: 1 }}>
+                    item.image && isShowImage &&
+                    <View style={{
+                        flex: 1,
+                        backgroundColor: Colors.greyDark,
+                        marginBottom: 15,
+                        borderRadius: 5,
+                    }}>
                         <FastImage
                             source={{ uri: item.image, priority: FastImage.priority.normal }}
                             resizeMode={ FastImage.resizeMode.contain }
                             style={{
                                 width: '100%',
-                                marginTop: 10,
+                                margin: 5,
                                 height: item.image  ? parentheight/2 : 0,
                             }}
                         />

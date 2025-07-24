@@ -101,6 +101,22 @@ export const IconNote = ({ size = defaultSize, color = defaultColor, style }: Ic
     return <MaterialIcons name="edit-note" size={size} color={color} style={style} />
 }
 
+export const IconArrowUp = ({ size = defaultSize, color = defaultColor, style }: IconProps) => {
+    return <MaterialIcons name="keyboard-arrow-up" size={size} color={color} style={style} />
+}
+
+export const IconArrowDown = ({ size = defaultSize, color = defaultColor, style }: IconProps) => {
+    return <MaterialIcons name="keyboard-arrow-down" size={size} color={color} style={style} />
+}
+
+export const IconArrowRight = ({ size = defaultSize, color = defaultColor, style }: IconProps) => {
+    return <MaterialIcons name="keyboard-arrow-right" size={size} color={color} style={style} />
+}
+
+export const IconArrowLeft = ({ size = defaultSize, color = defaultColor, style }: IconProps) => {
+    return <MaterialIcons name="keyboard-arrow-left" size={size} color={color} style={style} />
+}
+
 const Icon = {
     Home: IconHome,
     History: IconHistory,
@@ -121,6 +137,10 @@ const Icon = {
     Checkin: IconCheckin,
     Checkout: IconCheckout,
     Note: IconNote,
+    ArrowUp: IconArrowUp,
+    ArrowDown: IconArrowDown,
+    ArrowRight: IconArrowRight,
+    ArrowLeft: IconArrowLeft,
 }
 
 export default Icon
