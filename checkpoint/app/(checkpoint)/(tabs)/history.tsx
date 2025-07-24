@@ -188,7 +188,7 @@ export default function History() {
         }}
       >
 
-        <WaitingIndicator isWaiting={isWaiting} />
+        {/* <WaitingIndicator isWaiting={isWaiting} /> */}
 
         {/* SECTION HEADER */}
         <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 12}}>
@@ -216,7 +216,7 @@ export default function History() {
         {/* DATA LIST */}
         <View style={{paddingHorizontal: 12}}>
 
-          <TimelineList data={timeLineList} />
+          <TimelineList data={timeLineList} date={selectedDate} isRefreshing={isWaiting} onRefresh={handleSelectedDate} />
           <Relogin display={ !authenticated && !isWaiting } />
         </View>
 
