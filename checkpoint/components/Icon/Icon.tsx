@@ -1,7 +1,6 @@
 import React from 'react';
 import {
     FontAwesome,
-    FontAwesome6,
     Ionicons,
     MaterialIcons,
     Foundation,
@@ -70,7 +69,7 @@ export const IconImage = ({size = defaultSize, color=defaultColor, style}: IconP
 }
 
 export const IconUser = ({size = defaultSize, color=defaultColor, style}: IconProps) => {
-    return <FontAwesome6 name="user" size={size} color={color} style={style} />
+    return <FontAwesome name="user" size={size} color={color} style={style} />
 }
 
 export const IconKey = ({size = defaultSize, color=defaultColor, style}: IconProps) => {
