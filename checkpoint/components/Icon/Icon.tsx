@@ -97,7 +97,7 @@ export const IconCheckout = ({ size = defaultSize, color = defaultColor, style }
 }
 
 export const IconNote = ({ size = defaultSize, color = defaultColor, style }: IconProps) => {
-    return <MaterialIcons name="edit-note" size={size} color={color} style={style} />
+    return <MaterialIcons name="notes" size={size} color={color} style={style} />
 }
 
 export const IconArrowUp = ({ size = defaultSize, color = defaultColor, style }: IconProps) => {
