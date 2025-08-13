@@ -13,6 +13,7 @@ import {
 import Styles from "@/constants/Styles";
 import { Colors } from "../constants/Colors";
 import LogoIcon from "@/components/LogoIcon/LogoIcon";
+import Logo from "@/components/Logo/Logo";
 import { useAuth } from "@/contexts/Authcontext";
 
 //Interface
@@ -89,7 +90,7 @@ export default function Login({ authstate }: { authstate: IAuth | null | undefin
           alignSelf: "center",
           width: '100%'
         }}>
-          { displayLogo ? <LogoIcon size="s" /> : null }
+          { displayLogo ? <Logo size="s" /> : null }
         </View> 
 
         <View style={{

@@ -31,20 +31,20 @@ const styles: { [key: string]: typeSize } = StyleSheet.create({
         height: 50,
     },
     s: {
-        width: 100,
-        height: 100,
+        width: 150,
+        height: 150,
     },
     m: {
-        width: 300,
-        height: 300,
+        width: 200,
+        height: 200,
     },
     l: {
-        width: 600,
-        height: 600,
+        width: 250,
+        height: 250,
     },
     xl: {
-        width: 700,
-        height: 700,
+        width: 300,
+        height: 300,
     },
 });
 
