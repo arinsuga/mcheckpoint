@@ -26,6 +26,7 @@ import DateList from "@/components/DateList/DateList";
 import TimelineList from "@/components/TimelineList/TimelineList";
 import DialogDatePeriod from "@/components/DialogDatePeriod/DialogDatePeriod";
 import Icon from "@/components/Icon/Icon";
+import WaitingIndicator from "@/components/WaitingIndicator/WaitingIndicator";
 
 //Templates
 import AttendHistory from "@/templates/attends/AttendHistory";
@@ -42,7 +43,11 @@ import ICheckpointHistory from "@/interfaces/ICheckpointHistory";
 //Serivces
 import { getUsername } from "@/services/AuthService";
 import TimeLineService from "@/services/TimeLineService";
-import { historyByUserIdCheckpointDate, historyByUserIdCheckpointPeriod } from '@/services/CheckpointService';
+import {
+  check,
+  historyByUserIdCheckpointDate,
+  historyByUserIdCheckpointPeriod
+} from '@/services/CheckpointService';
 
 //Utils
 import { useFilePath, useFileName } from "@/utils/Fileutils";
@@ -54,11 +59,12 @@ export default function History() {
     const [authenticated, setAuthenticated] = useState(true);
     const [timeLineList, setTimeLineList] = useState<ITimeLine[]>([]);
     const [showPeriod, setShowPeriod] = useState(false);
+    const [actionType, setActionType] = useState<'checkin' | 'checkout' | ''>('');
     const { Authenticate, authState } = useAuth();
 
     const router: Router = useRouter();
 
-    const getStyles = () => {
+    const getStyles = (actionType: string) => {
 
       const buttonContainerWidth = Dimensions.get('window').width;
       const buttonWidth = buttonContainerWidth*0.92;
@@ -75,7 +81,7 @@ export default function History() {
           paddingVertical: 15,
           bottom: 10,
           left: buttonLeftPosition,
-          backgroundColor: Colors.orange,
+          backgroundColor: actionType === 'checkin' ? Colors.success : actionType === 'checkout' ? Colors.danger : Colors.greyDark,
         }
 
       });
@@ -91,7 +97,8 @@ export default function History() {
         setIsWaiting(true);
         setTimeLineList([]);
 
-        const userName = await getUsername() as string
+        // const userName = await getUsername() as string
+        const userName = authState?.user?.username as string;
         const data = await getTimelineByDate(userName, date);
         
         setIsWaiting(false);
@@ -104,6 +111,10 @@ export default function History() {
 
 
       try {
+
+        const resultCheck = await check(userName);
+        setActionType(resultCheck.action);
+        console.log(resultCheck);
 
         const dataHistory: ICheckpointHistory[] = await historyByUserIdCheckpointDate(userName, date, 'view');
         let data = TimeLineService.fillTimeLine(dataHistory);
@@ -194,12 +205,14 @@ export default function History() {
 
     useEffect(() => {
 
+      console.log('Inside useEffect 1.....');
       const fetchData = async () => {
 
         setTimeLineList([]);
         setIsWaiting(true);
 
-        const userName = await getUsername() as string
+        // const userName = await getUsername() as string;
+        const userName = authState?.user?.username as string;
         const data = await getTimelineByDate(userName, selectedDate);
 
         setTimeLineList(data);
@@ -210,6 +223,15 @@ export default function History() {
     }, []);    
 
     
+    useEffect(() => {
+      const fetchData = async () => {
+
+        //const resultCheck = await check(userName);
+
+      }
+      fetchData();
+    });
+
     return (
       <SafeAreaView
         style={{
@@ -269,11 +291,11 @@ export default function History() {
               hideMessage();
               router.push('/pinloc');
             }} 
-            style={ getStyles().checkButton }
+            style={ getStyles(actionType).checkButton }
         >
           <Icon.Location size={28} color={ Colors.white } />
           <Text style={{color: Colors.white, fontSize: 15, marginLeft: 15}}>
-              Update Location
+              {  actionType === 'checkin' ? 'Check-In' : actionType === 'checkout' ? 'Check-Out' : 'Loading...' }
           </Text>
         </TouchableOpacity>
 
