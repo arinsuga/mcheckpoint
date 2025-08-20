@@ -23,7 +23,7 @@ import Relogin from "@/components/Relogin/Relogin";
 import DateList from "@/components/DateList/DateList";
 import TimelineList from "@/components/TimelineList/TimelineList";
 import WaitingIndicator from "@/components/WaitingIndicator/WaitingIndicator";
-import DialogDatePeriod from "@/components/DialogDatePeriod/DialogDatePeriod";
+import DialogReportPeriod from "@/components/DialogReportPeriod/DialogReportPeriod";
 
 //Templates
 import AttendHistory from "@/templates/attends/AttendHistory";
@@ -220,7 +220,7 @@ export default function History() {
           <Relogin display={ !authenticated && !isWaiting } />
         </View>
 
-        <DialogDatePeriod visible={showPeriod} actionOk={handleCreatePDFOk} actionCancel={handleCreatePDFCancel} />
+        <DialogReportPeriod visible={showPeriod} actionOk={handleCreatePDFOk} actionCancel={handleCreatePDFCancel} />
       </SafeAreaView>
     );
 }

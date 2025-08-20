@@ -21,10 +21,12 @@ import { hideMessage } from 'react-native-flash-message';
 import { useAuth } from "@/contexts/Authcontext";
 
 //Components
+import DateInfo from "@/components/DateInfo/DateInfo";
+import DatePeriodInfo from "@/components/DatePeriodInfo/DatePeriodInfo";
 import Relogin from "@/components/Relogin/Relogin";
 import DateList from "@/components/DateList/DateList";
 import TimelineList from "@/components/TimelineList/TimelineList";
-import DialogDatePeriod from "@/components/DialogDatePeriod/DialogDatePeriod";
+import DialogReportPeriod from "@/components/DialogReportPeriod/DialogReportPeriod";
 import Icon from "@/components/Icon/Icon";
 import WaitingIndicator from "@/components/WaitingIndicator/WaitingIndicator";
 
@@ -55,7 +57,9 @@ import { useFilePath, useFileName } from "@/utils/Fileutils";
 export default function History() {
     const [currentDate, setCurrentDate] = useState(moment());
     const [selectedDate, setSelectedDate] = useState(currentDate.clone());
-    const [isWaiting, setIsWaiting] = useState(true);
+    const [selectedDatePeriod, setSelectedDatePeriod] = useState<{ dateFrom: string, dateTo: string }>({  dateFrom: '', dateTo: '' });
+    const [isWaiting, setIsWaiting] = useState(false);
+    const [isViewMode, setIsViewMode] = useState(false);
     const [authenticated, setAuthenticated] = useState(true);
     const [timeLineList, setTimeLineList] = useState<ITimeLine[]>([]);
     const [showPeriod, setShowPeriod] = useState(false);
@@ -89,7 +93,25 @@ export default function History() {
       return styles
     }
     
+    const handleRefresh = useCallback(async (viewMode: boolean, parDate: moment.Moment, parDateFrom?: string, parDateTo?: string) => {
+
+        console.log('handleRefresh :');
+        console.log({
+          isViewMode: isViewMode,
+          parDate: parDate,
+          selectedDatePeriod: selectedDatePeriod,
+        });
+
+        const dateFrom = parDateFrom ? parDateFrom as string : '';
+        const dateTo = parDateTo ? parDateTo as string : '';
+
+        viewMode ? await handleViewOk(dateFrom, dateTo) :
+        await handleSelectedDate(parDate);
+
+    }, []);
+
     const handleSelectedDate = useCallback(async (date: moment.Moment) => {
+
 
         //check Authentication
         Authenticate && Authenticate();
@@ -109,14 +131,34 @@ export default function History() {
 
     const getTimelineByDate = async (userName: string, date: moment.Moment): Promise<ITimeLine[]> => {
 
+      try {
+
+        const resultCheck = await check(userName);
+        setActionType(resultCheck.action);
+
+        const dataHistory: ICheckpointHistory[] = await historyByUserIdCheckpointDate(userName, date, 'view');
+        let data = TimeLineService.fillTimeLine(dataHistory);
+        data.sort((a, b) => parseInt(b.milliseconds) - parseInt(a.milliseconds));
+
+        return data
+      } catch (error: any) {
+
+        console.error("Error fetching checkpoint history:", error);
+        return [];
+        
+      }
+
+    }
+
+    const getTimelineByDatePeriod = async (userName: string, dateFrom: string, dateTo: string): Promise<ITimeLine[]> => {
+
 
       try {
 
         const resultCheck = await check(userName);
         setActionType(resultCheck.action);
-        console.log(resultCheck);
 
-        const dataHistory: ICheckpointHistory[] = await historyByUserIdCheckpointDate(userName, date, 'view');
+        const dataHistory: ICheckpointHistory[] = await historyByUserIdCheckpointPeriod(userName, dateFrom, dateTo, 'view');
         let data = TimeLineService.fillTimeLine(dataHistory);
         data.sort((a, b) => parseInt(b.milliseconds) - parseInt(a.milliseconds));
 
@@ -162,19 +204,32 @@ export default function History() {
 
     }
 
-    const handleCreatePDF = async () => {
+    const handleDialogPeriod = async () => {
 
-      let data: ICheckpointHistory[] = [];
       setShowPeriod(true);
+
+    }
+
+    const handleViewOk = async (dateFrom: string, dateTo: string) => {
+
+        setIsViewMode(true);
+        setShowPeriod(false);
+        setIsWaiting(true);
+        setTimeLineList([]);
+        setSelectedDatePeriod({ dateFrom: dateFrom, dateTo: dateTo });
+
+        const userName = authState?.user?.username as string;
+        const data = await getTimelineByDatePeriod(userName, dateFrom, dateTo);
+        
+        setIsWaiting(false);
+        setTimeLineList(data);
 
     }
 
     const handleCreatePDFOk = async (dateFrom: string, dateTo: string) => {
 
       setShowPeriod(false);
-
-      
-      const userName = await getUsername() as string
+      const userName = authState?.user?.username as string;
       const data = await getHistoryByPeriod(userName, dateFrom, dateTo);
       const result = await createPDF(data);
 
@@ -205,7 +260,6 @@ export default function History() {
 
     useEffect(() => {
 
-      console.log('Inside useEffect 1.....');
       const fetchData = async () => {
 
         setTimeLineList([]);
@@ -244,36 +298,39 @@ export default function History() {
 
         {/* SECTION HEADER */}
         <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 12}}>
-          <View style={{flexDirection: 'row', alignItems: 'center', columnGap: 8}}>
-            <Text style={{fontSize: 36, fontWeight: 'bold'}}>{ selectedDate ? selectedDate.format('DD') : 'N/A' }</Text>
-            <View style={{flexDirection:'column'}}>
-              <Text style={{color: Colors.grey, fontWeight: 'bold'}}>{ selectedDate.format('dddd') } { currentDate.format('YYYY-MM-DD') === selectedDate.format('YYYY-MM-DD') ? '- Today' : '' }</Text>
-              <Text style={{color: Colors.grey, fontWeight: 'bold'}}>{ selectedDate.format('MMM') } { selectedDate.format('YYYY') }</Text>
-            </View>
-          </View>
-          <TouchableOpacity style={[
-            Styles.btn,
-            {
-              flex: 0.5,
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              paddingVertical: 8,
-              paddingHorizontal: 10,
-              backgroundColor: Colors.orange,
-              borderRadius: 0,
-            }
-          ]} onPress={ () => handleCreatePDF() }>
 
-            <Icon.Share size={16} color={ Colors.white } />
-            <Text style={[Styles.btnText, { marginLeft: 5 }]}>Share</Text>
+          {
+            !isViewMode ?
+            <>
+                <DateInfo date={selectedDate} currentDate={currentDate} />
+                <TouchableOpacity style={[ Styles.btn, localStyles.btnDlgPeriod, { backgroundColor: Colors.orange } ]} onPress={ () => handleDialogPeriod() }>
+                  <Text style={[Styles.btnText, { marginLeft: 5 }]}>View / Share</Text>
+                </TouchableOpacity>
+            </> :
 
-          </TouchableOpacity>
+            <>
+                <DatePeriodInfo dateFrom={selectedDatePeriod.dateFrom} dateTo={selectedDatePeriod.dateTo} />
+                <TouchableOpacity style={[ Styles.btn, localStyles.btnDlgPeriod ]} onPress={ async () => {
+                  await handleSelectedDate(selectedDate);
+                  setIsViewMode(false);
+                } }>
+
+                  <Text style={[Styles.btnText, { marginLeft: 5 }]}>Back</Text>
+
+                </TouchableOpacity>
+            </>
+
+
+          }
 
         </View>
 
         {/* DATE LIST FILTER */}
-        <DateList date={currentDate} onSelectedDate={handleSelectedDate}  />
+        
+        {
+          !isViewMode ?
+          <DateList date={selectedDate} onSelectedDate={handleSelectedDate}  /> : null
+        }
         
         {/* DIVIDER */}
         <View style={{backgroundColor: Colors.white, height: 1}}></View>
@@ -281,7 +338,14 @@ export default function History() {
         {/* DATA LIST */}
         <View style={{paddingHorizontal: 12, height: '89%'}}>
 
-          <TimelineList data={timeLineList} date={selectedDate} isRefreshing={false} onRefresh={handleSelectedDate} />
+          <TimelineList
+            data={timeLineList}
+            date={selectedDate}
+            datePeriod={selectedDatePeriod}
+            isViewMode={isViewMode}
+            isRefreshing={isWaiting}
+            onRefresh={handleRefresh}
+          />
           <Relogin display={ !authenticated && !isWaiting } />
         </View>
 
@@ -301,12 +365,28 @@ export default function History() {
 
 
 
-        <DialogDatePeriod visible={showPeriod} actionOk={handleCreatePDFOk} actionCancel={handleCreatePDFCancel} />
+        <DialogReportPeriod
+          visible={showPeriod}
+          actionView={handleViewOk}
+          actionPDF={handleCreatePDFOk}
+          actionCancel={handleCreatePDFCancel}
+        />
       </SafeAreaView>
     );
 }
 
 
-const styles = StyleSheet.create({
+const localStyles = StyleSheet.create({
 
+  btnDlgPeriod: {
+              flex: 0.75,
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              paddingVertical: 8,
+              paddingHorizontal: 10,
+              backgroundColor: Colors.greyDark,
+              borderRadius: 0,
+  }
+  
 });

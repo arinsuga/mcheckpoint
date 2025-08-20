@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { FlatList, RefreshControl, StyleSheet, View } from 'react-native'
+import { FlatList, RefreshControl, StyleSheet, View, Text } from 'react-native'
 import moment from 'moment';
 
 //Constats
@@ -9,26 +9,47 @@ import { Colors } from '@/constants/Colors';
 import ITimeLine from '@/interfaces/ITimeLine';
 
 //Components
-import TimelineHeader from './TimelineHeader';
 import TimelineItem from './TimelineItem';
+import TimeLineEmpty from './TimelineEmpty';
+
+interface IDatePeriod {
+    dateFrom: string,
+    dateTo: string
+}
 
 interface IDataListProps {
     data: ITimeLine[];
     date: moment.Moment;
+    datePeriod: IDatePeriod;
+    isViewMode: boolean;
     isRefreshing: boolean;
-    onRefresh: (data: moment.Moment) => Promise<void>;
+    onRefresh: (isViewMode: boolean, date: moment.Moment, dateFrom?: string, dateTo?: string) => Promise<void>;
 }
 
-const TimelineList = ({ data, date, isRefreshing = false, onRefresh }: IDataListProps) => {
-    // const [isRefreshing, setIsRefreshing] = React.useState(false);
-    const flatRefresh = React.useRef<RefreshControl>(null);
+const TimelineList = ({ data, date, datePeriod, isViewMode = false, isRefreshing = false, onRefresh }: IDataListProps) => {
 
-    const handleFlatRefresh = () => {
+    const handleFlatRefresh = (parViewMode: boolean, parDate: moment.Moment, parDatePeriod?: IDatePeriod) => {
         
-        onRefresh(date);
+        onRefresh(parViewMode, parDate, parDatePeriod?.dateFrom, parDatePeriod?.dateTo);
 
     }
 
+    const MemoizedTimelineItem = React.memo(({ item }: { item: ITimeLine }) => (
+        <TimelineItem item={item} />
+    ));
+
+    const renderItem = ({ item }: { item: ITimeLine }) => (
+    <MemoizedTimelineItem item={item} />
+    );
+
+    const MemoizedTimelineEmpty = React.memo(({ isRefreshing }: { isRefreshing: boolean }) => (
+        <TimeLineEmpty isRefreshing={isRefreshing} emptyText='Empty Data...' />
+    ));
+
+    const renderEmpty = (isRefreshing: boolean) => (
+        <MemoizedTimelineEmpty isRefreshing={isRefreshing} />
+    );
+    
     return (
         <View>
             {
@@ -36,14 +57,15 @@ const TimelineList = ({ data, date, isRefreshing = false, onRefresh }: IDataList
                 <FlatList
                     // ListHeaderComponent={TimelineHeader}
                     data={data}
-                    renderItem={({ item }) => <TimelineItem item={item} />}
+                    keyExtractor={item => item.id}
+                    renderItem={ renderItem }
+                    ListEmptyComponent={ () => renderEmpty(isRefreshing) }
                     contentContainerStyle={{paddingBottom: 150}}
                     showsVerticalScrollIndicator={false}
-                    keyExtractor={item => item.id}
                     refreshControl={
                         <RefreshControl
                             refreshing={isRefreshing}
-                            onRefresh={handleFlatRefresh}
+                            onRefresh={() =>handleFlatRefresh(isViewMode, date, datePeriod)}
                             colors={[Colors.orange]}
                         />
                     }

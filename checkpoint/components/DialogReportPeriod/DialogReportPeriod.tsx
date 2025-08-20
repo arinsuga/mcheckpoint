@@ -23,11 +23,12 @@ import Dates from '@/constants/Dates';
 
 interface IDialogProps {
     visible?: boolean;
-    actionOk: (dateFrom: string, dateTo: string) => Promise<void>;
+    actionView: (dateFrom: string, dateTo: string) => Promise<void>;
+    actionPDF: (dateFrom: string, dateTo: string) => Promise<void>;
     actionCancel: () => Promise<void>;
 }
 
-const DialogDatePeriod = ({ visible = false, actionOk, actionCancel }: IDialogProps) => {
+const DialogReportPeriod = ({ visible = false, actionView, actionPDF, actionCancel }: IDialogProps) => {
     const [dateFrom, setDateFrom] = useState<string>(moment().format(Dates.format.date));
     const [dateTo, setDateTo] = useState(moment().format(Dates.format.date));
     
@@ -120,12 +121,21 @@ const DialogDatePeriod = ({ visible = false, actionOk, actionCancel }: IDialogPr
                         </TouchableOpacity>
 
                         <TouchableOpacity
-                            onPress={() => actionOk(dateFrom, dateTo)}
+                            onPress={() => actionView(dateFrom, dateTo)}
                             style={[
-                                Styles.btn, styles.DialogButton
+                                Styles.btn, styles.DialogButtonView
                             ]}
                         >
-                            <Text style={Styles.btnText}>Ok</Text>
+                            <Text style={Styles.btnText}>View</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            onPress={() => actionPDF(dateFrom, dateTo)}
+                            style={[
+                                Styles.btn, styles.DialogButtonPDF
+                            ]}
+                        >
+                            <Text style={Styles.btnText}>PDF</Text>
                         </TouchableOpacity>
 
                     </View>
@@ -142,12 +152,20 @@ const DialogDatePeriod = ({ visible = false, actionOk, actionCancel }: IDialogPr
     );
 };
 
-export default DialogDatePeriod;
+export default DialogReportPeriod;
 
 const styles = StyleSheet.create({
     DialogButton: {
         width: '30%',
-        backgroundColor: Colors.orange,
-    }
+        backgroundColor: Colors.grey,
+    },
+    DialogButtonView: {
+        width: '30%',
+        backgroundColor: Colors.success,
+    },
+    DialogButtonPDF: {
+        width: '30%',
+        backgroundColor: Colors.danger,
+    },
 
 });
