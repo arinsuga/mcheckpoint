@@ -35,13 +35,6 @@ echo "Database table patch [ $DBSCRIPT2 ]..."
 mysql -h localhost -u $DBUSERNAME -p"$DBPASSWORD" "$DBNAME" < "$DBSCRIPT2"
 echo "Database table patch [ $DBSCRIPT3 ]..."
 mysql -h localhost -u $DBUSERNAME -p"$DBPASSWORD" "$DBNAME" < "$DBSCRIPT3"
-echo "========================"
-echo "Optimize and Cache..."
-echo "========================"
-php artisan optimize
-php artisan config:cache
-php artisan view:cache
-php artisan route:cache
 echo "..."
 echo "..."
 echo "Deployment Complete..."
