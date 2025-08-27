@@ -18,5 +18,5 @@ set "filename=C:\Users\arin\Downloads\hdde4090_dbcheckpointprodtoapi"
 echo File Name: %filename%
 
 mysqldump --column-statistics=0 -u %dbuser% -h %dbhost% -p"%dbpass%" %dbname% > %filename%.sql
-REM 7z.exe a %filename%.zip %filename%.sql
-REM del %filename%.sql
+7z.exe a %filename%.zip %filename%.sql
+del %filename%.sql
