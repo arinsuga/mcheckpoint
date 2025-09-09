@@ -81,6 +81,12 @@ const TakePhoto = () => {
 
     }
 
+    const abortCapturePhoto = async () => {
+
+      console.log('TODO : Abort photo capture');
+
+    }
+    
     const toggleCameraFacing = () => {
       setCameraPosition(current => current ==='front' ? 'back' : 'front');
     }
@@ -97,6 +103,7 @@ const TakePhoto = () => {
             <CheckpointCamera
               viewCapturedImage={viewCapturedImage}
               capturePhoto={capturePhoto}
+              abortCapturePhoto={abortCapturePhoto}
               toggleCameraFacing={toggleCameraFacing}
               cameraInfo={cameraInfo}
               isWaiting={isCaptureWaiting}

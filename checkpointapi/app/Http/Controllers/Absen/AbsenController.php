@@ -538,18 +538,15 @@ class AbsenController extends Controller
         } //end if
         
         //validasi upload foto mandatory
-        if (!isset($upload)) {
+        // if (!isset($upload)) {
 
-            // return redirect('/')->with('status-failed', 'CHECKIN GAGAL - Foto harus dilampirkan')
-            //                     ->with('checkin_description', $request->input('checkin_description'));
-
-            return response()->json([
-                'status_failed' => 'CHECKIN GAGAL - Foto harus dilampirkan',
-                'checkin_description' => $request->input('checkin_description'),
-            ], 500);
+        //     return response()->json([
+        //         'status_failed' => 'CHECKIN GAGAL - Foto harus dilampirkan',
+        //         'checkin_description' => $request->input('checkin_description'),
+        //     ], 500);
             
             
-        } //end if
+        // } //end if
 
         //validasi Timezone
         if (!isset($utc_tz) || !isset($utc_millis) || !isset($utc_offset)) {
@@ -565,23 +562,11 @@ class AbsenController extends Controller
         $host = $this->getFullURL($latitude, $longitude);
         $data = $this->oLocater->locate($host);
 
-        // $data = $parData;
-        // $city1 = $data->results[0]->address_components[2]->short_name;
-        // $city2 = $data->results[0]->address_components[3]->short_name;
-        //return dd($data->results[0]->address_components);
-
         //convert to JSON
         if ( ($data) && ($data->results) ) {
 
             //create temporary uploaded image
             $uploadTemp = Filex::uploadTemp($upload, $imageTemp, null, 'checkin');
-            //$request->session()->flash('imageTemp', $uploadTemp);
-            // return response()->json([
-            //     '$imageTemp' => $imageTemp,
-            //     '$this->uploadDirectory' => $this->uploadDirectory,
-            //     '$host' => $host,
-            //     '$data' => $data,
-            // ]);
 
             //copy temporary uploaded image to real path
             $checkin_image = Filex::uploadOrCopyAndRemove('', $uploadTemp, $this->uploadDirectory, $upload, 'public', false, 'checkin');
@@ -627,12 +612,6 @@ class AbsenController extends Controller
             'checkin_description' => '',
         ], 500);
 
-        // $response = [
-        //     'message' => 'data checkin absensi gagal tersimpan',
-        //     'result' => $data,
-        //     'metadata' => json_encode($data)
-        // ];
-        // return response()->json($response, 500);
     }
 
     /**
@@ -681,14 +660,14 @@ class AbsenController extends Controller
             } //end if
 
             //validasi upload foto mandatory
-            if (!isset($upload)) {
+            // if (!isset($upload)) {
 
-                return response()->json([
-                    'status_failed' => 'CHECKOUT GAGAL - Foto harus dilampirkan',
-                    'checkout_description' => $request->input('checkout_description'),
-                ], 500);
+            //     return response()->json([
+            //         'status_failed' => 'CHECKOUT GAGAL - Foto harus dilampirkan',
+            //         'checkout_description' => $request->input('checkout_description'),
+            //     ], 500);
 
-            } //end if
+            // } //end if
 
             //validasi Timezone
             if (!isset($utc_tz) || !isset($utc_millis) || !isset($utc_offset)) {
@@ -709,7 +688,6 @@ class AbsenController extends Controller
 
                 //create temporary uploaded image
                 $uploadTemp = Filex::uploadTemp($upload, $imageTemp, null, 'checkin');
-                //$request->session()->flash('imageTemp', $uploadTemp);
 
                 //copy temporary uploaded image to real path
                 $checkout_image = Filex::uploadOrCopyAndRemove('', $uploadTemp, $this->uploadDirectory, $upload, 'public', false, 'checkout');
@@ -749,14 +727,6 @@ class AbsenController extends Controller
             'status_failed' => 'CHECKOUT GAGAL - Kontak admin untuk informasi lebih lanjut',
             'checkout_description' => '',
         ], 500);
-
-        // $response = [
-        //     'message' => 'data checkout absensi gagal tersimpan',
-        //     'result' => $data,
-        //     'metadata' => json_encode($data)
-        // ];
-
-        // return response()->json($response, 500);
 
     } //end method
 

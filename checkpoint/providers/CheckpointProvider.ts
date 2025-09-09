@@ -51,14 +51,28 @@ export const checkin = async (checkinData: ICheckpoint): Promise<any> => {
   let errorData = null;
   try {    
 
-    const filePhoto = await Compressutils.photoFileToJPEG(checkinData.file, compressWidth, compressPercent);
-    const fileUri   = filePhoto?.uri ? filePhoto?.uri as string : '';
-    const filePath  = Fileutils.path(fileUri);
-    const fileName = Fileutils.name(filePath);
-    const fileType = Fileutils.type(filePath);
+      let filePhoto = null;
+      let fileUri   = '';
+      let filePath  = '';
+      let fileName = '';
+      let fileType = '';
+
+    if (checkinData.file) {
+
+      filePhoto = await Compressutils.photoFileToJPEG(checkinData.file, compressWidth, compressPercent);
+      fileUri   = filePhoto?.uri ? filePhoto?.uri as string : '';
+      filePath  = Fileutils.path(fileUri);
+      fileName = Fileutils.name(filePath);
+      fileType = Fileutils.type(filePath);
+
+    }
 
     const formData = new FormData();
-    formData.append('upload', { uri: fileUri, type: fileType, name: fileName, });
+    if (checkinData.file) {
+
+      formData.append('upload', { uri: fileUri, type: fileType, name: fileName, });
+      
+    }
     formData.append('latitude', checkinData.latitude as string);
     formData.append('longitude', checkinData.longitude as string);
     formData.append('imageTemp', checkinData.imageTemp as string);
@@ -121,14 +135,28 @@ export const checkout = async (checkoutData: ICheckpoint): Promise<any> => {
   let errorData = null;
   try {    
 
-    const filePhoto = await Compressutils.photoFileToJPEG(checkoutData.file, compressWidth, compressPercent);
-    const fileUri   = filePhoto?.uri ? filePhoto?.uri as string : '';
-    const filePath  = Fileutils.path(fileUri);
-    const fileName = Fileutils.name(filePath);
-    const fileType = Fileutils.type(filePath);
+    let filePhoto = null;
+    let fileUri   = '';
+    let filePath  = '';
+    let fileName = '';
+    let fileType = '';
+
+    if (checkoutData.file) {
+
+      filePhoto = await Compressutils.photoFileToJPEG(checkoutData.file, compressWidth, compressPercent);
+      fileUri   = filePhoto?.uri ? filePhoto?.uri as string : '';
+      filePath  = Fileutils.path(fileUri);
+      fileName = Fileutils.name(filePath);
+      fileType = Fileutils.type(filePath);
+
+    }
 
     const formData = new FormData();
-    formData.append('upload', { uri: fileUri, type: fileType, name: fileName, });
+    if (checkoutData.file) {
+
+      formData.append('upload', { uri: fileUri, type: fileType, name: fileName, });
+      
+    }
     formData.append('attend_id', checkoutData.attend_id as string);
     formData.append('latitude', checkoutData.latitude as string);
     formData.append('longitude', checkoutData.longitude as string);

@@ -1,6 +1,6 @@
 //systems
 import React, { MutableRefObject, useState } from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 //packages
 import { Camera, CameraDevice } from 'react-native-vision-camera';
 //components
@@ -23,6 +23,7 @@ interface CheckpointCameraProps {
 
   viewCapturedImage: () => void;
   capturePhoto: () => Promise<void>;
+  abortCapturePhoto: () => void;
   toggleCameraFacing: () => void;
   cameraInfo: ICameraInfoProps
   isWaiting: boolean;
@@ -44,6 +45,7 @@ const CheckpointCamera = (props: CheckpointCameraProps) => {
                 photoQualityBalance='speed'
             />
 
+
             <View style={Styles.buttonCameraContainer}>
 
                 <TouchableOpacity onPress={props.capturePhoto}>
@@ -52,7 +54,11 @@ const CheckpointCamera = (props: CheckpointCameraProps) => {
 
             </View>
 
-            <View style={[Styles.buttonCameraContainer, { justifyContent: 'flex-end', paddingRight: 50 }]}>
+            <View style={[Styles.buttonCameraContainer, { justifyContent: 'space-between', paddingLeft: 50, paddingRight: 50 }]}>
+
+                <TouchableOpacity onPress={props.abortCapturePhoto}>
+                  <Text style={[ Styles.btnText, { color: Colors.red }]}>Skip</Text>
+                </TouchableOpacity>
 
                 <TouchableOpacity onPress={props.toggleCameraFacing}>
                   <Icon.CameraRotate color={Colors.whiteDark} />
