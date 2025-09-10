@@ -59,6 +59,7 @@ const CheckpointForm = ({action, actionButton, file, attendId}: IChekPointFormPr
       subtitle: '',
       description: '',
     });
+
     const uri = `file://${file?.path}`;
     const localInputRef = useRef<TextInput>(null);
 
@@ -141,6 +142,7 @@ useEffect(() => {
           if (checkpointData.checkType == 'checkin') {
         
               result = await checkin(checkpointCurrentData);
+
               messageOption = {
                 ...messageOptionSuccess,
                 message: 'CHECKIN',
@@ -150,6 +152,7 @@ useEffect(() => {
           } else if (checkpointData.checkType == 'checkout') {
 
               result = await checkout(checkpointCurrentData);
+
               messageOption = {
                 ...messageOptionDanger,
                 message: 'CHECKOUT',

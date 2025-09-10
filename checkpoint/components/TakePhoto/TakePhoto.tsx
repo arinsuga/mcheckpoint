@@ -14,6 +14,7 @@ import { getUsername } from '@/services/AuthService';
 
 const TakePhoto = () => {
     const [isCaptureWaiting, setIsCaptureWaiting] = useState(false);
+    const [showCamera, setShowCamera] = useState(true);
 
 
     const [action, setAction] = useState<'checkin' | 'checkout'>('checkin');  
@@ -71,6 +72,7 @@ const TakePhoto = () => {
             enableShutterSound: false,
           });
           setPhoto(photoResult);
+          setShowCamera(false);
           setIsCaptureWaiting(false);
 
         } catch(e) {
@@ -84,20 +86,27 @@ const TakePhoto = () => {
     const abortCapturePhoto = async () => {
 
       console.log('TODO : Abort photo capture');
+      setIsCaptureWaiting(true);
+      setShowCamera(false);
+      setIsCaptureWaiting(false);
 
     }
     
     const toggleCameraFacing = () => {
+
       setCameraPosition(current => current ==='front' ? 'back' : 'front');
+
     }
 
     const viewCapturedImage = () => {
+
       alert('TODO : Image Viewer');
+
     }
 
     return (
 
-          !photo ? 
+          showCamera ? 
           <View style={{ flex: 1, justifyContent: 'center' }}>
 
             <CheckpointCamera

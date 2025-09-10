@@ -558,18 +558,30 @@ class AbsenController extends Controller
                                 
         } //end if
 
-
         $host = $this->getFullURL($latitude, $longitude);
         $data = $this->oLocater->locate($host);
+
 
         //convert to JSON
         if ( ($data) && ($data->results) ) {
 
-            //create temporary uploaded image
-            $uploadTemp = Filex::uploadTemp($upload, $imageTemp, null, 'checkin');
+            $uploadTemp = '';
+            $checkin_image = '';
+            if (isset($upload)) {
 
-            //copy temporary uploaded image to real path
-            $checkin_image = Filex::uploadOrCopyAndRemove('', $uploadTemp, $this->uploadDirectory, $upload, 'public', false, 'checkin');
+                //create temporary uploaded image
+                $uploadTemp = Filex::uploadTemp($upload, $imageTemp, null, 'checkin');
+
+                //copy temporary uploaded image to real path
+                $checkin_image = Filex::uploadOrCopyAndRemove('', $uploadTemp, $this->uploadDirectory, $upload, 'public', false, 'checkin');
+
+            }
+
+        // return response()->json([
+        //     'aftertes' => 'aftertes',
+        //     'uploadTemp' => $uploadTemp
+        // ]);
+
 
             $attend->user_id = $authUser->id;
 
@@ -686,11 +698,17 @@ class AbsenController extends Controller
             if ( ($data) && ($data->results) ) {
 
 
-                //create temporary uploaded image
-                $uploadTemp = Filex::uploadTemp($upload, $imageTemp, null, 'checkin');
+                $uploadTemp = '';
+                $checkout_image = '';
+                if (isset($upload)) {
 
-                //copy temporary uploaded image to real path
-                $checkout_image = Filex::uploadOrCopyAndRemove('', $uploadTemp, $this->uploadDirectory, $upload, 'public', false, 'checkout');
+                    //create temporary uploaded image
+                    $uploadTemp = Filex::uploadTemp($upload, $imageTemp, null, 'checkin');
+
+                    //copy temporary uploaded image to real path
+                    $checkout_image = Filex::uploadOrCopyAndRemove('', $uploadTemp, $this->uploadDirectory, $upload, 'public', false, 'checkout');
+
+                }
 
                 
                 $attend->checkout_time = now();
