@@ -706,8 +706,6 @@ class AbsenController extends Controller
             if ( ($data) && ($data->results) ) {
 
 
-                $uploadTemp = '';
-                $checkout_image = '';
                 if (isset($upload)) {
 
                     //create temporary uploaded image
