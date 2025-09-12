@@ -12,4 +12,5 @@ export default interface ITimeLine {
     address: string;
     description: string;
     image: string;
+    client: string;
 }

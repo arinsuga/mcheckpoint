@@ -611,6 +611,8 @@ class AbsenController extends Controller
             $attend->checkin_title = $request->input('checkin_title');
             $attend->checkin_subtitle = $request->input('checkin_subtitle');
             $attend->checkin_description = $request->input('checkin_description');
+            $attend->checkin_client = $client;
+            
 
             $attend->save();
 
@@ -656,6 +658,7 @@ class AbsenController extends Controller
         if ($attend)
         {
 
+            $client = $request->input('client');
             $latitude = $request->input('latitude');
             $longitude = $request->input('longitude');
             $upload = $request->file('upload'); //upload file (image/document) ==> if included
@@ -738,6 +741,9 @@ class AbsenController extends Controller
                 $attend->checkout_title = $request->input('checkout_title');
                 $attend->checkout_subtitle = $request->input('checkout_subtitle');
                 $attend->checkout_description = $request->input('checkout_description');
+                $attend->checkout_client = $client;
+
+
                 $attend->save();
 
                 $response = [

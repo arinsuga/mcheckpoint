@@ -10,7 +10,7 @@ import {
     StatusBar,
     TouchableOpacity,
     StyleSheet,
-    ActivityIndicator
+    ActivityIndicator,
 } from 'react-native';
 
 //Packages
@@ -58,6 +58,7 @@ const CheckpointForm = ({action, actionButton, file, attendId}: IChekPointFormPr
       title: '',
       subtitle: '',
       description: '',
+      client: Platform.OS === 'android' ? 'android' : 'ios',
     });
 
     const uri = `file://${file?.path}`;

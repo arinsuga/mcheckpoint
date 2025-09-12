@@ -15,6 +15,7 @@ export default interface ICheckpointHistory {
     checkin_address: string;
     checkin_description: string;
     checkin_image: string;
+    checkin_client: string;
 
     checkout_latitude: string;
     checkout_longitude: string;
@@ -27,6 +28,8 @@ export default interface ICheckpointHistory {
     checkout_address: string;
     checkout_description: string;
     checkout_image: string;
+    checkout_client: string;
+
     time_elapse: string;
 
 }

@@ -5,6 +5,17 @@ DELETE FROM attends
 WHERE YEAR(checkin_time) < 2025;
 
 -- ===================================================
+-- checkin/checkout client
+-- ===================================================
+update `attends` set
+checkin_client = 'web'
+WHERE checkin_time is not null;
+
+update `attends` set
+checkout_client = 'web'
+WHERE checkout_time is not null;
+
+-- ===================================================
 -- checkin
 -- ===================================================
 update `attends` set

@@ -84,7 +84,7 @@ export const checkin = async (checkinData: ICheckpoint): Promise<any> => {
     formData.append('checkin_title', checkinData.title as string);
     formData.append('checkin_subtitle', checkinData.subtitle as string);
     formData.append('checkin_description', checkinData.description as string);
-
+    formData.append('client', checkinData.client as string);
 
     const response = await axios.post(`${API_URL}/checkin`, formData,
       {
@@ -169,6 +169,7 @@ export const checkout = async (checkoutData: ICheckpoint): Promise<any> => {
     formData.append('checkout_title', checkoutData.title as string);
     formData.append('checkout_subtitle', checkoutData.subtitle as string);
     formData.append('checkout_description', checkoutData.description as string);
+    formData.append('client', checkoutData.client as string);
 
     // formData.append('checkout_title', 'HPTEST - ' + checkoutData.title as string);
     // formData.append('checkout_subtitle', 'HPTEST - ' + checkoutData.subtitle as string);

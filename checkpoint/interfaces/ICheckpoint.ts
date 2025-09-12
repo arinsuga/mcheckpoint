@@ -13,4 +13,5 @@ export default interface ICheckpoint {
     title?: string;
     subtitle?: string;
     description?: string;
+    client?: string;
 }
