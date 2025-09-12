@@ -20,16 +20,16 @@ class AddColumnsAttendsTable extends Migration
             $table->bigInteger('attend_utcmillis')->nullable()->after('attend_dt');
             $table->string('attend_utctz')->nullable()->after('attend_dt');
 
+            $table->string('checkin_client', 50)->nullable()->after('checkin_time');
             $table->integer('checkin_utcoffset')->nullable()->after('checkin_time');
             $table->bigInteger('checkin_utcmillis')->nullable()->after('checkin_time');
             $table->string('checkin_utctz')->nullable()->after('checkin_time');
-            $table->string('checkin_client', 50)->nullable()->after('checkin_description');
             
+            $table->string('checkout_client', 50)->nullable()->after('checkout_time');
             $table->integer('checkout_utcoffset')->nullable()->after('checkout_time');
             $table->bigInteger('checkout_utcmillis')->nullable()->after('checkout_time');
             $table->string('checkout_utctz')->nullable()->after('checkout_time');
 
-            $table->string('checkout_client', 50)->nullable()->after('checkout_description');
 
         });
     }
@@ -48,15 +48,15 @@ class AddColumnsAttendsTable extends Migration
             $table->dropColumn('attend_utcmillis');
             $table->dropColumn('attend_utctz');
             
+            $table->dropColumn('checkin_client');
             $table->dropColumn('checkin_utcoffset');
             $table->dropColumn('checkin_utcmillis');
             $table->dropColumn('checkin_utctz');
-            $table->dropColumn('checkin_client');
 
+            $table->dropColumn('checkout_client');
             $table->dropColumn('checkout_utcoffset');
             $table->dropColumn('checkout_utcmillis');
             $table->dropColumn('checkout_utctz');
-            $table->dropColumn('checkout_client');
 
 
         });

@@ -517,6 +517,7 @@ class AbsenController extends Controller
         $authUser = Auth::user();
         $attend = new Attend();
         
+        $client = $request->input('client');
         $latitude = $request->input('latitude');
         $longitude = $request->input('longitude');
         $upload = $request->file('upload'); //upload file (image/document) ==> if included
