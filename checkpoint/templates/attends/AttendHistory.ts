@@ -21,18 +21,20 @@ const AttendHistory = async (data: ICheckpointHistory[]) => {
     data.map((item) => {
         templateItems += `
             <tr>
-                <td style="border: 1px solid black;">${item.checkin_date ? item.checkin_date : ''}</td>
-                <td style="border: 1px solid black;">
+                <td style="border: 1px solid black; padding: 5px; text-align: center;">
+                    ${item.checkin_date ? item.checkin_date : ''}
+                </td>
+                <td style="border: 1px solid black; padding: 5px;">
                     ${item.checkin_date ? 'Tanggal '+item.checkin_date: ''} ${item.checkin_time ? 'Jam '+item.checkin_time+'<br>' : ''}
                     ${item.checkin_description ? '<strong>'+item.checkin_description+'</strong><br>' : ''}
                     ${item.checkin_address ? item.checkin_address : ''}
                 </td>
-                <td style="border: 1px solid black;">
+                <td style="border: 1px solid black; padding: 5px;">
                     ${item.checkout_date ? 'Tanggal '+item.checkout_date : ''} ${item.checkout_time ? 'Jam '+item.checkout_time+'<br>' : ''}
                     ${item.checkout_description ? '<strong>'+item.checkout_description+'</strong><br>' : ''}
                     ${item.checkout_address ? item.checkout_address : ''}
                 </td>
-                <td style="border: 1px solid black;">${item.time_elapse ? item.time_elapse : ''}</td>
+                <td style="border: 1px solid black; padding: 5px;  text-align: center;">${item.time_elapse ? item.time_elapse : ''}</td>
             </tr>
         `
     });
@@ -43,7 +45,7 @@ const AttendHistory = async (data: ICheckpointHistory[]) => {
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
         </head>
         <body>
-            <table style="width: 95%; font-size: 8px; border-collapse: collapse;">
+            <table style="width: 95%; font-size: 10px; border-collapse: collapse;">
                 <thead>
                     <tr style="text-align: center;">
                         <td colspan="4" style="border: 1px solid black;">
