@@ -2,13 +2,13 @@ import React, { useState, memo } from "react";
 import {
     View,
     Text,
+    Image,
     StyleSheet,
     TouchableOpacity,
     LayoutChangeEvent
 } from "react-native";
 
 //Packages
-import FastImage from "react-native-fast-image";
 
 //Components
 import Icon from '@/components/Icon/Icon';
@@ -124,9 +124,9 @@ const TimelineItem = memo(({item}: TimelineItemProps) => {
                         borderRadius: 5,
                         paddingHorizontal: 10,
                     }}>
-                        <FastImage
-                            source={{ uri: item.image, priority: FastImage.priority.normal }}
-                            resizeMode={ FastImage.resizeMode.contain }
+                        <Image
+                            source={{ uri: item.image }}
+                            resizeMode="contain"
                             style={{
                                 width: '100%',
                                 height: item.image  ? parentheight/2 : 0,
