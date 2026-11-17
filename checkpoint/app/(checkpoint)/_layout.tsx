@@ -28,8 +28,9 @@ export default function AppLayout() {
 
         <Stack 
             screenOptions={{
-              title: "",
+              title: "v1.1.3b11",
               headerShown: true,
+              headerTintColor: Colors.white,
               headerStyle: {
                 backgroundColor: Colors.orange
               },
