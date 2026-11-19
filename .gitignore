@@ -21,4 +21,4 @@ expo-env.d.ts
 # @end expo-cli
 .env
 checkpoint/.env
-checkpontapi/.env
+checkpointapi/.env
