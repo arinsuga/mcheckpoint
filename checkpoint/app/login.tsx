@@ -28,8 +28,8 @@ import { useRouter } from "expo-router";
 export default function Login({ authstate }: { authstate: IAuth | null | undefined }) {
     const { Login } = useAuth();
     const router = useRouter();
-    const [ username, setUsername ] = useState('');
-    const [ password, setPassword ] = useState('');
+    const [ username, setUsername ] = useState('imam@hadiprana.co.id');
+    const [ password, setPassword ] = useState('hadiprana');
     const [ isWaiting, setIsWaiting ] = useState(false);
     const [ displayLogo, setDisplayLogo ] = useState(true);
   
