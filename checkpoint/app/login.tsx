@@ -1,7 +1,6 @@
 
 import { useState, useEffect } from "react";
 import {
-  SafeAreaView,
   Text,
   TouchableOpacity,
   View,
@@ -9,6 +8,7 @@ import {
   Dimensions,
   Keyboard,
 } from "react-native";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import Styles from "@/constants/Styles";
 import { Colors } from "../constants/Colors";

@@ -1,19 +1,19 @@
 import React, { useEffect, useState, useCallback } from "react";
 import {
-  SafeAreaView,
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   Dimensions,
 } from "react-native";
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 //Packages
 import moment from "moment";
 import 'react-native-get-random-values';
 import * as Print from 'expo-print'
 import { shareAsync } from "expo-sharing";
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import { useRouter, Router } from "expo-router";
 import { hideMessage } from 'react-native-flash-message';
 
@@ -68,6 +68,7 @@ export default function History() {
 
     const router: Router = useRouter();
 
+    const insets = useSafeAreaInsets();
     const getStyles = (actionType: string) => {
 
       const buttonContainerWidth = Dimensions.get('window').width;
@@ -83,7 +84,7 @@ export default function History() {
           alignItems: 'center',
           width: buttonWidth,
           paddingVertical: 15,
-          bottom: 10,
+          bottom: insets.bottom + 10,
           left: buttonLeftPosition,
           backgroundColor: actionType === 'checkin' ? Colors.success : actionType === 'checkout' ? Colors.danger : Colors.greyDark,
         }
@@ -288,6 +289,7 @@ export default function History() {
 
     return (
       <SafeAreaView
+        edges={['top', 'left', 'right']}
         style={{
           flex: 1,
           backgroundColor: Colors.white,

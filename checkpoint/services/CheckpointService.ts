@@ -10,9 +10,6 @@ import ICheckpointHistory from '@/interfaces/ICheckpointHistory';
 import CheckpointProvider from '@/providers/CheckpointProvider';
 
 
-const API_URL = `${process.env.EXPO_PUBLIC_API_URL}/absen`;
-const compressPercent = 0.5;
-const compressWidth = 400;
 export const check = async (username: string): Promise<any> => {
 
   try {    

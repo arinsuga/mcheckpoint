@@ -11,6 +11,7 @@ import {
     TouchableOpacity,
     StyleSheet,
     ActivityIndicator,
+    useColorScheme,
 } from 'react-native';
 
 //Packages
@@ -46,6 +47,7 @@ interface IChekPointFormProps {
 const CheckpointForm = ({action, actionButton, file, attendId}: IChekPointFormProps) => {
     const [isWaiting, setIsWaiting] = useState(false);
     const [displaycamera, setDisplaycamera] = useState(true);
+    const colorScheme = useColorScheme();
     const [checkpoint, setCheckpoint] = useState<ICheckpoint>({
       file: file,
       checkType: action,
@@ -219,6 +221,7 @@ useEffect(() => {
               inputRef={ localInputRef }
               style={{
                 width: Dimensions.get('window').width-50,
+                color: colorScheme === 'dark' ? Colors.whiteLight : Colors.black,
               }}
             />
 
@@ -262,7 +265,7 @@ export default CheckpointForm
 
 const styles = StyleSheet.create({
   checkButton: {
-    flex: 0.3,
+    flex: 0.1,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 50,

@@ -16,6 +16,7 @@ import Icon from '@/components/Icon/Icon';
 //Constants
 import { Colors } from "@/constants/Colors";
 import Styles from '@/constants/Styles';
+import { getApiImageSource } from '@/utils/ApiImageSource';
 
 //Interfaces
 import ITimeLine from "@/interfaces/ITimeLine";
@@ -125,7 +126,7 @@ const TimelineItem = memo(({item}: TimelineItemProps) => {
                         paddingHorizontal: 10,
                     }}>
                         <Image
-                            source={{ uri: item.image }}
+                            source={getApiImageSource(item.image)}
                             resizeMode="contain"
                             style={{
                                 width: '100%',

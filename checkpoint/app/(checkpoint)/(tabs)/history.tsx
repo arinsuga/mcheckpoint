@@ -13,7 +13,7 @@ import moment from "moment";
 import 'react-native-get-random-values';
 import * as Print from 'expo-print'
 import { shareAsync } from "expo-sharing";
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 
 //Context
 import { useAuth } from "@/contexts/Authcontext";

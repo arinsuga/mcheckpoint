@@ -1,9 +1,10 @@
 
 //Packages
 import { BehaviorSubject, interval } from 'rxjs';
-import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { jwtDecode } from 'jwt-decode';
+//import axios from 'axios';
+import ApiClient from '@/services/ApiClient';
 
 //Interfaces
 import IAuth, { IUser, IToken, IHeader, IPayload, IJWT } from '@/interfaces/IAuth';
@@ -131,7 +132,9 @@ export const login = async (username?: string, password?: string): Promise<IAuth
     await clearAuth();
     authSubject.next(null);
 
-    const response = await axios.post(`${API_URL}/login`, { email: username, password });
+    console.log('===== LOGIN =====');
+    console.log(API_URL);
+    const response = await ApiClient.post(`${API_URL}/login`, { email: username, password });
     const { token }: any = response.data;
 
     if (token) {
@@ -218,7 +221,7 @@ export const refreshAuthToken = async () => {
   try {
 
     const formData = new FormData();
-    const response = await axios.post(`${API_URL}/refresh`, formData, {
+    const response = await ApiClient.post(`${API_URL}/refresh`, formData, {
       headers: {
         'Authorization': `Bearer ${tokenString}`,
         'Accept': 'application/json',
@@ -292,7 +295,7 @@ export const isAuthenticated = async () => {
   const token = await getToken();
   if (!token) return false;
 
-  const response = await axios.get(`${API_URL}/status`, {
+  const response = await ApiClient.get(`${API_URL}/status`, {
     headers: {
       'Authorization': `Bearer ${token}`,
       'Accept': 'application/json',

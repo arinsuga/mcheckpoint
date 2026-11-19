@@ -1,6 +1,7 @@
 
 //Packages
-import axios from 'axios';
+//import axios from 'axios';
+import ApiClient from '@/services/ApiClient';
 import Fileutils from '../utils/Fileutils';
 import moment from 'moment';
 
@@ -25,7 +26,7 @@ export const check = async (username: string): Promise<any> => {
   const token = await getToken();
   try {    
 
-    const response = await axios.get(`${API_URL}/check-by-email/${username}`, {
+    const response = await ApiClient.get(`${API_URL}/check-by-email/${username}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json',
@@ -86,7 +87,7 @@ export const checkin = async (checkinData: ICheckpoint): Promise<any> => {
     formData.append('checkin_description', checkinData.description as string);
     formData.append('client', checkinData.client as string);
 
-    const response = await axios.post(`${API_URL}/checkin`, formData,
+    const response = await ApiClient.post(`${API_URL}/checkin`, formData,
       {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -175,7 +176,7 @@ export const checkout = async (checkoutData: ICheckpoint): Promise<any> => {
     // formData.append('checkout_subtitle', 'HPTEST - ' + checkoutData.subtitle as string);
     // formData.append('checkout_description', 'HPTEST - ' + checkoutData.description as string);
 
-    const response = await axios.post(`${API_URL}/checkout`, formData,
+    const response = await ApiClient.post(`${API_URL}/checkout`, formData,
       {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -235,7 +236,7 @@ export const historyByUserIdCheckpointPeriod = async (
     formData.append('enddt', enddt);
     formData.append('history_media', history_media);
 
-    const response = await axios.post(`${API_URL}/check-history-post`, formData,
+    const response = await ApiClient.post(`${API_URL}/check-history-post`, formData,
       {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -268,7 +269,7 @@ export const historyByUserIdCheckpointDate = async (
     formData.append('checkpoint_date', checkpointDate.format(Dates.format.date));
     formData.append('history_media', history_media);
 
-    const response = await axios.post(`${API_URL}/post-history-by-userid-checkpointdate`, formData,
+    const response = await ApiClient.post(`${API_URL}/post-history-by-userid-checkpointdate`, formData,
       {
         headers: {
           'Authorization': `Bearer ${token}`,

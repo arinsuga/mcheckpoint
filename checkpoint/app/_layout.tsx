@@ -1,4 +1,5 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useFonts } from 'expo-font';
 import { Slot } from 'expo-router';
 import FlashMessage from 'react-native-flash-message';
@@ -30,13 +31,11 @@ export default function RootLayout() {
   }
 
   return (
-
+    <SafeAreaProvider>
       <Authprovider>
-
           <Slot />
-
           <FlashMessage position="center" />
-        
       </Authprovider>
+    </SafeAreaProvider>
   );
 }
