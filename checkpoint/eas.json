@@ -12,6 +12,8 @@
       "distribution": "internal"
     },
     "review":{
+      "environment": "preview",
+      "autoIncrement": false,
       "android": {
         "buildType": "apk"
       }
@@ -22,6 +24,8 @@
       }
     },
     "production": {
+      "environment": "production",
+      "autoIncrement": true,
       "android": {
         "buildType": "app-bundle"
       }
