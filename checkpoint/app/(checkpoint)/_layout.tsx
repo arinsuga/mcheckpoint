@@ -4,6 +4,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { Stack } from "expo-router";
 
 import { Colors } from "@/constants/Colors";
+import { App } from "@/constants/App";
 import Icon from "@/components/Icon/Icon";
 import { useAuth } from "@/contexts/Authcontext";
 
@@ -28,7 +29,7 @@ export default function AppLayout() {
 
         <Stack 
             screenOptions={{
-              title: "v1.1.3b16",
+              title: App.version,
               headerShown: true,
               headerTintColor: Colors.white,
               headerStyle: {

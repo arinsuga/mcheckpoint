@@ -19,8 +19,11 @@ export const FieldUserName = ({onChangeText}: FieldUserNameProps) => {
           <Icon.User size={20} color={Colors.greyLight} style={styles.inputIcon} />
           <TextInput
             placeholderTextColor={ Colors.grey }
-            secureTextEntry={ false }
-            placeholder="Username"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoComplete="email"
+            textContentType="emailAddress"
+            placeholder="Email"
             style={ styles.textInput }
             onChangeText={ (nextText) => onChangeText(nextText) }
           ></TextInput>

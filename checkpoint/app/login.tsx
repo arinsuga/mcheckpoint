@@ -4,12 +4,15 @@ import {
   Text,
   TouchableOpacity,
   View,
+  KeyboardAvoidingView,
+  Platform,
   StatusBar,
   Dimensions,
   Keyboard,
 } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { App } from "@/constants/App";
 import Styles from "@/constants/Styles";
 import { Colors } from "../constants/Colors";
 import LogoIcon from "@/components/LogoIcon/LogoIcon";
@@ -32,7 +35,7 @@ export default function Login({ authstate }: { authstate: IAuth | null | undefin
     const [ password, setPassword ] = useState('');
     const [ isWaiting, setIsWaiting ] = useState(false);
     const [ displayLogo, setDisplayLogo ] = useState(true);
-  
+
     const onLogin = async (username: string, password: string) => {
       
       setIsWaiting(true);
@@ -79,55 +82,63 @@ export default function Login({ authstate }: { authstate: IAuth | null | undefin
       <SafeAreaView style={ [ Styles.activityContainer, { backgroundColor: Colors.whiteLight } ] }>
         <WaitingIndicator isWaiting={true} />
       </SafeAreaView> :
-      <SafeAreaView style={ [ Styles.loginContainer, { backgroundColor: Colors.whiteLight } ] } >
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={ Platform.OS === "ios" ? "padding" : "height" }
+      >
+        <SafeAreaView style={ [ Styles.loginContainer, { backgroundColor: Colors.whiteLight } ] } >
 
-        <StatusBar barStyle={ "dark-content" }  />
-        <View style={{
-          flex: 1,
-          alignItems: "center",
-          position: 'absolute',
-          top: 100,
-          alignSelf: "center",
-          width: '100%'
-        }}>
-          { displayLogo ? <Logo size="s" /> : null }
-        </View> 
+          <StatusBar barStyle={ "dark-content" }  />
+          { displayLogo ?
+          <View style={{
+            flex: 1,
+            alignItems: "center",
+            position: 'absolute',
+            top: 100,
+            alignSelf: "center",
+            width: '100%'
+          }}>
+             
+            <Logo size="s" />
+            <Text style={{ fontSize: 16, top: 10 }}>{ App.version }</Text>
+          </View> : null }
 
-        <View style={{
-          display: authstate?.firstLogin ? 'none' : 'flex',
-          flex: 1,
-          alignItems: "center",
-          position: 'absolute',
-          top: (Dimensions.get('screen').height - 100) / 2,
-          alignSelf: "center",
-          width: '100%'
-        }}>
-          <Text> Authentication expired </Text>
-          <Text> Please login again </Text>
-        </View>
-
-        <View style={ Styles.container }>
-
-          <FieldUserName onChangeText={ usernamedOnChange } />
-          <FieldPassword onChangeText={ passwordOnChange } />
-
-          <View>
-
-            <TouchableOpacity
-                style={ [Styles.btn, Styles.btnLogin] }
-                onPress={ () => onLogin(username, password) }
-            >
-
-              <Text style={ Styles.btnText }>Login</Text>
-
-            </TouchableOpacity>
-
+          <View style={{
+            display: authstate?.firstLogin ? 'none' : 'flex',
+            flex: 1,
+            alignItems: "center",
+            position: 'absolute',
+            top: (Dimensions.get('screen').height - 100) / 2,
+            alignSelf: "center",
+            width: '100%'
+          }}>
+            <Text> Authentication expired </Text>
+            <Text> Please login again </Text>
           </View>
-        </View>
 
-        <WaitingIndicator isWaiting={isWaiting} />
+          <View style={ [Styles.container, { paddingBottom: 0 }] }>
 
-      </SafeAreaView>
+            <FieldUserName onChangeText={ usernamedOnChange } />
+            <FieldPassword onChangeText={ passwordOnChange } />
+
+            <View>
+
+              <TouchableOpacity
+                  style={ [Styles.btn, Styles.btnLogin] }
+                  onPress={ () => onLogin(username, password) }
+              >
+
+                <Text style={ Styles.btnText }>Login</Text>
+
+              </TouchableOpacity>
+
+            </View>
+          </View>
+
+          <WaitingIndicator isWaiting={isWaiting} />
+
+        </SafeAreaView>
+      </KeyboardAvoidingView>
     );
 
 }
